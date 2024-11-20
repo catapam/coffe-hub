@@ -11,9 +11,11 @@ Welcome to Coffee Hub, your one-stop platform for premium coffee and related mer
 
 # Description
 
+Coffee Hub is a luxurious e-commerce platform dedicated to coffee enthusiasts, offering a curated selection of premium coffee beans, brewing equipment, and accessories. The platform is designed to provide a seamless shopping experience, integrating a robust payment gateway, real-time inventory updates, and personalized recommendations based on user preferences. Coffee Hub is the perfect destination for anyone looking to elevate their coffee experience.
 
 # User Experience
 
+Coffee Hub is meticulously crafted to deliver an elegant and intuitive user experience. The platform features a sleek dark-mode design with warm, rich colors that reflect the essence of coffee culture. Navigation is effortless, with clear categorization of products, a search functionality, and an easy checkout process. Users can create accounts to save preferences, track orders, and manage their profiles. Accessibility and responsiveness are prioritized, ensuring that Coffee Hub looks and performs beautifully across all devices.
 
 # Agile Methodology and Planning
 
@@ -199,16 +201,27 @@ Tasks and tickets were reviewed every 3 work days. New tickets, such as bug repo
 
 # Design
 
+Coffee Hub's design combines elegance with functionality, offering users a visually striking yet highly intuitive experience. The platform leverages a luxurious dark-mode theme with warm, coffee-inspired hues, accented by gold and white details, to create a sophisticated ambiance. This design reflects the essence of premium coffee culture while ensuring usability and accessibility.
+
+Key design principles include:
+
+* **User-Centric Design**: The platform is crafted to provide a seamless user experience, with intuitive navigation, clear categorization of products, and a streamlined checkout process.
+* **Responsive Design**: Coffee Hub is fully responsive, delivering a consistent and polished experience across all devices, whether desktop, tablet, or mobile.
+* **Visual Elegance**: Rich gradients, subtle lighting effects, and high-quality imagery highlight the premium nature of the products.
+* **Accessibility**: The design adheres to accessibility standards, ensuring all users can navigate and interact with the platform effortlessly.
+* **Security**: Robust security measures, including secure authentication and encrypted transactions, are integrated to protect user data and payment information.
+
 ## Color scheme
 
 * Used <a href="https://coolors.co/" target="_blank">Coolors</a> to create the palette:
 
+![coolors screenshot](documentation/palette.png)
 
 ## Typography
 
 * The fonts were choosen on <a href="https://fonts.google.com/" target="_blank">Google fonts</a>, thinking of keeping the same sentiment as the colors passed.
-* Primary font family for body text: 
-* Font family for headings:
+* Primary font family for body text: **Playfair Display**
+* Font family for headings: **Lato**
 
 ## Wireframes
 
@@ -301,7 +314,6 @@ To deploy the application on Heroku:
 ## Manual testing
 
 ## Bugs
-|
 
 # Credits
 

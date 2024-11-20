@@ -1,1 +1,102 @@
-<p>Hello, world!</p>
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coffee Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .background {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        #181818 0%,
+        #181818 60%,
+        #1d130b 90%,
+        #2d1e12 100%
+      );
+      background-attachment: fixed;
+      position: relative; /* Constrains pseudo-elements */
+      overflow: hidden; /* Prevents overflow from gradients */
+    }
+
+    .background::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 100%; /* Slightly larger than the element for smooth fading */
+      height: 80%;
+      background: radial-gradient(
+        circle at top center,
+        rgba(255, 255, 255, 0.08) 0%,   /* Bright at the center */
+        rgba(255, 255, 255, 0.05) 30%, /* Gradual fade */
+        rgba(255, 255, 255, 0.0) 65%, /* Subtle fading */
+        rgba(255, 255, 255, 0) 100%   /* Fully transparent at edges */
+      );
+      transform: translateX(-50%); /* Centers the gradient */
+      mix-blend-mode: screen; /* Natural blending with background */
+      pointer-events: none; /* No interference with user interactions */
+    }
+
+    .background::after {
+      content: '';
+      position: absolute;
+      top: 85%; /* Start at 80% of the height */
+      left: 50%;
+      width: 100%; /* Covers a wide area for a soft gradient */
+      height: 25%;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.25) 0%,   /* Bright white center */
+        rgba(255, 255, 255, 0.0) 70%  /* Fully transparent edges */
+      );
+      transform: translate(-50%, -50%); /* Center the gradient */
+      mix-blend-mode: screen; /* Natural blending with background */
+      pointer-events: none; /* No interference with user interactions */
+    }
+
+    .image {
+      position: absolute;
+      bottom: 5%; /* Position the bottom of the image at 90% of the element height */
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      height: calc(95% - 60px); /* Adjust height based on your design preference */
+      z-index: 1000;
+    }
+
+    .navbar {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 60px;
+      color: #E9AC62;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Lato", sans-serif;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="background">
+    <div class="navbar">Navbar Menu</div>
+    <img class="image" src="{% static 'images/hero.png' %}" alt="Decorative Image">
+    <p style='color: white; text-align: center; margin-top: 200px; font-family: "Playfair Display", sans-serif;'>Hello, world!</p>
+  </div>
+</body>
+</html>
