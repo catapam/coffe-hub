@@ -271,11 +271,12 @@ To deploy the application on Heroku:
 5. Navigate to the "Settings" tab and find "Config Vars."
 6. Click "Reveal Config Vars," add "PORT" as a key with the value "8000," and click "Add."
 7. Add other vars like DISABLE_COLLECTSTATIC and SECRET_KEY
-8. Scroll down to the "Buildpacks" section, click "Add buildpack," and select "Python."
-9. Repeat step 7 to add "Node.js," ensuring "Python" is listed first.
-10. Scroll to the top and select the "Deploy" tab.
-11. Choose GitHub as the deployment method, then search for your repository and click "Connect."
-12. Scroll down and either "Enable Automatic Deploys" to update the code each time it is pushed to GitHub, or choose "Manual Deploy" for manual updates.
+8. For the database and email setups, add the relevant variables to the heroku app too, example: DATABASE_URL, EMAIL_HOST_PASSWORD and EMAIL_HOST_USER
+9. Scroll down to the "Buildpacks" section, click "Add buildpack," and select "Python."
+10. Repeat step 7 to add "Node.js," ensuring "Python" is listed first.
+11. Scroll to the top and select the "Deploy" tab.
+12. Choose GitHub as the deployment method, then search for your repository and click "Connect."
+13. Scroll down and either "Enable Automatic Deploys" to update the code each time it is pushed to GitHub, or choose "Manual Deploy" for manual updates.
 
 # Testing
 
