@@ -1,6 +1,6 @@
 {% load static %}
 
-<footer class="text-light pt-5 pb-3">
+<footer class="pt-5 pb-3">
     <div class="container">
         <hr class="bg-light">
         <div class="row">
@@ -17,10 +17,10 @@
             <div class="col-md-2 mb-4">
                 <h5 class="text-uppercase">Quick Links</h5>
                 <ul class="list-unstyled">
-                    <li><a href="/shop/" class="text-light text-decoration-none">Shop</a></li>
-                    <li><a href="/about/" class="text-light text-decoration-none">About</a></li>
-                    <li><a href="/faq/" class="text-light text-decoration-none">FAQ</a></li>
-                    <li><a href="/contact/" class="text-light text-decoration-none">Contact Us</a></li>
+                    <li><a href="/#" class="text-decoration-none menu-item">Shop</a></li>
+                    <li><a href="/about/" class="text-decoration-none menu-item">About</a></li>
+                    <li><a href="/help/" class="text-decoration-none menu-item">Help</a></li>
+                    <li><a href="/account/" class="text-decoration-none menu-item">Account</a></li>
                 </ul>
             </div>
             
@@ -33,7 +33,7 @@
                         <label for="email" class="form-label">Email address</label>
                         <input type="email" class="form-control" id="email" name="email" placeholder="Your email" required>
                     </div>
-                    <button type="submit" class="btn btn-secondary">Subscribe</button>
+                    <button type="submit" class="btn btn-secondary btn-sm">Subscribe</button>
                 </form>
             </div>
             
@@ -42,23 +42,23 @@
                 <h5 class="text-uppercase">Follow Us</h5>
                 <ul class="list-inline">
                     <li class="list-inline-item">
-                        <a href="https://facebook.com" class="text-light" aria-label="Facebook">
-                            <i class="fa-brands fa-facebook fa-lg"></i>
+                        <a href="https://facebook.com" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook menu-item"></i>
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="https://twitter.com" class="text-light" aria-label="Twitter">
-                            <i class="fa-brands fa-twitter fa-lg"></i>
+                        <a href="https://twitter.com" aria-label="Twitter">
+                            <i class="fa-brands fa-twitter menu-item"></i>
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="https://instagram.com" class="text-light" aria-label="Instagram">
-                            <i class="fa-brands fa-instagram fa-lg"></i>
+                        <a href="https://instagram.com" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram menu-item"></i>
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="https://linkedin.com" class="text-light" aria-label="LinkedIn">
-                            <i class="fa-brands fa-linkedin fa-lg"></i>
+                        <a href="https://linkedin.com" aria-label="LinkedIn">
+                            <i class="fa-brands fa-linkedin menu-item"></i>
                         </a>
                     </li>
                 </ul>
@@ -70,9 +70,9 @@
         <!-- Copyright -->
         <div class="row">
             <div class="col text-center">
-                <p class="mb-0">
+                <p class="mb-0 privacy-link">
                     &copy; {{ current_year|default:2024 }} Coffee Hub. All rights reserved. | 
-                    <a href="/privacy-policy/" class="text-light text-decoration-none">Privacy Policy</a>
+                    <a href="/privacy-policy/" class="text-decoration-none menu-item">Privacy Policy</a>
                 </p>
             </div>
         </div>

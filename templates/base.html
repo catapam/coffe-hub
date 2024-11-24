@@ -59,5 +59,12 @@
         {% include 'includes/footer.html' %}
         </div>
     </div>
+
+    <script src="{% static 'js/base.js' %}" defer></script>
+
+    <!-- Page specific scripts -->
+    {% block extra_js %}
+  
+    {% endblock %}
   </body>
 </html>

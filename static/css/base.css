@@ -1,5 +1,6 @@
 /* base.css */
 
+/* Main elements */
 html, body {
     margin: 0;
     padding: 0;
@@ -17,15 +18,6 @@ body {
     width: 100%; /* Full width */
 }
 
-footer {
-    bottom: 0;
-    position: relative; /* Change to relative */
-    width: 100%; /* Ensure it spans the full width */
-    text-align: center;
-    padding: 20px; /* Add padding for spacing */
-}
-
-
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
@@ -37,6 +29,44 @@ p {
     color: var(--text-primary-color);
     font-weight: 100; /* Reduce font weight */
     letter-spacing: 0.1em; /* Increase spacing between letters */
+}
+
+a, i, label {
+    font-family: var(--font-heading);
+    color: var(--text-primary-color);
+}
+
+/* footer */
+footer {
+    bottom: 0;
+    position: relative; /* Change to relative */
+    width: 100%; /* Ensure it spans the full width */
+    text-align: center;
+    padding: 20px; /* Add padding for spacing */
+}
+
+footer i{
+    font-size: 40px;
+    margin: 5px !important;
+    text-align: center;
+}
+
+footer h1, footer h2, footer h3, footer h4, footer h5, footer h6, footer p, footer label, footer a{
+    font-size: small;
+}
+
+footer li{
+    margin: 0 !important;
+}
+
+/* General */
+.text-secondary {
+    color: var(--text-secondary-color);
+}
+
+.active {
+    color: var(--text-secondary-color) !important;
+    font-weight: 700;
 }
 
 .small-heading {
@@ -58,12 +88,18 @@ p {
     border: 0;
 }
 
+.privacy-link {
+    font-size: xx-small;
+}
+
+/* Content container */
 .content-container {
     flex: 1; /* Allows it to fill the remaining space */
     width: 100%; /* Full width */
-    height: 100%; /* Adjust dynamically based on content */
+    height: calc(100% - 60px); /* Adjust dynamically based on content */
     position: absolute;
-    top: 60px;
+    top: 0;
+    margin-top: 60px;
     z-index: 300; /* Below the navbar */
 }
 
@@ -112,6 +148,7 @@ p {
     z-index: -1; /* Place it below the content */
 }
 
+/* hero image */
 .hero::after {
     content: '';
     position: absolute;
@@ -152,6 +189,7 @@ p {
 /* Buttons */
 .btn{
     border: var(--border);
+    border-radius: var(--bs-border-radius);
     font-family: var(--font-heading);
 }
 
@@ -179,16 +217,6 @@ p {
     border-color: var(--text-secondary-color);
 }
 
-/* Text */
-.text-secondary {
-    color: var(--text-secondary-color);
-}
-
-.active {
-    color: var(--text-secondary-color) !important;
-    font-weight: 700;
-}
-
 /* Navbar */
 .navbar {
     position: fixed; /* Fixed to the top */
@@ -200,7 +228,7 @@ p {
     display: flex;
     align-items: center;
     background-color: rgba(0, 0, 0, 0); /* Initial transparency */
-    backdrop-filter: blur(10px); /* Optional: blur for a frosted glass effect */
+    backdrop-filter: blur(50px); /* Optional: blur for a frosted glass effect */
     pointer-events: auto; /* Ensure interactivity */
     transition: background-color 0.3s ease; /* Smooth transition on scroll */
 }
@@ -222,7 +250,7 @@ p {
     height: 40px;
 }
 
-.nav-link:hover {
+.menu-item:hover {
     color: var(--text-secondary-color);
 }
 
@@ -291,7 +319,6 @@ p {
     left: auto;
 }
 
-
 .search-menu i{
     color: var(--text-primary-color);
 }
@@ -308,7 +335,6 @@ p {
     background-color: var(--bg-dark);
     opacity: 1;
 }
-
 
 /* Wrapper for centering the search bar */
 .search-bar-container {
@@ -337,10 +363,10 @@ p {
 }
 
 /* Change the border color when the search input is focused */
-.search-bar input:focus {
-    outline: none; /* Removes the default blue outline */
-    border-color: var(--text-secondary-color); /* Replace with your desired color */
-    box-shadow: 0 0 5px var(--text-primary-color); /* Optional: Add a glow effect */
+form input:focus {
+    outline: none !important; /* Removes the default blue outline */
+    border-color: var(--text-secondary-color) !important; /* Replace with your desired color */
+    box-shadow: 0 0 5px var(--text-primary-color) !important; /* Optional: Add a glow effect */
 }
 
 /* Styling for custom error pages */
@@ -349,14 +375,22 @@ p {
     max-height: 600px;
     width: 100%;
     max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 200px;
-
+    margin: auto;
+    padding-top: 100px;
     /* Flexbox layout for vertical and horizontal centering */
     display: flex;
     flex-direction: column;
     text-align: center; /* Center the text content */
+}
+
+/* Privacy policy */
+.privacy-policy{
+    width: 80%;
+    max-width: 800px;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: small;
 }
 
 /* Desktop styles */
@@ -368,16 +402,13 @@ p {
     }
 
     /* Desktop menu alignment */
-    .navbar-nav {
-        flex-direction: row;
-        align-items: center;
-    }
-
     .navbar-nav .nav-item {
         margin-right: 15px;
     }
 
     .navbar-nav{
+        flex-direction: row;
+        align-items: center;
         background-color: transparent;
         opacity: 1;
         border: none;

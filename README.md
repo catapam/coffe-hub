@@ -260,6 +260,7 @@ Key design principles include:
 * **Email Marketing**: Mailchimp API
 * **Canva.com**: Branding and logo
 * **Favicon.io**: For manifest and favicon creation
+* **freeprivacypolicy.com**: Privacy privacy generator
 
 # Deployment
 
