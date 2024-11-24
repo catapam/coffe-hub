@@ -1,0 +1,329 @@
+/* base.css */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-dark);
+  }
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--text-secondary-color);
+}
+
+p {
+    font-family: var(--font-primary);
+    color: var(--text-primary-color);
+    font-weight: 100; /* Reduce font weight */
+    letter-spacing: 0.1em; /* Increase spacing between letters */
+}
+
+.small-heading {
+    color: var(--light-accent);
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* Screen-reader only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    color: var(--bg-darker);
+    border: 0;
+}
+  
+.content-container{
+    top: 0;
+    width: 100%;
+    position: fixed;
+    height: 100%;
+}
+
+.background-gradient {
+    background: linear-gradient(
+        to bottom,
+        var(--bg-darker) 0%,
+        var(--bg-darker) 60%,
+        var(--bg-dark) 85%
+    );
+    background-repeat: no-repeat; /* Prevents the gradient from repeating */
+    background-size: cover;
+}
+
+.background-gradient, .hero{
+    width: 100%;
+    height: 100%;
+    max-height: 500px; /* Limits maximum height */
+    position: relative; /* Constrains pseudo-elements */
+    overflow: hidden; /* Prevents overflow from gradients */
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 200vh; /* Slightly larger than the element for smooth fading */
+    max-width: 2000px;
+    height: 80%;
+    background: radial-gradient(
+        circle at top center,
+        rgba(var(--highlight-rgb), 0.08) 0%,   /* Bright at the center */
+        rgba(var(--highlight-rgb), 0.05) 30%, /* Gradual fade */
+        rgba(var(--highlight-rgb), 0.0) 65%, /* Subtle fading */
+        rgba(var(--highlight-rgb), 0) 100%   /* Fully transparent at edges */
+    );
+    transform: translateX(-50%); /* Centers the gradient */
+    mix-blend-mode: screen; /* Natural blending with background */
+    pointer-events: none; /* No interference with user interactions */
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 85%; /* Start at 85% of the height */
+    left: 50%;
+    width: 200vh; /* Slightly larger than the element for smooth fading */
+    max-width: 2000px;
+    height: 25%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(var(--highlight-rgb), 0.2) 0%,   /* Bright white center */
+        rgba(var(--highlight-rgb), 0.0) 70%  /* Fully transparent edges */
+    );
+    transform: translate(-50%, -50%); /* Center the gradient */
+    mix-blend-mode: screen; /* Natural blending with background */
+    pointer-events: none; /* No interference with user interactions */
+}
+
+.hero .image {
+    position: absolute;
+    bottom: 10%; /* Position the bottom of the image at 95% of the element height */
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    height: calc(90% - 60px); /* Adjust height based on your design preference */
+    max-height: 400px;
+    z-index: 1000;
+}
+
+/* Buttons */
+.btn{
+    border: var(--border);
+    font-family: var(--font-heading);
+}
+
+.btn-primary {
+    color: var(--text-primary-color);
+    background-color: var(--bg-light);
+    border-color: var(--bg-darker);
+}
+
+.btn-primary:hover {
+    color: var(--text-primary-color);
+    background-color: var(--bg-lighter);
+    border-color: var(--bg-light);
+}
+
+.btn-secondary {
+    color: var(--bg-darker);
+    background-color: var(--text-secondary-color);
+    border-color: var(--dark-red-accent);
+}
+
+.btn-secondary:hover {
+    color: var(--text-secondary-color);
+    background-color: var(--bg-darker);
+    border-color: var(--text-secondary-color);
+}
+
+/* Text */
+.text-secondary {
+    color: var(--text-secondary-color);
+}
+
+.active {
+    color: var(--text-secondary-color) !important;
+    font-weight: 700;
+}
+
+/* Navbar */
+.navbar {
+    z-index: 1000;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    color: var(--text-primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 20px;
+    }
+
+.navbar-brand {
+    margin: auto;
+    padding: 0;
+    max-height: 50px;
+    color: var(--text-secondary-color);
+}
+
+.navbar-brand img{
+    width: 50px;
+    height: 50px;
+}
+
+.nav-link {
+    color: var(--text-primary-color);
+    height: 40px;
+}
+
+.nav-link:hover {
+    color: var(--text-secondary-color);
+}
+
+.navbar-toggler {
+    border-color: var(--text-primary-color);
+    border-width: 3px;
+    color: var(--text-primary-color) !important;
+}
+
+.navbar-collapse .nav-item, .dropdown-item{
+    min-height: 50px;
+    margin-left: auto;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.dropdown-item{
+    text-align: right;
+    padding-right: 10px;
+    margin-left: auto;
+    margin-right:0;
+}
+
+.navbar-nav{
+    background-color: var(--bg-darker);
+    opacity: 0.95;
+    border: var(--border);
+    border-radius: var(--bs-border-radius);
+    border-color: var(--bg-light);
+    max-width: 10rem;
+    max-height: 80%;
+    margin-left: auto;
+    margin-top: 5px;
+}
+
+/* User menu aligned to the right */
+.user-menu, .search-menu {
+    position: relative;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.user-menu i, .search-menu i{
+    font-size: 2rem;
+    cursor: pointer;
+    min-width: 60px;
+    margin: auto;
+}
+
+.user-menu i {
+    color: var(--text-secondary-color);
+    padding-left: 20px;
+}
+
+.search-menu i{
+    color: var(--text-primary-color);
+}
+
+.navbar-nav .dropdown-menu {
+    position: absolute;
+    right: -11.5px;
+    top: 44px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    left: auto;
+    border: var(--border);
+    border-color: var(--bg-light);
+    background-color: var(--bg-dark);
+    opacity: 1;
+}
+
+
+/* Wrapper for centering the search bar */
+.search-bar-container {
+    display: flex;
+    justify-content: center; /* Horizontally centers the content */
+    align-items: center;    /* Vertically centers the content */
+    height: 100%;          /* Full viewport height to center the search bar vertically */
+    position: relative;     /* Makes sure it's relative to the page */
+    width:100%;
+}
+
+.search-bar {
+    display: flex;
+    flex-direction: row;
+    gap: 10px; /* Add spacing between input and button */
+    margin-left: auto;
+    margin-right: auto;
+    flex: 1;
+    width:50%;   
+    max-width: 400px;
+}
+
+.form-control{
+    border: var(--border);
+}
+
+/* Change the border color when the search input is focused */
+.search-bar input:focus {
+    outline: none; /* Removes the default blue outline */
+    border-color: var(--text-secondary-color); /* Replace with your desired color */
+    box-shadow: 0 0 5px var(--text-primary-color); /* Optional: Add a glow effect */
+}
+
+/* Desktop styles */
+@media (min-width: 992px) {
+    /* Logo aligned to the left */
+    .navbar-brand {
+        margin: 0;
+        margin-right: auto;
+    }
+
+    /* Desktop menu alignment */
+    .navbar-nav {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .navbar-nav .nav-item {
+        margin-right: 15px;
+    }
+
+    .navbar-nav{
+        background-color: transparent;
+        opacity: 1;
+        border: none;
+        border-radius: 0;
+        border-color: none;
+        max-width: 100%;
+        max-height: 100%;
+        margin-left: 10px;
+        margin-top: auto;
+    }
+
+    .dropdown-toggle::after {
+        border: 0;
+        content: none;
+    }
+}

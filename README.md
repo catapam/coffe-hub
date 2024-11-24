@@ -258,7 +258,8 @@ Key design principles include:
 * **Git**: For version control.
 * **Payment Integration**: Stripe
 * **Email Marketing**: Mailchimp API
-* **google-webfonts-helper**: For downloadable fonts that can be hosted locally avoiding layout shifts caused by slow response from Google fonts
+* **Canva.com**: Branding and logo
+* **Favicon.io**: For manifest and favicon creation
 
 # Deployment
 

@@ -1,0 +1,22 @@
+
+:root {
+    /* Background colors */
+    --bg-lighter: #3b2a1a;
+    --bg-light: #2d1e12;
+    --bg-dark: #1d130b;
+    --bg-darker: #181818;
+    --highlight-rgb: 255, 255, 255;
+
+    /* Text colors */
+    --text-primary-color: #FFFFFF;
+    --text-secondary-color: #d4af37;
+
+    /* Border */
+    --bs-border-radius: 0.5rem;
+    --border-color: var(--bg-darker);
+    --border: 2px solid var(--border-color);
+
+    /* Font Variables */
+    --font-primary: "Playfair Display", Arial, sans-serif;
+    --font-heading: "Lato", Georgia, serif;
+}
