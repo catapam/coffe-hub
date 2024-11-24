@@ -1,0 +1,80 @@
+{% load static %}
+
+<footer class="text-light pt-5 pb-3">
+    <div class="container">
+        <hr class="bg-light">
+        <div class="row">
+            <!-- About Section -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase">About Us</h5>
+                <p>
+                    Coffee Hub is your destination for premium coffee beans, artisanal brews, and high-quality coffee accessories. 
+                    Enjoy the finest coffee experience.
+                </p>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="col-md-2 mb-4">
+                <h5 class="text-uppercase">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/shop/" class="text-light text-decoration-none">Shop</a></li>
+                    <li><a href="/about/" class="text-light text-decoration-none">About</a></li>
+                    <li><a href="/faq/" class="text-light text-decoration-none">FAQ</a></li>
+                    <li><a href="/contact/" class="text-light text-decoration-none">Contact Us</a></li>
+                </ul>
+            </div>
+            
+            <!-- Newsletter Signup -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase">Subscribe to Our Newsletter</h5>
+                <form method="post" action="/subscribe/">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Your email" required>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Subscribe</button>
+                </form>
+            </div>
+            
+            <!-- Social Media -->
+            <div class="col-md-2 mb-4">
+                <h5 class="text-uppercase">Follow Us</h5>
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a href="https://facebook.com" class="text-light" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook fa-lg"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://twitter.com" class="text-light" aria-label="Twitter">
+                            <i class="fa-brands fa-twitter fa-lg"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://instagram.com" class="text-light" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram fa-lg"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://linkedin.com" class="text-light" aria-label="LinkedIn">
+                            <i class="fa-brands fa-linkedin fa-lg"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <hr class="bg-light">
+        
+        <!-- Copyright -->
+        <div class="row">
+            <div class="col text-center">
+                <p class="mb-0">
+                    &copy; {{ current_year|default:2024 }} Coffee Hub. All rights reserved. | 
+                    <a href="/privacy-policy/" class="text-light text-decoration-none">Privacy Policy</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>

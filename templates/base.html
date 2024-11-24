@@ -42,22 +42,22 @@
       {% endblock %}
   </head>
   <body>
-    <div class="background-gradient">
-      {% include 'includes/header.html' %} <!-- Ensuring header includes accessible elements -->
-    </div> 
+    <div class="body-wrapper">
+        <!-- Navbar -->
+        <div class="background-gradient"></div>
+        <div class="content-gradient"></div>
 
-    <div class="content-container">
-      {% block content %}
+        {% include 'includes/header.html' %}
 
-      {% endblock content %}
+        <!-- Main Content -->
+        <div class="content-container">
+            {% block content %}
+            <!-- Additional content here -->
+            {% endblock content %}
+        
+        <!-- Footer -->
+        {% include 'includes/footer.html' %}
+        </div>
     </div>
-  
-  <!-- Block for extra page-specific JS -->
-  {% block extra_js %}
-    
-  {% endblock extra_js %}
-
-  <!-- Base JavaScript file -->
-  <script src="{% static 'js/base.js' %}" defer></script>
   </body>
 </html>

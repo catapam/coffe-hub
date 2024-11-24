@@ -3,10 +3,28 @@
 html, body {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
     background-color: var(--bg-dark);
-  }
+    box-sizing: border-box; /* Ensure padding/border doesn't affect width */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Full viewport height */
+    width: 100%; /* Full width */
+}
+
+footer {
+    bottom: 0;
+    position: relative; /* Change to relative */
+    width: 100%; /* Ensure it spans the full width */
+    text-align: center;
+    padding: 20px; /* Add padding for spacing */
+}
+
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
@@ -40,11 +58,13 @@ p {
     border: 0;
 }
 
-.content-container{
-    top: 0;
-    width: 100%;
-    position: fixed;
-    height: 100%;
+.content-container {
+    flex: 1; /* Allows it to fill the remaining space */
+    width: 100%; /* Full width */
+    height: 100%; /* Adjust dynamically based on content */
+    position: absolute;
+    top: 60px;
+    z-index: 300; /* Below the navbar */
 }
 
 .background-gradient {
@@ -56,24 +76,30 @@ p {
     );
     background-repeat: no-repeat; /* Prevents the gradient from repeating */
     background-size: cover;
-}
-
-.background-gradient, .hero{
     width: 100%;
     height: 100%;
-    max-height: 500px; /* Limits maximum height */
-    position: relative; /* Constrains pseudo-elements */
-    overflow: hidden; /* Prevents overflow from gradients */
+    max-height: 500px; /* Matches hero height */
+    z-index: 1; /* Below navbar and hero */
 }
 
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 200vh; /* Slightly larger than the element for smooth fading */
-    max-width: 2000px;
-    height: 80%;
+.content-gradient {
+    position: relative; /* Allow the pseudo-element to position correctly */
+    width: 100%;
+    height: 100vh; /* Match the gradient height */
+    overflow: hidden; /* Prevent content overflow */
+    z-index: 20; /* Place it below higher layers */
+    top: -500px;
+}
+
+.content-gradient::after {
+    content: ''; /* Required for the pseudo-element */
+    position: absolute; /* Allow precise placement */
+    top: 0; /* Align with the top of the container */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Proper centering */
+    width: 200vh; /* Extend for a smooth fade */
+    min-height: 100vh;
+    height: 100%; /* Match the parent height */
     background: radial-gradient(
         circle at top center,
         rgba(var(--highlight-rgb), 0.08) 0%,   /* Bright at the center */
@@ -81,9 +107,9 @@ p {
         rgba(var(--highlight-rgb), 0.0) 65%, /* Subtle fading */
         rgba(var(--highlight-rgb), 0) 100%   /* Fully transparent at edges */
     );
-    transform: translateX(-50%); /* Centers the gradient */
-    mix-blend-mode: screen; /* Natural blending with background */
-    pointer-events: none; /* No interference with user interactions */
+    mix-blend-mode: screen; /* Natural blending with the background */
+    pointer-events: none; /* Prevent interaction interference */
+    z-index: -1; /* Place it below the content */
 }
 
 .hero::after {
@@ -104,15 +130,23 @@ p {
     pointer-events: none; /* No interference with user interactions */
 }
 
-.hero .image {
-    position: absolute;
-    bottom: 10%; /* Position the bottom of the image at 95% of the element height */
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto;
-    height: calc(90% - 60px); /* Adjust height based on your design preference */
-    max-height: 400px;
-    z-index: 1000;
+.hero {
+    width: 100%; /* Full width */
+    height: 500px; /* Default height */
+    max-height: 100vh; /* Constrain to viewport height */
+    position: relative;
+    overflow: hidden; /* Prevent overflow */
+    z-index: 500; /* Position it below the navbar */
+    padding-bottom: 50px;
+}
+
+.hero img {
+    width: auto; /* Fill the width of the container */
+    max-width: 100%;
+    height: 100%; /* Fill the height of the container */
+    object-fit: cover; /* Maintain aspect ratio and cover the space */
+    display: block;
+    margin: auto;
 }
 
 /* Buttons */
@@ -157,18 +191,19 @@ p {
 
 /* Navbar */
 .navbar {
-    z-index: 1000;
-    position: absolute;
+    position: fixed; /* Fixed to the top */
     top: 0;
-    width: 100%;
-    height: 60px;
-    color: var(--text-primary-color);
+    left: 0;
+    width: 100%; /* Full width */
+    height: 60px; /* Fixed height */
+    z-index: 1000; /* Ensure it appears above other elements */
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-family: var(--font-heading);
-    font-size: 20px;
-    }
+    background-color: rgba(0, 0, 0, 0); /* Initial transparency */
+    backdrop-filter: blur(10px); /* Optional: blur for a frosted glass effect */
+    pointer-events: auto; /* Ensure interactivity */
+    transition: background-color 0.3s ease; /* Smooth transition on scroll */
+}
 
 .navbar-brand {
     margin: auto;
@@ -306,6 +341,22 @@ p {
     outline: none; /* Removes the default blue outline */
     border-color: var(--text-secondary-color); /* Replace with your desired color */
     box-shadow: 0 0 5px var(--text-primary-color); /* Optional: Add a glow effect */
+}
+
+/* Styling for custom error pages */
+.error-page{
+    height: auto;
+    max-height: 600px;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 200px;
+
+    /* Flexbox layout for vertical and horizontal centering */
+    display: flex;
+    flex-direction: column;
+    text-align: center; /* Center the text content */
 }
 
 /* Desktop styles */
