@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <!-- SEO optimization: Added description and keywords for search engines -->
+      <meta name="description" content="Coffee Hub - Your gourmet coffee spot">
+      <meta name="keywords" content="coffee">
+      
+      <!-- Page title with dynamic content block -->
+      <title>Coffee Hub - {% block title %}{% endblock %}</title>
+
+      <!-- Favicon and touch icons for various platforms -->
+      <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}">
+      <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">
+      <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon/favicon-16x16.png' %}">
+      <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}">
+
+      <!-- Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+      <!-- Import Bootstrap CSS with integrity and referrer policy for security -->
+      <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.rel='stylesheet'">
+      
+      <!-- Import custom css -->
+      <link rel="stylesheet" href="{% static 'css/brand.css' %}">
+      <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+      <!-- Page specific styles -->
+      {% block extra_css %}
+      
+      {% endblock %}
+      
+      {% block onload_js %}
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+      <script src="https://kit.fontawesome.com/ab75482a80.js" crossorigin="anonymous"></script>
+      {% endblock %}
+  </head>
+  <body>
+    <div class="background-gradient">
+      {% include 'includes/header.html' %} <!-- Ensuring header includes accessible elements -->
+    </div> 
+
+    <div class="content-container">
+      {% block content %}
+
+      {% endblock content %}
+    </div>
+  
+  <!-- Block for extra page-specific JS -->
+  {% block extra_js %}
+    
+  {% endblock extra_js %}
+
+  <!-- Base JavaScript file -->
+  <script src="{% static 'js/base.js' %}" defer></script>
+  </body>
+</html>

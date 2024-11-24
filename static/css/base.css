@@ -39,7 +39,7 @@ p {
     color: var(--bg-darker);
     border: 0;
 }
-  
+
 .content-container{
     top: 0;
     width: 100%;
@@ -66,7 +66,7 @@ p {
     overflow: hidden; /* Prevents overflow from gradients */
 }
 
-.hero::before {
+.content-container::before {
     content: '';
     position: absolute;
     top: 0;
@@ -207,8 +207,8 @@ p {
 .dropdown-item{
     text-align: right;
     padding-right: 10px;
-    margin-left: auto;
-    margin-right:0;
+    margin: auto;
+    margin-right: 0;
 }
 
 .navbar-nav{
@@ -221,6 +221,10 @@ p {
     max-height: 80%;
     margin-left: auto;
     margin-top: 5px;
+}
+
+.menu-item.active{
+    color: var(--text-secondary-color);
 }
 
 /* User menu aligned to the right */
@@ -238,9 +242,20 @@ p {
 }
 
 .user-menu i {
-    color: var(--text-secondary-color);
+    color: var(--text-primary-color);
     padding-left: 20px;
 }
+
+.user-menu i:hover {
+    color: var(--text-secondary-color);
+}
+
+.user-menu .dropdown-menu {
+    right: 0;
+    border: var(--border);
+    left: auto;
+}
+
 
 .search-menu i{
     color: var(--text-primary-color);
@@ -268,6 +283,7 @@ p {
     height: 100%;          /* Full viewport height to center the search bar vertically */
     position: relative;     /* Makes sure it's relative to the page */
     width:100%;
+    margin-top: 10px;
 }
 
 .search-bar {
@@ -290,6 +306,23 @@ p {
     outline: none; /* Removes the default blue outline */
     border-color: var(--text-secondary-color); /* Replace with your desired color */
     box-shadow: 0 0 5px var(--text-primary-color); /* Optional: Add a glow effect */
+}
+
+/* Styling for custom error pages */
+.error-page{
+    /* Ensure the element takes up 100% of the viewport height and width */
+    height: calc(100vh - 60px);
+    width: 100vw;
+
+    /* Flexbox layout for vertical and horizontal centering */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+
+    /* Optional styling */
+    text-align: center; /* Center the text content */
+    padding: 20px; /* Add some padding to avoid content touching the edges */
 }
 
 /* Desktop styles */
@@ -325,5 +358,9 @@ p {
     .dropdown-toggle::after {
         border: 0;
         content: none;
+    }
+
+    .search-bar-container {
+        margin-top: 0px;
     }
 }
