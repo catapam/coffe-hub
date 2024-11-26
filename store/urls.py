@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import Index
+from .views import Catalog
 
 # Define URL patterns for the home app
 urlpatterns = [
     # The home page route, served by the Index class-based view
-    path('', Index.as_view(), name='home'),
+    path('', Catalog.as_view(), name='catalog'),
 ]

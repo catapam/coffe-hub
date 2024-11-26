@@ -7,15 +7,22 @@
         <div class="container-fluid">
             
             <!-- Search button for mobile -->
-            <div class="search-menu d-block d-lg-none" id="mobileSearchButton">
+            <div class="search-menu menu-icon d-block d-lg-none" id="mobileSearchButton">
                 <i class="fa-solid fa-magnifying-glass menu-item"></i>
             </div>
 
             <!-- Logo -->
-            <a class="navbar-brand" href="/" aria-label="Homepage - Coffee Hub">
+            <a class="navbar-brand centered-element" href="/" aria-label="Homepage - Coffee Hub">
                 <!-- Improved alt text for logo for better accessibility -->
                 <img src="{% static 'images/logo.webp' %}" alt="Coffee Hub logo" width="30" height="30">
             </a>
+
+            <!-- Cart menu -->
+            <div class="cart-menu d-block d-lg-none menu-icon">
+                <a class="nav-link" href="/" aria-label="Cart button">
+                    <i class="fa-solid fa-cart-shopping menu-item" aria-label="Cart menu"></i>
+                </a>
+            </div>
 
             <!-- Button for toggling the mobile navigation menu -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -53,8 +60,15 @@
                 </form>
             </div>
             
+            <!-- Cart menu -->
+            <div class="cart-menu d-none d-lg-block menu-icon">
+                <a class="nav-link" href="/" aria-label="Cart button">
+                    <i class="fa-solid fa-cart-shopping menu-item" aria-label="Cart menu"></i>
+                </a>
+            </div>
+            
             <!-- User menu for desktop -->
-            <div class="user-menu d-none d-lg-block">
+            <div class="user-menu menu-icon d-none d-lg-block">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa-solid fa-user menu-item" aria-label="User menu"></i>
                 </a>

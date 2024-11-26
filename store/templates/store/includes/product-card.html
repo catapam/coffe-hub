@@ -1,0 +1,44 @@
+{% load static %}
+
+<div class="card">
+    <div class="background-gradient">
+        <div class="content-gradient">
+            <img class="card-img-top" src="{% static 'images/product-holder.webp' %}" alt="Card image cap">
+        </div>
+    </div>
+    <div class="card-body">
+        <h1 class="card-title mx-auto">Product name</h5>
+
+        <!--Review Row -->
+        <div class="review-stars">
+            {% for star in total_review %}
+                {% if star < review %}
+                    <i class="star filled">★</i>
+                {% else %}
+                    <i class="star">★</i>
+                {% endif %}
+            {% endfor %}
+        </div>                
+
+        <p class="card-text mx-auto">Short details</p>
+
+        <!-- Size and Quantity Selectors -->
+        <div class="row card-row">
+            <div class="col-6 mx-auto">
+                <label for="size-select">Size</label>
+                <select id="size-select" class="form-select size">
+                    <option value="S">Small</option>
+                    <option value="M">Medium</option>
+                    <option value="L">Large</option>
+                </select>
+            </div>
+            <div class="col-6 mx-auto">
+                <label for="quantity-select">Quantity</label>
+                <input id="quantity-select" type="number" class="form-control quantity" min="1" value="1">
+            </div>
+        </div>
+
+        <h1 class="card-subtitle mx-auto"><strong>$0.00</strong></h6>
+        <a href="#" class="btn btn-secondary btn-lg mx-auto">Buy</a>
+    </div>
+</div>

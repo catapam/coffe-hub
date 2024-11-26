@@ -17,6 +17,6 @@
     --border: 2px solid var(--border-color);
 
     /* Font Variables */
-    --font-primary: "Playfair Display", Arial, sans-serif;
+    --font-primary: "Nunito", Arial, sans-serif;
     --font-heading: "Lato", Georgia, serif;
 }

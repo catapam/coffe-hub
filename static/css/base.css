@@ -20,18 +20,18 @@ body {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
-    color: var(--text-secondary-color);
+    font-family: var(--font-heading) !important;
+    color: var(--text-secondary-color) !important;
 }
 
 p {
-    font-family: var(--font-primary);
-    color: var(--text-primary-color);
+    font-family: var(--font-primary) !important;
+    color: var(--text-primary-color) !important;
     font-weight: 100; /* Reduce font weight */
     letter-spacing: 0.1em; /* Increase spacing between letters */
 }
 
-a, i, label {
+a, label {
     font-family: var(--font-heading);
     color: var(--text-primary-color);
 }
@@ -90,6 +90,12 @@ footer li{
 
 .privacy-link {
     font-size: xx-small;
+}
+
+.centered-element{
+    margin: auto;
+    padding: 0;
+    width: auto;
 }
 
 /* Content container */
@@ -208,7 +214,7 @@ footer li{
 .btn-secondary {
     color: var(--bg-darker);
     background-color: var(--text-secondary-color);
-    border-color: var(--dark-red-accent);
+    border-color: var(--bg-darker);
 }
 
 .btn-secondary:hover {
@@ -234,10 +240,9 @@ footer li{
 }
 
 .navbar-brand {
-    margin: auto;
-    padding: 0;
     max-height: 50px;
     color: var(--text-secondary-color);
+    margin-left: calc(50% - 85px);
 }
 
 .navbar-brand img{
@@ -279,7 +284,7 @@ footer li{
     opacity: 0.95;
     border: var(--border);
     border-radius: var(--bs-border-radius);
-    border-color: var(--bg-light);
+    border-color: var(--text-secondary-color);
     max-width: 10rem;
     max-height: 80%;
     margin-left: auto;
@@ -291,36 +296,34 @@ footer li{
 }
 
 /* User menu aligned to the right */
-.user-menu, .search-menu {
+.menu-icon {
     position: relative;
     align-items: center;
     justify-content: flex-end;
 }
 
-.user-menu i, .search-menu i{
+.menu-icon i {
     font-size: 2rem;
     cursor: pointer;
     min-width: 60px;
     margin: auto;
-}
-
-.user-menu i {
     color: var(--text-primary-color);
     padding-left: 20px;
 }
 
-.user-menu i:hover {
+.menu-icon i:hover {
     color: var(--text-secondary-color);
+}
+
+.menu-item{
+    margin: auto;
 }
 
 .user-menu .dropdown-menu {
     right: 0;
     border: var(--border);
+    border-color: var(--text-secondary-color);
     left: auto;
-}
-
-.search-menu i{
-    color: var(--text-primary-color);
 }
 
 .navbar-nav .dropdown-menu {
@@ -331,7 +334,7 @@ footer li{
     border-top-right-radius: 0;
     left: auto;
     border: var(--border);
-    border-color: var(--bg-light);
+    border-color: var(--text-secondary-color);
     background-color: var(--bg-dark);
     opacity: 1;
 }
@@ -358,15 +361,21 @@ footer li{
     max-width: 400px;
 }
 
-.form-control{
+.form-control, .form-select{
     border: var(--border);
+    box-shadow: 0 0 1px var(--text-primary-color);
 }
 
 /* Change the border color when the search input is focused */
-form input:focus {
+* input:focus, * select:focus {
     outline: none !important; /* Removes the default blue outline */
     border-color: var(--text-secondary-color) !important; /* Replace with your desired color */
     box-shadow: 0 0 5px var(--text-primary-color) !important; /* Optional: Add a glow effect */
+}
+
+/* Cart menu option */
+.cart-menu.d-block{
+    padding-right: 10px;
 }
 
 /* Styling for custom error pages */
@@ -393,11 +402,124 @@ form input:focus {
     font-size: small;
 }
 
+/* Card template */
+.card{
+    border: var(--border);
+    border-color: var(--bg-lighter);
+    color: inherit;
+    margin: 0;
+    height: 100%;
+    width: auto;
+    background-color: var(--bg-dark);
+    box-shadow: 0 0 10px rgba(var(--highlight-rgb), 0.1);
+}
+
+.card * {
+    font-size: x-small;
+    padding: 0;
+    margin: 0;
+}
+
+.card-body {
+    margin: 10px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.card .content-gradient{
+    top: 0;
+    height: 150px;
+}
+
+.card .background-gradient{
+    height: auto;
+    border-top-right-radius: var(--bs-border-radius);
+    border-top-left-radius: var(--bs-border-radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Horizontally centers the image */
+}
+
+.card .content-gradient::after {
+    width: 100%; /* Extend for a smooth fade */
+    height: auto;
+    min-height: 500px;
+    background: radial-gradient(
+        circle at top center,
+        rgba(var(--highlight-rgb), 0.08) 0%,   /* Bright at the center */
+        rgba(var(--highlight-rgb), 0.05) 7%, /* Gradual fade */
+        rgba(var(--highlight-rgb), 0.0) 30%, /* Subtle fading */
+        rgba(var(--highlight-rgb), 0) 100%   /* Fully transparent at edges */
+    );
+}
+
+.card .btn {
+    width: 50%;
+    margin: auto;
+    height: 25px;
+    font-size: medium;
+}
+
+.card-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; /* Centers content horizontally */
+}
+
+.card-row > * {
+    text-align: center;
+}
+
+.card-img-top{
+    max-height: 150px;
+    max-width: 100%;
+    object-fit: contain; /* Ensures the image maintains aspect ratio */
+}
+
+.review-stars {
+    display: flex;
+    justify-content: center; /* Centers the stars */
+    gap: 5px; /* Space between stars */
+}
+
+.star {
+    font-size: xx-small;
+    color: var(--text-primary); /* Default bordered color */
+    opacity: 0.5;
+    text-shadow: 0 0 2px var(--text-primary-color);
+}
+
+.star.filled {
+    opacity: 1;
+    color: var(--text-secondary-color) !important; /* Filled color for selected stars */
+}
+
+.card .form-control, .card .form-select{
+    max-width: 80%;
+    margin: auto;
+    text-align: center; /* Centers content horizontally */
+}
+
+.card h1, .card-subtitle strong{
+    font-size: medium !important;
+}
+
+.card-text, .card-subtitle {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+#size-select {
+    background-position: right center;
+}
+
 /* Desktop styles */
 @media (min-width: 992px) {
     /* Logo aligned to the left */
     .navbar-brand {
-        margin: 0;
+        width: auto;
+        margin: auto;
         margin-right: auto;
     }
 
