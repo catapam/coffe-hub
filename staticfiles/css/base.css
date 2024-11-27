@@ -200,18 +200,24 @@ footer li{
 }
 
 .btn-primary {
-    color: var(--text-primary-color);
-    background-color: var(--bg-light);
-    border-color: var(--bg-darker);
+    --bs-btn-active-bg: var(--text-secondary-color);
+    --bs-btn-active-border-color: var(--text-secondary-color);
+    --bs-btn-active-color: var(--bg-darker);
+    color: var(--text-secondary-color);
+    background-color: var(--bg-darker);
+    border-color: var(--text-secondary-color);
 }
 
 .btn-primary:hover {
-    color: var(--text-primary-color);
-    background-color: var(--bg-lighter);
-    border-color: var(--bg-light);
+    color: var(--bg-darker);
+    background-color: var(--text-secondary-color);
+    border-color: var(--bg-darker);
 }
 
 .btn-secondary {
+    --bs-btn-active-bg: var(--bg-darker);
+    --bs-btn-active-border-color: var(--bg-darker);
+    --bs-btn-active-color: var(--text-secondary-color);
     color: var(--bg-darker);
     background-color: var(--text-secondary-color);
     border-color: var(--bg-darker);
@@ -295,6 +301,11 @@ footer li{
     color: var(--text-secondary-color);
 }
 
+.dropdown-toggle::after{
+    border: 0;
+    content: none;
+}
+
 /* User menu aligned to the right */
 .menu-icon {
     position: relative;
@@ -317,15 +328,19 @@ footer li{
 
 .menu-item{
     margin: auto;
+    cursor: pointer;
 }
 
-.user-menu .dropdown-menu {
+.dropdown-menu {
     right: 0;
     border: var(--border);
     border-color: var(--text-secondary-color);
     left: auto;
 }
 
+.dropdown-menu[data-bs-popper]{
+    left: auto;
+}
 .navbar-nav .dropdown-menu {
     position: absolute;
     right: -11.5px;
@@ -514,6 +529,37 @@ footer li{
     background-position: right center;
 }
 
+/* Filtering and sorting */
+.sort-menu .d-flex {
+    justify-content: flex-start; /* Align icons to the left */
+    gap: 5px; /* Add 5px gap between icons */
+}
+
+/* Icon button styling */
+.sort-menu .nav-link {
+    display: flex; /* Ensure proper alignment */
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    width: 40px; /* Set width */
+    height: 40px; /* Set height */
+    font-size: 1.5rem; /* Increase font size */
+    border-radius: 50%; /* Optional: make the icons circular */
+    background-color: transparent; /* Optional: add background color for visual effect */
+    text-decoration: none; /* Remove underline */
+    margin-left: auto;
+}
+
+/* Additional hover effect for better UX */
+.sort-menu .nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Slight background highlight */
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Adjust icon size */
+.sort-menu .menu-item.lg {
+    font-size: 1.8rem; /* Larger font size for icons */
+}
+
 /* Desktop styles */
 @media (min-width: 992px) {
     /* Logo aligned to the left */
@@ -540,11 +586,6 @@ footer li{
         max-height: 100%;
         margin-left: 10px;
         margin-top: auto;
-    }
-
-    .dropdown-toggle::after {
-        border: 0;
-        content: none;
     }
 
     .search-bar-container {

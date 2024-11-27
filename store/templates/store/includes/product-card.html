@@ -1,44 +1,50 @@
 {% load static %}
 
 <div class="card">
+    <!-- Product Image -->
     <div class="background-gradient">
         <div class="content-gradient">
-            <img class="card-img-top" src="{% static 'images/product-holder.webp' %}" alt="Card image cap">
+            <img class="card-img-top" src="{% static 'images/product-holder.webp' %}" alt="{{ product.name }}">
         </div>
     </div>
-    <div class="card-body">
-        <h1 class="card-title mx-auto">Product name</h5>
 
-        <!--Review Row -->
+    <!-- Card Body -->
+    <div class="card-body">
+        <!-- Product Name -->
+        <h5 class="card-title mx-auto">{{ product.name }}</h5>
+
+        <!-- Review Stars -->
         <div class="review-stars">
             {% for star in total_review %}
-                {% if star < review %}
+                {% if star < product.rating %}
                     <i class="star filled">★</i>
-                {% else %}
+                {% elif star < 5 %}
                     <i class="star">★</i>
                 {% endif %}
             {% endfor %}
         </div>                
 
-        <p class="card-text mx-auto">Short details</p>
+        <!-- Product Details -->
+        <p class="card-text mx-auto">{{ product.details }}</p>
 
         <!-- Size and Quantity Selectors -->
         <div class="row card-row">
             <div class="col-6 mx-auto">
-                <label for="size-select">Size</label>
-                <select id="size-select" class="form-select size">
-                    <option value="S">Small</option>
-                    <option value="M">Medium</option>
-                    <option value="L">Large</option>
+                <label for="size-select-{{ product.id }}">Size</label>
+                <select id="size-select-{{ product.id }}" class="form-select size">
+                    {% for size in product.sizes %}
+                    <option value="{{ size }}">{{ size }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="col-6 mx-auto">
-                <label for="quantity-select">Quantity</label>
-                <input id="quantity-select" type="number" class="form-control quantity" min="1" value="1">
+                <label for="quantity-select-{{ product.id }}">Quantity</label>
+                <input id="quantity-select-{{ product.id }}" type="number" class="form-control quantity" min="1" value="1">
             </div>
         </div>
 
-        <h1 class="card-subtitle mx-auto"><strong>$0.00</strong></h6>
-        <a href="#" class="btn btn-secondary btn-lg mx-auto">Buy</a>
+        <!-- Price and Buy Button -->
+        <h5 class="card-subtitle mx-auto"><strong>${{ product.price }}</strong></h5>
+        <a href="{{ product.buy_url }}" class="btn btn-secondary btn-lg mx-auto">Buy</a>
     </div>
 </div>

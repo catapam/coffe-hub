@@ -1,32 +1,53 @@
-// Mobile search bar toggler
-document.getElementById('mobileSearchButton').addEventListener('click', function () {
-    const searchBar = document.querySelector('.search-bar-container');
-    searchBar.classList.toggle('active'); // Show/hide the search bar
-    searchBar.classList.toggle('d-none'); // Ensure it’s not hidden
-});
-
-// Define a function to handle the menu item toggle
-function setupMenuItemToggle() {
-    // Select all menu items
-    const menuItems = document.querySelectorAll('.menu-item');
-
-    // Add click event listener to each menu item
-    menuItems.forEach(item => {
-        item.addEventListener('click', function () {
-            // If this item is already active, remove the active class
-            if (this.classList.contains('active')) {
-                this.classList.remove('active');
-            } else {
-                // Remove 'active' class from all menu items
-                menuItems.forEach(i => i.classList.remove('active'));
-
-                // Add 'active' class to the clicked menu item
-                this.classList.add('active');
+// Mobile Search Bar Toggle
+function setupMobileSearchToggle() {
+    const mobileSearchButton = document.getElementById('mobileSearchButton');
+    if (mobileSearchButton) {
+        mobileSearchButton.addEventListener('click', function () {
+            const searchBar = document.querySelector('.search-bar-container');
+            if (searchBar) {
+                searchBar.classList.toggle('active'); // Show/hide the search bar
+                searchBar.classList.toggle('d-none'); // Ensure it’s not hidden
             }
         });
-    });
+    }
 }
 
+// Menu Item Toggle
+function setupMenuItemToggle() {
+    const menuItems = document.querySelectorAll('.menu-item');
+    if (menuItems.length > 0) {
+        menuItems.forEach(item => {
+            item.addEventListener('click', function () {
+                if (this.classList.contains('active')) {
+                    this.classList.remove('active'); // Deactivate if already active
+                } else {
+                    menuItems.forEach(i => i.classList.remove('active')); // Deactivate all
+                    this.classList.add('active'); // Activate the clicked item
+                }
+            });
+        });
+    }
+}
 
-// Call the function when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', setupMenuItemToggle);
+// Filter Form Toggle
+function setupFilterToggle() {
+    const toggleButton = document.getElementById('toggle-filters');
+    const filterForm = document.getElementById('filter-form');
+
+    if (toggleButton && filterForm) {
+        toggleButton.addEventListener('click', function () {
+            const isHidden = filterForm.classList.contains('d-none');
+
+            // Toggle visibility classes
+            filterForm.classList.toggle('d-none', !isHidden);
+            filterForm.classList.toggle('d-block', isHidden);
+        });
+    }
+}
+
+// Initialize all event listeners once DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function () {
+    setupMobileSearchToggle();
+    setupMenuItemToggle();
+    setupFilterToggle();
+});
