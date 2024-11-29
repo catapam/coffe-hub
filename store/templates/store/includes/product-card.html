@@ -4,19 +4,22 @@
     <!-- Product Image -->
     <div class="background-gradient">
         <div class="content-gradient">
-            <img class="card-img-top" src="{% static 'images/product-holder.webp' %}" alt="{{ product.name }}">
+            <img class="card-img-top" src="{% static 'images/product-holder.webp' %}" alt="{{ product.product.name }}">
         </div>
     </div>
 
     <!-- Card Body -->
     <div class="card-body">
         <!-- Product Name -->
-        <h5 class="card-title mx-auto">{{ product.name }}</h5>
+        <h5 class="card-title mx-auto">
+            <a href="{% url 'product_detail' slug=product.product.slug %}">{{ product.product.name }}</a>
+        </h5>
+        
 
         <!-- Review Stars -->
         <div class="review-stars">
             {% for star in total_review %}
-                {% if star < product.rating %}
+                {% if star < product.product.rating %}
                     <i class="star filled">★</i>
                 {% elif star < 5 %}
                     <i class="star">★</i>
@@ -25,26 +28,26 @@
         </div>                
 
         <!-- Product Details -->
-        <p class="card-text mx-auto">{{ product.details }}</p>
+        <p class="card-text mx-auto">{{ product.product.description }}</p>
 
         <!-- Size and Quantity Selectors -->
         <div class="row card-row">
             <div class="col-6 mx-auto">
-                <label for="size-select-{{ product.id }}">Size</label>
-                <select id="size-select-{{ product.id }}" class="form-select size">
+                <label for="size-select-{{ product.product.id }}">Size</label>
+                <select id="size-select-{{ product.product.id }}" class="form-select size">
                     {% for size in product.sizes %}
                     <option value="{{ size }}">{{ size }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-6 mx-auto">
-                <label for="quantity-select-{{ product.id }}">Quantity</label>
-                <input id="quantity-select-{{ product.id }}" type="number" class="form-control quantity" min="1" value="1">
+                <label for="quantity-select-{{ product.product.id }}">Quantity</label>
+                <input id="quantity-select-{{ product.product.id }}" type="number" class="form-control quantity" min="1" value="1">
             </div>
         </div>
 
         <!-- Price and Buy Button -->
-        <h5 class="card-subtitle mx-auto"><strong>${{ product.price }}</strong></h5>
-        <a href="{{ product.buy_url }}" class="btn btn-secondary btn-lg mx-auto">Buy</a>
+        <h5 class="card-subtitle mx-auto"><strong>${{ product.product.price }}</strong></h5>
+        <a href="#" class="btn btn-secondary btn-lg mx-auto">Buy</a>
     </div>
 </div>

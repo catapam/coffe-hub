@@ -1,0 +1,23 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div role="main" aria-labelledby="product-details" class="product-details container my-4 page-container">
+    <h1>{{ product.name }}</h1>
+    <p>{{ product.description }}</p>
+    <p>Price: ${{ product.price }}</p>
+    <p>Rating: {{ product.rating }} / 5</p>
+
+    <h3>Sizes</h3>
+    <ul>
+        {% for variant in variants %}
+        <li>
+            {{ variant.size }} - Stock: {{ variant.stock }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock content %}

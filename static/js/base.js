@@ -45,9 +45,62 @@ function setupFilterToggle() {
     }
 }
 
+// Category Dropdown Multi-Select
+function setupCategorySelection() {
+    const allCheckbox = document.querySelector('input[name="category[]"][value=""]');
+    const categoryCheckboxes = document.querySelectorAll('input[name="category[]"]:not([value=""])');
+
+    if (allCheckbox) {
+        // Handle "All" checkbox behavior
+        allCheckbox.addEventListener('change', function () {
+            if (allCheckbox.checked) {
+                categoryCheckboxes.forEach(checkbox => checkbox.checked = false);
+            }
+            updateCategoryButton();
+        });
+    }
+
+    if (categoryCheckboxes.length > 0) {
+        // Handle individual category checkboxes behavior
+        categoryCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                if (this.checked) {
+                    allCheckbox.checked = false; // Deselect "All" when any category is selected
+                }
+                if (Array.from(categoryCheckboxes).every(checkbox => checkbox.checked)) {
+                    allCheckbox.checked = true; // Select "All" if all individual categories are selected
+                    categoryCheckboxes.forEach(checkbox => checkbox.checked = false); // Deselect others
+                }
+                updateCategoryButton();
+            });
+        });
+    }
+}
+
+// Function to update the button label
+function updateCategoryButton() {
+    const allCheckbox = document.querySelector('input[name="category[]"][value=""]');
+    const categoryCheckboxes = document.querySelectorAll('input[name="category[]"]:not([value=""])');
+    const categoryDropdownButton = document.getElementById('categoryDropdownButton');
+
+    if (allCheckbox && allCheckbox.checked) {
+        categoryDropdownButton.textContent = 'All';
+    } else {
+        const selectedCategories = Array.from(categoryCheckboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.closest('label').textContent.trim());
+
+        categoryDropdownButton.textContent = selectedCategories.length > 0
+            ? selectedCategories.join(', ')
+            : 'All';
+    }
+}
+
 // Initialize all event listeners once DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function () {
     setupMobileSearchToggle();
     setupMenuItemToggle();
     setupFilterToggle();
+    setupCategorySelection();
+    updateCategoryButton();
 });

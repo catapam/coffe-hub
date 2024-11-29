@@ -245,6 +245,10 @@ footer li{
     transition: background-color 0.3s ease; /* Smooth transition on scroll */
 }
 
+.navbar .container-fluid {
+    max-width: 1800px;
+}
+
 .navbar-brand {
     max-height: 50px;
     color: var(--text-secondary-color);
@@ -382,7 +386,7 @@ footer li{
 }
 
 /* Change the border color when the search input is focused */
-* input:focus, * select:focus {
+* input:focus, * select:focus, .btn-category:focus {
     outline: none !important; /* Removes the default blue outline */
     border-color: var(--text-secondary-color) !important; /* Replace with your desired color */
     box-shadow: 0 0 5px var(--text-primary-color) !important; /* Optional: Add a glow effect */
@@ -407,14 +411,18 @@ footer li{
     text-align: center; /* Center the text content */
 }
 
-/* Privacy policy */
-.privacy-policy{
+.error-page p a {
+    font-family: inherit;
+}
+
+/* Pages container */
+.page-container{
     width: 80%;
-    max-width: 800px;
     margin-top: 100px;
     margin-left: auto;
     margin-right: auto;
     font-size: small;
+    min-height: 350px;
 }
 
 /* Card template */
@@ -425,6 +433,8 @@ footer li{
     margin: 0;
     height: 100%;
     width: auto;
+    max-width: 250px;
+    min-width: 150px;
     background-color: var(--bg-dark);
     box-shadow: 0 0 10px rgba(var(--highlight-rgb), 0.1);
 }
@@ -467,6 +477,16 @@ footer li{
         rgba(var(--highlight-rgb), 0.0) 30%, /* Subtle fading */
         rgba(var(--highlight-rgb), 0) 100%   /* Fully transparent at edges */
     );
+}
+
+.card-title a{
+    color: var(--text-secondary-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.card-title a:hover {
+    color: var(--text-primary-color);
 }
 
 .card .btn {
@@ -514,6 +534,7 @@ footer li{
     max-width: 80%;
     margin: auto;
     text-align: center; /* Centers content horizontally */
+    background-image: none;
 }
 
 .card h1, .card-subtitle strong{
@@ -533,6 +554,41 @@ footer li{
 .sort-menu .d-flex {
     justify-content: flex-start; /* Align icons to the left */
     gap: 5px; /* Add 5px gap between icons */
+}
+
+.btn-category {
+    color: var(--text-primary-color);
+    border: var(--border);
+    background-color: var(--bs-body-bg);
+    box-shadow: 0 0 1px var(--text-primary-color);
+    border-radius: var(--bs-border-radius);
+    font-family: var(--font-heading);
+    height: 100%;
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-clip: padding-box;
+    border-radius: var(--bs-border-radius);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+    /* Truncation with ellipsis */
+    white-space: nowrap;          /* Prevent text from wrapping */
+    overflow: hidden;            /* Hide overflowing text */
+    text-overflow: ellipsis;     /* Add ellipsis (...) to truncated text */
+}
+
+.btn-category:hover {
+    color: var(--text-secondary-color);
+}
+
+.btn-category:active {
+    color: var(--text-secondary-color);
 }
 
 /* Icon button styling */

@@ -1,0 +1,101 @@
+[
+    {
+        "model": "product.productvariant",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "size": "250g",
+            "stock": 100
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 2,
+        "fields": {
+            "product": 1,
+            "size": "500g",
+            "stock": 50
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 3,
+        "fields": {
+            "product": 1,
+            "size": "1kg",
+            "stock": 20
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 4,
+        "fields": {
+            "product": 2,
+            "size": "250g",
+            "stock": 120
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 5,
+        "fields": {
+            "product": 2,
+            "size": "500g",
+            "stock": 60
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 6,
+        "fields": {
+            "product": 2,
+            "size": "1kg",
+            "stock": 25
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 7,
+        "fields": {
+            "product": 3,
+            "size": "500ml",
+            "stock": 40
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 8,
+        "fields": {
+            "product": 3,
+            "size": "1L",
+            "stock": 20
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 9,
+        "fields": {
+            "product": 5,
+            "size": "250g",
+            "stock": 80
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 10,
+        "fields": {
+            "product": 5,
+            "size": "500g",
+            "stock": 40
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 11,
+        "fields": {
+            "product": 5,
+            "size": "1kg",
+            "stock": 15
+        }
+    }
+]

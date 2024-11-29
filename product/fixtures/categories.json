@@ -1,0 +1,32 @@
+[
+    {
+        "model": "product.category",
+        "pk": 1,
+        "fields": {
+            "name": "Coffee Beans",
+            "slug": "coffee-beans",
+            "description": "A variety of high-quality coffee beans from around the world.",
+            "created_at": "2024-11-24T00:00:00Z"
+        }
+    },
+    {
+        "model": "product.category",
+        "pk": 2,
+        "fields": {
+            "name": "Coffee Equipment",
+            "slug": "coffee-equipment",
+            "description": "Brewing tools and accessories for coffee enthusiasts.",
+            "created_at": "2024-11-24T00:00:00Z"
+        }
+    },
+    {
+        "model": "product.category",
+        "pk": 3,
+        "fields": {
+            "name": "Specialty Drinks",
+            "slug": "specialty-drinks",
+            "description": "Unique and flavorful coffee beverages.",
+            "created_at": "2024-11-24T00:00:00Z"
+        }
+    }
+]

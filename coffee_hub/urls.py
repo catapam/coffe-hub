@@ -17,4 +17,7 @@ urlpatterns = [
 
     # Custom privacy policy page
     path('privacy-policy/', CustomPrivacyPolicyView.as_view(), name='privacy-policy'),
+
+    # Products
+    path('products/', include('product.urls')),
 ]

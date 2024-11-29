@@ -1,0 +1,77 @@
+[
+    {
+        "model": "product.product",
+        "pk": 1,
+        "fields": {
+            "name": "Ethiopian Coffee Beans",
+            "slug": "ethiopian-coffee-beans",
+            "category": 1,
+            "description": "Premium Ethiopian coffee beans with bright citrus and floral notes.",
+            "price": "25.99",
+            "rating": 4.7,
+            "image": null,
+            "created_at": "2024-11-24T00:00:00Z",
+            "updated_at": "2024-11-24T00:00:00Z"
+        }
+    },
+    {
+        "model": "product.product",
+        "pk": 2,
+        "fields": {
+            "name": "Colombian Coffee Beans",
+            "slug": "colombian-coffee-beans",
+            "category": 1,
+            "description": "Rich and smooth Colombian coffee beans, perfect for a balanced cup.",
+            "price": "22.99",
+            "rating": 4.8,
+            "image": null,
+            "created_at": "2024-11-24T00:00:00Z",
+            "updated_at": "2024-11-24T00:00:00Z"
+        }
+    },
+    {
+        "model": "product.product",
+        "pk": 3,
+        "fields": {
+            "name": "Cold Brew Concentrate",
+            "slug": "cold-brew-concentrate",
+            "category": 3,
+            "description": "Smooth and refreshing cold brew coffee concentrate.",
+            "price": "15.99",
+            "rating": 4.6,
+            "image": null,
+            "created_at": "2024-11-24T00:00:00Z",
+            "updated_at": "2024-11-24T00:00:00Z"
+        }
+    },
+    {
+        "model": "product.product",
+        "pk": 4,
+        "fields": {
+            "name": "French Press",
+            "slug": "french-press",
+            "category": 2,
+            "description": "High-quality French press for brewing aromatic coffee.",
+            "price": "35.99",
+            "rating": 4.5,
+            "image": null,
+            "created_at": "2024-11-24T00:00:00Z",
+            "updated_at": "2024-11-24T00:00:00Z"
+        }
+    },
+    {
+        "model": "product.product",
+        "pk": 5,
+        "fields": {
+            "name": "Espresso Blend Beans",
+            "slug": "espresso-blend-beans",
+            "category": 1,
+            "description": "Bold espresso blend coffee beans with rich crema.",
+            "price": "28.99",
+            "rating": 4.9,
+            "image": null,
+            "created_at": "2024-11-24T00:00:00Z",
+            "updated_at": "2024-11-24T00:00:00Z"
+        }
+    }
+]
