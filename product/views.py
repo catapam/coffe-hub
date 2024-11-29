@@ -70,6 +70,7 @@ class ProductListView(ListView):
 class ProductDetailView(DetailView):
     """
     Displays the details of a single product, including its variants.
+    Passes size and stock information dynamically from ProductVariant.
     """
     model = Product
     template_name = 'product/product_detail.html'
@@ -77,6 +78,27 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Add product variants to the context
-        context['variants'] = self.object.variants.all()
+        product = self.object
+
+        # Fetch variants and organize sizes and stock
+        variants = product.variants.all()
+        sizes = [variant.size for variant in variants]
+        stock_by_size = {variant.size: variant.stock for variant in variants}
+
+        # Set default size and stock status
+        default_size = sizes[0] if sizes else None
+        default_stock_status = "In Stock" if stock_by_size.get(default_size, 0) > 0 else "Out of Stock"
+
+        # Add data to the context
+        context['variants'] = variants
+        context['sizes'] = sizes
+        context['stock_by_size'] = stock_by_size
+        context['default_size'] = default_size  # First size as default
+        context['default_stock_status'] = default_stock_status  # Stock status for the default size
+        context['total_review'] = range(5)  # For star ratings
+
         return context
+
+
+
+

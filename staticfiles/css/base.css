@@ -437,6 +437,7 @@ footer li{
     min-width: 150px;
     background-color: var(--bg-dark);
     box-shadow: 0 0 10px rgba(var(--highlight-rgb), 0.1);
+    border-radius: var(--bs-border-radius);
 }
 
 .card * {
@@ -614,6 +615,34 @@ footer li{
 /* Adjust icon size */
 .sort-menu .menu-item.lg {
     font-size: 1.8rem; /* Larger font size for icons */
+}
+
+/* Product page */
+.product-page .review-stars{
+    justify-content: left;
+}
+
+.product-page .star{
+    font-size: medium;
+}
+
+.product-page .card-img-top{
+    min-width: 150px;
+    width: auto;
+    max-width: 100%;
+    max-height: none;
+}
+
+.product-page .card{
+    max-width: 100%;
+}
+
+.product-page .content-gradient{
+    height: 100%;
+}
+
+.product-page .content-gradient::after{
+    height: 100%;
 }
 
 /* Desktop styles */
