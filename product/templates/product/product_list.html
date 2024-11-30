@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<!-- Including the CSS for styling -->
+{% block extra_css %}
+
+{% endblock extra_css %}
+
 {% block content %}
 <div role="main" aria-labelledby="product-list" class="product-list page-container">
     <h1>Products</h1>
@@ -8,3 +13,9 @@
 </div>
 
 {% endblock content %}
+
+<!-- Page specific scripts -->
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'js/product.js' %}" defer></script>
+{% endblock extra_js %}

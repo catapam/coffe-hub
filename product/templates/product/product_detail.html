@@ -37,10 +37,13 @@
                 <div class="d-flex gap-3 mb-3">
                     <!-- Size Selector -->
                     <div class="w-50">
-                        <label for="size-select" class="form-label">Size</label>
-                        <select id="size-select" class="form-select">
-                            {% for size in sizes %}
-                                <option value="{{ size }}" {% if size == default_size %}selected{% endif %}>
+                        <label for="size-select-{{ product.id }}" class="form-label">Size</label>
+                        <select id="size-select-{{ product.id }}" class="form-select size select-dropdown">
+                            {% for size, data in stock_by_size.items %}
+                                <option value="{{ size }}" 
+                                    data-price="{{ data.price }}" 
+                                    data-stock="{{ data.stock }}"
+                                    {% if size == default_size %}selected{% endif %}>
                                     {{ size }}
                                 </option>
                             {% endfor %}
@@ -54,43 +57,28 @@
                     </div>
                 </div>
 
-                <!-- Price Display -->
+                <!-- Price or Stock Status -->
                 <div class="d-flex justify-content-end mb-3">
-                    <h4 class="mb-0"><strong>${{ product.price }}</strong></h4>
+                    <h5 class="card-subtitle mt-3">
+                        <span id="price-display-{{ product.id }}"></span>
+                    </h5>
                 </div>
 
-                <!-- Buy Button and Stock Display -->
-                <a href="{{ product.get_buy_url }}" class="btn btn-secondary btn-lg mt-3">
+                <!-- Buy Button -->
+                <a id="buy-button-{{ product.id }}" 
+                    href="{{ product.get_buy_url }}" 
+                    class="btn btn-secondary {% if default_stock_status == 'Out of Stock' %}disabled{% endif %}" 
+                    {% if default_stock_status == 'Out of Stock' %}disabled{% endif %}>
                     Buy
                 </a>
-                <div class="d-flex flex-column align-items-center">
-                    <!-- Stock Display -->
-                    <p id="stock-display" class="text-muted mb-3 align-items-center">{{ default_stock_status }}</p>
-                </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock content %}
+{% endblock %}
 
 <!-- Page specific scripts -->
 {% block extra_js %}
 {{ block.super }}
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const sizeSelect = document.getElementById("size-select");
-        const stockDisplay = document.getElementById("stock-display");
-
-        // Stock mapping from the context
-        const stockBySize = {{ stock_by_size|safe }};
-
-        // Update stock display when size is changed
-        sizeSelect.addEventListener("change", function () {
-            const selectedSize = sizeSelect.value;
-            const stock = stockBySize[selectedSize] || 0;
-            const stockStatus = stock > 0 ? "In Stock" : "Out of Stock";
-            stockDisplay.innerHTML = `<strong>${stockStatus}</strong>`;
-        });
-    });
-</script>
+    <script src="{% static 'js/product.js' %}" defer></script>
 {% endblock %}

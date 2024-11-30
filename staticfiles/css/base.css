@@ -382,11 +382,12 @@ footer li{
 
 .form-control, .form-select{
     border: var(--border);
-    box-shadow: 0 0 1px var(--text-primary-color);
+    border-color: var(--bg-lighter);
+    box-shadow: 0 0 2px var(--text-primary-color);
 }
 
 /* Change the border color when the search input is focused */
-* input:focus, * select:focus, .btn-category:focus {
+* input:focus, * select:focus, .btn-category:focus, * textarea:focus, .accordion-button:not(.collapsed), .accordion-button:focus, .accordion-body {
     outline: none !important; /* Removes the default blue outline */
     border-color: var(--text-secondary-color) !important; /* Replace with your desired color */
     box-shadow: 0 0 5px var(--text-primary-color) !important; /* Optional: Add a glow effect */
@@ -547,8 +548,16 @@ footer li{
     margin-bottom: 5px;
 }
 
+.card-subtitle {
+    text-align: center;
+}
+
 #size-select {
     background-position: right center;
+}
+
+.select-dropdown option:focus{
+    background-color: #c0c0c0 !important;
 }
 
 /* Filtering and sorting */
@@ -637,12 +646,22 @@ footer li{
     max-width: 100%;
 }
 
-.product-page .content-gradient{
+.product-page .content-gradient, .product-page .content-gradient::after{
     height: 100%;
 }
 
-.product-page .content-gradient::after{
-    height: 100%;
+/* Help page */
+.accordion-button:not(.collapsed) {
+    color: var(--bg-darker);
+    background-color: var(--text-secondary-color);
+}
+
+.accordion-button:not(.collapsed)::after, .accordion-button::after {
+    background-image: none;
+}
+
+.accordion-body {
+    border-radius: var(--bs-border-radius);
 }
 
 /* Desktop styles */

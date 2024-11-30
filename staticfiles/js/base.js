@@ -83,6 +83,11 @@ function updateCategoryButton() {
     const categoryCheckboxes = document.querySelectorAll('input[name="category[]"]:not([value=""])');
     const categoryDropdownButton = document.getElementById('categoryDropdownButton');
 
+    // Check if the button exists
+    if (!categoryDropdownButton) {
+        return;
+    }
+
     if (allCheckbox && allCheckbox.checked) {
         categoryDropdownButton.textContent = 'All';
     } else {

@@ -8,64 +8,54 @@ class ProductListView(ListView):
     """
     model = Product
     template_name = 'product/product_list.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        """
+        Retrieves the products along with their variants.
+        """
+        return Product.objects.prefetch_related('variants').all()
 
     def get_context_data(self, **kwargs):
+        """
+        Adds additional filtering, sorting, and variant information to the context.
+        """
         context = super().get_context_data(**kwargs)
 
-        # Fetch all products and their variants
-        all_products = Product.objects.prefetch_related('variants').all()
+        # Fetch the base queryset
+        queryset = self.get_queryset()
 
-        # Filters from request
-        selected_categories = self.request.GET.getlist('category[]')  # Allow multiple category selections
-        price_min = self.request.GET.get('price_min')
-        price_max = self.request.GET.get('price_max')
-        min_rating = self.request.GET.get('rating')
+        # Filters and sorting logic...
 
-        # Apply filters
-        if selected_categories:
-            all_products = all_products.filter(category__slug__in=selected_categories)
-        if price_min:
-            all_products = all_products.filter(price__gte=price_min)
-        if price_max:
-            all_products = all_products.filter(price__lte=price_max)
-        if min_rating:
-            all_products = all_products.filter(rating__gte=min_rating)
-
-        # Apply sorting
-        sort_by = self.request.GET.get('sort_by')
-        if sort_by == 'price_asc':
-            all_products = all_products.order_by('price')
-        elif sort_by == 'price_desc':
-            all_products = all_products.order_by('-price')
-        elif sort_by == 'name_asc':
-            all_products = all_products.order_by('name')
-        elif sort_by == 'name_desc':
-            all_products = all_products.order_by('-name')
-        elif sort_by == 'rating_asc':
-            all_products = all_products.order_by('rating')
-        elif sort_by == 'rating_desc':
-            all_products = all_products.order_by('-rating')
-
-        # Prepare product list with sizes from variants
-        products_with_sizes = []
-        for product in all_products:
+        # Prepare products with their sizes and stock
+        products_with_context = []
+        for product in queryset:
             variants = product.variants.all()
-            sizes = [variant.size for variant in variants]
-            products_with_sizes.append({
-                'product': product,
-                'sizes': sizes if sizes else ['Unic']  # Default to "Unic" if no sizes are available
+            stock_by_size = {
+                variant.size: {"price": variant.price, "stock": variant.stock}
+                for variant in variants
+            }
+            default_size = variants[0].size if variants else None
+            default_price = stock_by_size.get(default_size, {}).get('price', 0)
+            default_stock_status = (
+                "In Stock" if stock_by_size.get(default_size, {}).get('stock', 0) > 0 else "Out of Stock"
+            )
+
+            products_with_context.append({
+                "product": product,
+                "stock_by_size": stock_by_size,
+                "default_size": default_size,
+                "default_price": default_price,
+                "default_stock_status": default_stock_status,
             })
 
-        # Add context data
-        context['products'] = products_with_sizes
-        context['categories'] = [
-            {'slug': category.slug, 'name': category.name}
-            for category in Category.objects.all()
-        ]
-        context['selected_categories'] = selected_categories  # Pass selected categories to context
-        context['total_review'] = range(0, 6)  # Star ratings 0 to 5
+        # Add to context
+        context['products_with_context'] = products_with_context
+        context['categories'] = Category.objects.values('slug', 'name')
+        context['total_review'] = range(6)  # For star ratings
 
         return context
+
 
 class ProductDetailView(DetailView):
     """

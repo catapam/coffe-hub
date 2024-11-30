@@ -1,10 +1,8 @@
-{% load static %}
-
 <div class="card">
     <!-- Product Image -->
     <div class="background-gradient">
         <div class="content-gradient">
-            <img class="card-img-top" src="{{ product.product.image }}" alt="{{ product.product.name }}">
+            <img class="card-img-top" src="{{ product_data.product.image }}" alt="{{ product_data.product.name }}">
         </div>
     </div>
 
@@ -12,42 +10,59 @@
     <div class="card-body">
         <!-- Product Name -->
         <h5 class="card-title mx-auto">
-            <a href="{% url 'product_detail' slug=product.product.slug %}">{{ product.product.name }}</a>
+            <a href="{% url 'product_detail' slug=product_data.product.slug %}">{{ product_data.product.name }}</a>
         </h5>
-        
 
         <!-- Review Stars -->
         <div class="review-stars">
             {% for star in total_review %}
-                {% if star < product.product.rating %}
+                {% if star < product_data.product.rating %}
                     <i class="star filled">★</i>
                 {% elif star < 5 %}
                     <i class="star">★</i>
                 {% endif %}
             {% endfor %}
-        </div>                
+        </div>
 
         <!-- Product Details -->
-        <p class="card-text mx-auto">{{ product.product.description }}</p>
+        <p class="card-text mx-auto">{{ product_data.product.description }}</p>
 
         <!-- Size and Quantity Selectors -->
         <div class="row card-row">
+            <!-- Size Selector -->
             <div class="col-6 mx-auto">
-                <label for="size-select-{{ product.product.id }}">Size</label>
-                <select id="size-select-{{ product.product.id }}" class="form-select size">
-                    {% for size in product.sizes %}
-                    <option value="{{ size }}">{{ size }}</option>
+                <label for="size-select-{{ product_data.product.id }}">Size</label>
+                <select id="size-select-{{ product_data.product.id }}" class="form-select size select-dropdown">
+                    {% for size, data in product_data.stock_by_size.items %}
+                    <option value="{{ size }}" 
+                        data-price="{{ data.price }}" 
+                        data-stock="{{ data.stock }}"
+                        {% if size == product_data.default_size %}selected{% endif %}>
+                        {{ size }}
+                    </option>
                     {% endfor %}
                 </select>
             </div>
+
+            <!-- Quantity Selector -->
             <div class="col-6 mx-auto">
-                <label for="quantity-select-{{ product.product.id }}">Quantity</label>
-                <input id="quantity-select-{{ product.product.id }}" type="number" class="form-control quantity" min="1" value="1">
+                <label for="quantity-select-{{ product_data.product.id }}">Quantity</label>
+                <input id="quantity-select-{{ product_data.product.id }}" type="number" class="form-control quantity" min="1" value="1">
             </div>
         </div>
 
-        <!-- Price and Buy Button -->
-        <h5 class="card-subtitle mx-auto"><strong>${{ product.product.price }}</strong></h5>
-        <a href="#" class="btn btn-secondary btn-lg mx-auto">Buy</a>
+        <!-- Price or Stock Status -->
+        <h5 class="card-subtitle mt-3">
+            <span id="price-display-{{ product_data.product.id }}"></span>
+        </h5>
+
+        <!-- Buy Button -->
+        <a id="buy-button-{{ product_data.product.id }}" 
+            href="{{ product_data.product.get_buy_url }}" 
+            class="btn btn-secondary btn-sm {% if product_data.default_stock_status == 'Out of Stock' %}disabled{% endif %}" 
+            {% if product_data.default_stock_status == 'Out of Stock' %}disabled{% endif %}>
+            Buy
+        </a>
+
     </div>
 </div>

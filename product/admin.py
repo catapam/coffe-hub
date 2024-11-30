@@ -1,23 +1,20 @@
 from django.contrib import admin
 from .models import Product, ProductVariant, Category
 
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'created_at')
-    prepopulated_fields = {'slug': ('name',)}
+class ProductVariantInline(admin.TabularInline):
+    model = ProductVariant
+    extra = 1
+    fields = ('size', 'price', 'stock')  # Include price in the inline form
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price', 'get_total_stock', 'rating', 'created_at')
+    list_display = ('name', 'category', 'rating', 'created_at', 'updated_at')
+    list_filter = ('category', 'created_at', 'updated_at')
+    search_fields = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)}
+    inlines = [ProductVariantInline]
 
-    def get_total_stock(self, obj):
-        """
-        Calculate the total stock for a product by summing up the stock of its variants.
-        """
-        return sum(variant.stock for variant in obj.variants.all())
-    get_total_stock.short_description = 'Total Stock'  # Rename column in admin panel
-
-@admin.register(ProductVariant)
-class ProductVariantAdmin(admin.ModelAdmin):
-    list_display = ('product', 'size', 'stock')
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'created_at')
+    prepopulated_fields = {'slug': ('name',)}

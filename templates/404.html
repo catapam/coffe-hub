@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
 <!-- Including the CSS for styling -->
 {% block extra_css %}
 
 {% endblock extra_css %}
 
+{% block content %}
 <!-- Main content section with ARIA role for better accessibility -->
 <div role="main" aria-labelledby="not-found-heading" class="error-page page-container">
     <h1 id="not-found-heading">404 - Page Not Found</h1>
     
     <!-- Clear and descriptive error message -->
-    <p>The page you are looking for does not exist. Use the menu above to navigate back to the platform or <a href="{% url 'catalog' %}" aria-label="Return to home page" class="menu-item">return to home page</a>.</p>
+    <p>The page you are looking for does not exist. Use the menu above to navigate back to the platform or <a href="{% url 'home' %}" aria-label="Return to home page" class="menu-item">return to home page</a>.</p>
 </div>
+{% endblock %}
 
 <!-- Including the JavaScript for the page -->
 {% block extra_js %}
 
 {% endblock extra_js %}
-{% endblock %}

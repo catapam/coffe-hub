@@ -1,12 +1,24 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<!-- Including the CSS for styling -->
+{% block extra_css %}
+
+{% endblock extra_css %}
+
 {% block content %}
 <div class="hero">
     <img class="image" src="{% static 'images/hero.webp' %}" alt="Commercial Hero Image">
 </div>
 
-{% block shop-content %}
-
-{% endblock shop-content %}
+<div class="container my-4">
+    
+    {% include 'product/includes/catalog.html' %}
+</div>
 {% endblock content %}
+
+<!-- Page specific scripts -->
+{% block extra_js %}
+{{ block.super }}
+    <script src="{% static 'js/product.js' %}" defer></script>
+{% endblock extra_js %}
