@@ -1,0 +1,75 @@
+{% load static %}
+
+<div class="container mt-5 product-page">
+    <div class="row">
+        <!-- Image Section -->
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <div class="card">
+                <div class="background-gradient">
+                    <div class="content-gradient">
+                        <img class="card-img-top" src="{{ product.image }}" alt="{{ product.name }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Details Section -->
+        <div class="col-md-6">
+            <div class="card-body">
+                <h2 class="card-title">{{ product.name }}</h2>
+
+                <!-- Review Stars -->
+                <div class="review-stars mb-3">
+                    {% for star in total_review %}
+                        {% if star < product.rating %}
+                            <i class="star filled">★</i>
+                        {% elif star < 5 %}
+                            <i class="star">★</i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <p class="card-text">{{ product.description }}</p>
+
+                <!-- Size and Quantity Selectors -->
+                <div class="d-flex gap-3 mb-3">
+                    <!-- Size Selector -->
+                    <div class="w-50">
+                        <label for="size-select-{{ product.id }}" class="form-label">Size</label>
+                        <select id="size-select-{{ product.id }}" class="form-select size select-dropdown">
+                            {% for size, data in stock_by_size.items %}
+                                <option value="{{ size }}" 
+                                    data-price="{{ data.price }}" 
+                                    data-stock="{{ data.stock }}"
+                                    {% if size == default_size %}selected{% endif %}>
+                                    {{ size }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Quantity Selector -->
+                    <div class="w-50">
+                        <label for="quantity-select" class="form-label">Quantity</label>
+                        <input id="quantity-select" type="number" class="form-control" min="1" value="1">
+                    </div>
+                </div>
+
+                <!-- Price or Stock Status -->
+                <div class="d-flex justify-content-end mb-3">
+                    <h5 class="card-subtitle mt-3">
+                        <span id="price-display-{{ product.id }}"></span>
+                    </h5>
+                </div>
+
+                <!-- Buy Button -->
+                <a id="buy-button-{{ product.id }}" 
+                    href="{{ product.get_buy_url }}" 
+                    class="btn btn-secondary {% if default_stock_status == 'Out of Stock' %}disabled{% endif %}" 
+                    {% if default_stock_status == 'Out of Stock' %}disabled{% endif %}>
+                    Buy
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

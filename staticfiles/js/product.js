@@ -20,14 +20,25 @@ class ProductCardHandler {
     updateProductCard(sizeSelect) {
         if (!sizeSelect) return;
 
-        // Extract product ID from the element's ID
-        const productId = sizeSelect.id.split("-")[2];
+        // Find the parent card containing the size selector
+        const cardElement = sizeSelect.closest(".card");
+        if (!cardElement) return;
+
+        // Get the selected option details
         const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+        if (!selectedOption) return;
+
         const price = selectedOption.dataset.price || 0;
         const stock = parseInt(selectedOption.dataset.stock || 0, 10);
 
-        // Update price display
-        const priceDisplay = document.getElementById(`price-display-${productId}`);
+        // Update elements within this specific card
+        this.updatePriceDisplay(cardElement, price, stock);
+        this.updateBuyButton(cardElement, stock);
+    }
+
+    updatePriceDisplay(cardElement, price, stock) {
+        // Find the price display within the specific card
+        const priceDisplay = cardElement.querySelector(`#price-display-${cardElement.querySelector('.size').id.split('-')[2]}`);
         if (priceDisplay) {
             if (stock > 0) {
                 priceDisplay.innerHTML = `<strong>$${price} <span>each</span></strong>`;
@@ -37,9 +48,11 @@ class ProductCardHandler {
                 priceDisplay.classList.add(this.outOfStockClass);
             }
         }
+    }
 
-        // Enable or disable the buy button
-        const buyButton = document.getElementById(`buy-button-${productId}`);
+    updateBuyButton(cardElement, stock) {
+        // Find the buy button within the specific card
+        const buyButton = cardElement.querySelector(`#buy-button-${cardElement.querySelector('.size').id.split('-')[2]}`);
         if (buyButton) {
             if (stock <= 0) {
                 buyButton.classList.add(this.disabledClass);

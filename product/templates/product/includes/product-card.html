@@ -34,12 +34,11 @@
                 <label for="size-select-{{ product_data.product.id }}">Size</label>
                 <select id="size-select-{{ product_data.product.id }}" class="form-select size select-dropdown">
                     {% for size, data in product_data.stock_by_size.items %}
-                    <option value="{{ size }}" 
-                        data-price="{{ data.price }}" 
-                        data-stock="{{ data.stock }}"
-                        {% if size == product_data.default_size %}selected{% endif %}>
-                        {{ size }}
-                    </option>
+                        <option value="{{ size }}" 
+                            data-price="{{ data.price }}" 
+                            data-stock="{{ data.stock }}"{% if size == product_data.variant_size %} selected{% endif %}>
+                            {{ size }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>
@@ -53,16 +52,19 @@
 
         <!-- Price or Stock Status -->
         <h5 class="card-subtitle mt-3">
-            <span id="price-display-{{ product_data.product.id }}"></span>
+            {% if product_data.variant_stock == 0 %}
+                <span id="price-display-{{ product_data.product.id }}" class="text-danger"><strong>Out of Stock</strong></span>
+            {% else %}
+                <span id="price-display-{{ product_data.product.id }}"><strong>$<span>{{ product_data.variant_price }}</span> <span>each</span></strong></span>
+            {% endif %}
         </h5>
 
         <!-- Buy Button -->
         <a id="buy-button-{{ product_data.product.id }}" 
             href="{{ product_data.product.get_buy_url }}" 
-            class="btn btn-secondary btn-sm {% if product_data.default_stock_status == 'Out of Stock' %}disabled{% endif %}" 
-            {% if product_data.default_stock_status == 'Out of Stock' %}disabled{% endif %}>
+            class="btn btn-secondary btn-sm {% if product_data.variant_stock == 0 %}disabled{% endif %}" 
+            {% if product_data.variant_stock == 0 %}disabled{% endif %}>
             Buy
         </a>
-
     </div>
 </div>

@@ -58,6 +58,18 @@
     <div class="mt-3">
         <button type="submit" class="btn btn-secondary">Apply Filters</button>
         <a href="{{ request.path }}" class="btn btn-primary">Reset</a>
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                id="show-out-of-stock"
+                name="show_out_of_stock"
+                {% if request.GET.show_out_of_stock == "on" %}checked{% endif %}
+            >
+            <label class="form-check-label" for="show-out-of-stock">
+                Show Out of Stock
+            </label>
+        </div>     
     </div>
 </form>
 
@@ -68,18 +80,19 @@
         <i class="fa-solid fa-filter menu-item lg" aria-label="Filter toggler"></i>
     </a>
 
-    <!-- Sorting Icon with Dropdown -->
     <div class="dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" id="sortingDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa-solid fa-sort menu-item lg" aria-label="Sorting options"></i>
         </a>
         <ul class="dropdown-menu" aria-labelledby="sortingDropdown">
-            <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'sort_by' %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort_by=price_asc">Price: Low to High</a></li>
-            <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'sort_by' %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort_by=price_desc">Price: High to Low</a></li>
-            <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'sort_by' %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort_by=name_asc">Name: A to Z</a></li>
-            <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'sort_by' %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort_by=name_desc">Name: Z to A</a></li>
-            <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'sort_by' %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort_by=rating_asc">Rating: Low to High</a></li>
-            <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'sort_by' %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort_by=rating_desc">Rating: High to Low</a></li>
+            {% for sort_key, sort_label in sorting_options.items %}
+            <li>
+                <a class="dropdown-item" 
+                   href="?{% with request.GET.copy as params %}{% for key, values in params.lists %}{% for value in values %}{% if key != 'sort_by' %}{{ key }}={{ value|urlencode }}&{% endif %}{% endfor %}{% endfor %}sort_by={{ sort_key }}{% endwith %}">
+                    {{ sort_label }}
+                </a>
+            </li>
+            {% endfor %}
         </ul>
     </div>    
 </div>
