@@ -2,11 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5 product-page">
-    <div class="row">
-        {% include 'product/includes/product-detail.html' %}
-    </div>
-</div>
+    {% include 'product/includes/product-card.html' with view='detail' %}
 {% endblock %}
 
 <!-- Page specific scripts -->

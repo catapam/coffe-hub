@@ -54,11 +54,20 @@
 
             <!-- Search bar -->
             <div class="search-bar-container d-none d-lg-flex">
-                <form class="form-inline search-bar">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <form class="form-inline search-bar" method="GET" action="{% url 'product' %}">
+                    {% with request.GET.copy as params %}
+                    {% for key, values in params.lists %}
+                        {% if key != 'q' %}
+                            {% for value in values %}
+                                <input type="hidden" name="{{ key }}" value="{{ value|urlencode }}">
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    {% endwith %}
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
                     <button class="btn btn-secondary my-2 my-sm-0" type="submit">GO</button>
                 </form>
-            </div>
+            </div>                   
             
             <!-- Cart menu -->
             <div class="cart-menu d-none d-lg-block menu-icon">

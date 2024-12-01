@@ -11,9 +11,13 @@ class ProductCardHandler {
         sizeSelectors.forEach(sizeSelect => {
             // Trigger updates for each size selector on DOM load
             this.updateProductCard(sizeSelect);
+            this.updateBuyUrl(sizeSelect);
 
             // Add event listener for size changes
-            sizeSelect.addEventListener("change", () => this.updateProductCard(sizeSelect));
+            sizeSelect.addEventListener("change", () => {
+                this.updateProductCard(sizeSelect);
+                this.updateBuyUrl(sizeSelect);
+            });
         });
     }
 
@@ -61,6 +65,26 @@ class ProductCardHandler {
                 buyButton.classList.remove(this.disabledClass);
                 buyButton.removeAttribute("disabled");
             }
+        }
+    }
+
+    updateBuyUrl(sizeSelect) {
+        if (!sizeSelect) return;
+
+        // Extract slug or ID from the select element's ID
+        const selectId = sizeSelect.id; // Example: size-select-<slug or id>
+        const slug = selectId.split('-')[2]; // Extract slug or ID
+
+        // Find the link element using the slug
+        const link = document.getElementById(`detail-link-${slug}`);
+
+        // Get the base URL and selected size
+        const base_url = sizeSelect.getAttribute("data-base-url");
+        const size = sizeSelect.value;
+
+        // Update the href attribute if the link exists
+        if (link && base_url) {
+            link.href = `${base_url}?size=${size}`;
         }
     }
 }

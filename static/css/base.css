@@ -650,6 +650,17 @@ footer li{
     height: 100%;
 }
 
+.btn-buy{
+    display: block; 
+    margin: 0 auto; 
+    width: 50%;
+}
+
+option[data-stock="0"] {
+    color: grey;
+    font-style: italic;
+}
+
 /* Help page */
 .accordion-button:not(.collapsed) {
     color: var(--bg-darker);

@@ -1,70 +1,136 @@
-<div class="card">
-    <!-- Product Image -->
-    <div class="background-gradient">
-        <div class="content-gradient">
-            <img class="card-img-top" src="{{ product_data.product.image }}" alt="{{ product_data.product.name }}">
-        </div>
-    </div>
+{% load static %}
 
-    <!-- Card Body -->
-    <div class="card-body">
-        <!-- Product Name -->
-        <h5 class="card-title mx-auto">
-            <a href="{% url 'product_detail' slug=product_data.product.slug %}">{{ product_data.product.name }}</a>
-        </h5>
+<div class="{% if view == 'detail' %}container mt-5 product-page{% else %}card{% endif %}">
+    <div class="{% if view == 'detail' %}row{% endif %}">
 
-        <!-- Review Stars -->
-        <div class="review-stars">
-            {% for star in total_review %}
-                {% if star < product_data.product.rating %}
-                    <i class="star filled">★</i>
-                {% elif star < 5 %}
-                    <i class="star">★</i>
-                {% endif %}
-            {% endfor %}
-        </div>
-
-        <!-- Product Details -->
-        <p class="card-text mx-auto">{{ product_data.product.description }}</p>
-
-        <!-- Size and Quantity Selectors -->
-        <div class="row card-row">
-            <!-- Size Selector -->
-            <div class="col-6 mx-auto">
-                <label for="size-select-{{ product_data.product.id }}">Size</label>
-                <select id="size-select-{{ product_data.product.id }}" class="form-select size select-dropdown">
-                    {% for size, data in product_data.stock_by_size.items %}
-                        <option value="{{ size }}" 
-                            data-price="{{ data.price }}" 
-                            data-stock="{{ data.stock }}"{% if size == product_data.variant_size %} selected{% endif %}>
-                            {{ size }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Quantity Selector -->
-            <div class="col-6 mx-auto">
-                <label for="quantity-select-{{ product_data.product.id }}">Quantity</label>
-                <input id="quantity-select-{{ product_data.product.id }}" type="number" class="form-control quantity" min="1" value="1">
+        <!-- Product Image Section -->
+        <div class="{% if view == 'detail' %}col-md-6 d-flex align-items-center justify-content-center{% else %}background-gradient{% endif %}">
+            <div class="{% if view == 'detail' %}card{% endif %}">
+                <div class="{% if view == 'detail' %}background-gradient{% endif %}">
+                    <div class="content-gradient">
+                        <img class="card-img-top"
+                             src="{% if view == 'detail' %}{{ product.image }}{% else %}{{ product_data.product.image }}{% endif %}"
+                             alt="{% if view == 'detail' %}{{ product.name }}{% else %}{{ product_data.product.name }}{% endif %}">
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Price or Stock Status -->
-        <h5 class="card-subtitle mt-3">
-            {% if product_data.variant_stock == 0 %}
-                <span id="price-display-{{ product_data.product.id }}" class="text-danger"><strong>Out of Stock</strong></span>
+        <!-- Product Details Section -->
+        <div class="{% if view == 'detail' %}col-md-6{% else %}card-body{% endif %}">
+            {% if view == 'detail' %}
+                <h2 class="card-title">{{ product.name }}</h2>
             {% else %}
-                <span id="price-display-{{ product_data.product.id }}"><strong>$<span>{{ product_data.variant_price }}</span> <span>each</span></strong></span>
+                <h5 class="card-title mx-auto">
+                    <a id="detail-link-{{ product_data.product.id }}"
+                        href="{% url 'product_detail' slug=product_data.product.slug %}?size={{ product_data.variant_size }}">
+                        {{ product_data.product.name }}
+                    </a>
+                </h5>
             {% endif %}
-        </h5>
 
-        <!-- Buy Button -->
-        <a id="buy-button-{{ product_data.product.id }}" 
-            href="{{ product_data.product.get_buy_url }}" 
-            class="btn btn-secondary btn-sm {% if product_data.variant_stock == 0 %}disabled{% endif %}" 
-            {% if product_data.variant_stock == 0 %}disabled{% endif %}>
-            Buy
-        </a>
+            <!-- Review Stars -->
+            <div class="review-stars mb-3">
+                {% if view == 'detail' %}
+                    {% with rating=product.rating %}
+                        {% for star in total_review %}
+                            <i class="star {% if star < rating %}filled{% endif %}">★</i>
+                        {% endfor %}
+                    {% endwith %}
+                {% else %}
+                    {% with rating=product_data.product.rating %}
+                        {% for star in total_review %}
+                            <i class="star {% if star < rating %}filled{% endif %}">★</i>
+                        {% endfor %}
+                    {% endwith %}
+                {% endif %}
+            </div>
+
+            <!-- Product Description -->
+            <p class="card-text mx-auto">
+                {% if view == 'detail' %}
+                    {{ product.description }}
+                {% else %}
+                    {{ product_data.product.description }}
+                {% endif %}
+            </p>
+
+            <!-- Size and Quantity Selectors -->
+            <div class="{% if view == 'detail' %}d-flex gap-3 mb-3{% else %}row card-row{% endif %}">
+                <!-- Size Selector -->
+                <div class="{% if view == 'detail' %}w-50{% else %}col-6 mx-auto{% endif %}">
+                    {% if view == 'detail' %}
+                        {% with stock_by_size.items as size_data %}
+
+                            <label for="size-select-{{ product.id }}" class="form-label">Size</label>
+                            <select id="size-select-{{ product.id }}" class="form-select size select-dropdown"
+                                    onchange="location.href='?size=' + this.value">
+                                {% for size, data in stock_by_size.items %}
+                                    <option value="{{ size }}"
+                                            data-price="{{ data.price }}"
+                                            data-stock="{{ data.stock }}"
+                                            {% if size == default_size %}selected{% endif %}>
+                                        {{ size }}{% if data.stock == 0 %} (Out of Stock){% endif %}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% endwith %}
+                    {% else %}
+                        {% with product_data.stock_by_size.items as size_data %}
+                            <label for="size-select-{{ product_data.product.id }}" class="form-label">Size</label>
+                            <select id="size-select-{{ product_data.product.id }}" class="form-select size select-dropdown"
+                                    data-base-url="{% url 'product_detail' slug=product_data.product.slug %}">
+                                {% for size, data in size_data %}
+                                    <option value="{{ size }}"
+                                            data-price="{{ data.price }}"
+                                            data-stock="{{ data.stock }}"
+                                            {% if size == product_data.variant_size %}selected{% endif %}>
+                                        {{ size }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% endwith %}
+                    {% endif %}
+                </div>
+
+                <!-- Quantity Selector -->
+                <div class="{% if view == 'detail' %}w-50{% else %}col-6 mx-auto{% endif %}">
+                    <label for="quantity-select-{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" class="form-label">Quantity</label>
+                    <input id="quantity-select-{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" type="number" class="form-control quantity" min="1" value="1">
+                </div>
+            </div>
+
+            <!-- Price or Stock Status -->
+            <h5 class="card-subtitle mt-3">
+                {% if view == 'detail' %}
+                    {% if default_stock_status == 'Out of Stock' %}
+                        <span id="price-display-{{ product.id }}" class="text-danger"><strong>Out of Stock</strong></span>
+                    {% else %}
+                        <span id="price-display-{{ product.id }}"><strong>$<span>{{ default_price }}</span> <span>each</span></strong></span>
+                    {% endif %}
+                {% else %}
+                    {% if product_data.variant_stock == 0 %}
+                        <span id="price-display-{{ product_data.product.id }}" class="text-danger"><strong>Out of Stock</strong></span>
+                    {% else %}
+                        <span id="price-display-{{ product_data.product.id }}"><strong>$<span>{{ product_data.variant_price }}</span> <span>each</span></strong></span>
+                    {% endif %}
+                {% endif %}
+            </h5>
+
+            <!-- Price or Stock Status -->
+            <!-- <div class="d-flex justify-content-end mb-3">
+                <h5 class="card-subtitle mt-3">
+                    <span id="price-display-{{ product.id }}"></span>
+                </h5>
+            </div> -->
+
+            <!-- Buy Button -->
+            <a id="buy-button-{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}"
+                href="{% if view == 'detail' %}{{ product.get_buy_url }}{% else %}{{ product_data.product.get_buy_url }}{% endif %}"
+                class="btn btn-secondary {% if view == 'list' %}btn-sm{% else %}btn-buy{% endif %} {% if view == 'detail' and default_stock_status == 'Out of Stock' or product_data.variant_stock == 0 %}disabled{% endif %}"
+                {% if view == 'detail' and default_stock_status == 'Out of Stock' or product_data.variant_stock == 0 %}disabled{% endif %}>
+                    Buy
+            </a>
+        </div>
     </div>
 </div>
