@@ -14,5 +14,5 @@ urlpatterns = [
     path('contact_form/', ContactFormView.as_view(), name='contact_form'),
 
     # Custom privacy policy page
-    path('privacy-policy/', CustomPrivacyPolicyView.as_view(), name='privacy-policy'),
+    path('privacy_policy/', CustomPrivacyPolicyView.as_view(), name='privacy_policy'),
 ]

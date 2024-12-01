@@ -17,10 +17,10 @@
             <div class="col-md-2 mb-4">
                 <h5 class="text-uppercase">Quick Links</h5>
                 <ul class="list-unstyled">
-                    <li><a href="/#" class="text-decoration-none menu-item">Shop</a></li>
-                    <li><a href="/about/" class="text-decoration-none menu-item">About</a></li>
-                    <li><a href="/help/" class="text-decoration-none menu-item">Help</a></li>
-                    <li><a href="/account/" class="text-decoration-none menu-item">Account</a></li>
+                    <li><a href="{% url 'product' %}" class="text-decoration-none menu-item">Shop</a></li>
+                    <li><a href="{% url 'about' %}" class="text-decoration-none menu-item">About</a></li>
+                    <li><a href="{% url 'help' %}" class="text-decoration-none menu-item">Help</a></li>
+                    <li><a href="/accounts/" class="text-decoration-none menu-item">Account</a></li>
                 </ul>
             </div>
             
@@ -72,7 +72,7 @@
             <div class="col text-center">
                 <p class="mb-0 privacy-link">
                     &copy; {{ current_year|default:2024 }} Coffee Hub. All rights reserved. | 
-                    <a href="/privacy-policy/" class="text-decoration-none menu-item">Privacy Policy</a>
+                    <a href="{% url 'privacy_policy' %}" class="text-decoration-none menu-item">Privacy Policy</a>
                 </p>
             </div>
         </div>

@@ -1,0 +1,56 @@
+/* Division Margin */
+#divison_x {
+    margin-top: 30px;
+}
+
+/* Form Check Input Styling */
+.form-check .form-check-input {
+    float: none;
+    margin-right: 10px;
+}
+
+/* Email Verification Status Styling */
+.verified {
+    color: var(--green-accent);
+}
+
+.unverified {
+    color: var(--red-accent);
+}
+
+/* Email List Styling */
+.list-emails {
+    max-height: 100px;
+    overflow-y: auto;
+    text-align: left;
+    background-color: var(--bg-darker);
+    border: var(--border);
+    border-color: var(--bg-lighter);
+    box-shadow: 0 0 2px var(--text-primary-color);
+    margin-bottom: 15px;
+    border-radius: var(--bs-border-radius);
+    padding: 10px;
+}
+
+.list-emails input{
+    border-radius: var(--bs-border-radius);
+}
+
+/* Form Text Styling */
+.form-text {
+    font-size: small;
+    color: var(--text-secondary-color);
+}
+
+/* Badges */
+.bg-warning{
+    color: var(--bg-darker);
+}
+
+.bg-primary, .bg-success{
+    color: var(--text-primary-color);
+}
+
+.bg-success i{
+    color: var(--text-primary-color);
+}

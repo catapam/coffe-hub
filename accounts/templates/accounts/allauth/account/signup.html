@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n allauth account crispy_forms_tags static %}
+
+{% block title %}
+    {% translate "Signup" %}
+{% endblock title %}
+
+{% block content %}
+<!-- Extra CSS block for authentication styles -->
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock extra_css %}
+
+<div class="error-page">
+    <div class="text-center">
+        <!-- Page heading -->
+        <h1>
+            {% translate "Sign Up" %}
+        </h1>
+
+        <!-- Already have an account? Sign in link -->
+        <p class="small">
+            {% trans "Already have an account? Then please" %}
+            <a href="{{ login_url }}#">
+                {% translate "sign in" %}
+            </a>.
+        </p>
+
+        <!-- Sign-up form -->
+        {% if not SOCIALACCOUNT_ONLY %}
+            {% url 'account_signup' as action_url %}
+            <form method="post" action="{{ action_url }}" class="form p-2">
+                <div class="form-body">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    {{ redirect_field }}
+                </div>
+
+                <!-- Sign-up button -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success w-25 mb-2">
+                        {% translate "Sign Up" %}
+                    </button>
+                </div>
+            </form>
+        {% endif %}
+
+        <!-- Social account login options (if enabled) -->
+        {% if SOCIALACCOUNT_ENABLED %}
+            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

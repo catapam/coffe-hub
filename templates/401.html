@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Including the CSS for styling -->
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+<!-- Main content section with ARIA role for better accessibility -->
+<div role="main" aria-labelledby="unauthorized-heading" class="error-page">
+    <h1 id="unauthorized-heading">401 - Unauthorized</h1>
+    
+    <!-- Descriptive error message with clear next steps -->
+    <p>You do not have permission to access this page. Please contact us if you believe this is a mistake.</p>
+    
+    <!-- Improved link with aria-label for screen readers -->
+    <a href="{% url 'help' %}" aria-label="Contact Coffee hub support for assistance">Contact us</a>
+</div>
+{% endblock %}
+
+<!-- Including the JavaScript for the page -->
+{% block extra_js %}
+{% endblock extra_js %}
+

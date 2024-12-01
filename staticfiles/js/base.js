@@ -101,6 +101,23 @@ function updateCategoryButton() {
     }
 }
 
+// Refresh page on "Show Out of Stock" toggle
+function setupOutOfStockToggle() {
+    const outOfStockCheckbox = document.getElementById('show-out-of-stock');
+    if (outOfStockCheckbox) {
+        outOfStockCheckbox.addEventListener('change', function () {
+            // Reload the page with the updated query parameter
+            const url = new URL(window.location.href);
+            if (this.checked) {
+                url.searchParams.set('show_out_of_stock', 'on');
+            } else {
+                url.searchParams.delete('show_out_of_stock');
+            }
+            window.location.href = url.toString();
+        });
+    }
+}
+
 // Initialize all event listeners once DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function () {
     setupMobileSearchToggle();
@@ -108,4 +125,5 @@ document.addEventListener('DOMContentLoaded', function () {
     setupFilterToggle();
     setupCategorySelection();
     updateCategoryButton();
+    setupOutOfStockToggle();
 });

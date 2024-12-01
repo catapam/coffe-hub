@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load i18n allauth account crispy_forms_tags static %}
+
+{% block title %}
+    <!-- SEO-friendly and translated page title -->
+    {% translate "Confirm Access" %}
+{% endblock title %}
+
+{% block content %}
+<!-- Including the CSS for styling -->
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}" >
+{% endblock extra_css %}
+
+<!-- Main content with ARIA role for accessibility -->
+<main role="main" aria-labelledby="confirm-access-heading">
+    <div class="error-page">
+        <div class="text-center">
+            
+            <!-- Accessible heading for the page -->
+            <h1 id="confirm-access-heading">
+                {% translate "Confirm Access" %}
+            </h1>
+            
+            <!-- Descriptive text with appropriate tags for accessibility -->
+            <p>
+                {% blocktranslate %}Please reauthenticate to safeguard your account.{% endblocktranslate %}
+            </p>
+            
+            <!-- Block for reauthentication content -->
+            {% block reauthenticate_content %}{% endblock %}
+            
+            <!-- Conditional block for alternative reauthentication methods -->
+            {% if reauthentication_alternatives %}
+            <hr>
+            <h2>
+                {% translate "Alternative options" %}
+            </h2>
+            
+            <!-- Button group for alternatives, properly structured for accessibility -->
+            <div class="btn-group" role="group" aria-label="Reauthentication alternatives">
+                {% for alt in reauthentication_alternatives %}
+                    <!-- Accessible button for each alternative option -->
+                    <a class="btn btn-success w-50 mb-2" href="{{ alt.url }}" role="button">
+                        {{ alt.description }}
+                    </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock content %}

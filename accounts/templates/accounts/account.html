@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Including the CSS for styling -->
+{% block extra_css %}
+
+{% endblock extra_css %}
+
+{% block content %}
+{% include 'accounts/includes/menu.html' %}
+<div role="main" aria-labelledby="account-management" class="page-container">
+    
+    {% block account-content %}
+    
+    {% endblock account-content %}
+</div>
+{% endblock content %}
+
+<!-- Page specific scripts -->
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'js/auth.js' %}" defer></script>
+{% endblock extra_js %}

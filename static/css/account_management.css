@@ -1,0 +1,136 @@
+/* Dashboard Layout */
+.content-container{
+    max-width: calc( 100% - 150px);
+    right: 0;
+}
+
+/* Sidebar */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+    width: 150px;
+    background-color: var(--bg-dark);
+    color: var(--text-primary-color);
+    height: calc( 100vh - 60px );
+    position: fixed;
+    top: 60px;
+    left: 0;
+    transition: width 0.3s ease;
+    border: var(--border);
+    border-color: var(--bg-lighter);
+    box-shadow: 0 0 2px var(--text-primary-color);
+    border-left: none;
+    border-bottom-right-radius: var(--bs-border-radius);
+    border-top-right-radius: var(--bs-border-radius);
+}
+
+.sidebar.collapsed {
+    width: 50px;
+}
+
+.collapsed.content-container{
+    max-width: calc( 100% - 50px);
+}
+
+.sidebar.collapsed .menu-text {
+    display: none;
+}
+
+/* Toggle Button */
+.toggle-btn {
+    position: absolute;
+    top: -50px;
+    right: -45px;
+    background-color: transparent;
+    color: var(--border);
+    cursor: pointer;
+    padding: 5px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-top: 60px;
+}
+
+/* Access and Logout Buttons */
+.admin-access {
+    background-color: var(--text-secondary-color);
+    color: var(--bg-darker);
+}
+
+.logout-dashboard {
+    background-color: var(--red-accent);
+}
+
+.admin-access:hover, .admin-access.active {
+    background-color: var(--bg-darker);
+    color: var(--text-secondary-color);
+}
+
+.logout-dashboard:hover, .logout-dashboard.active {
+    color: var(--bg-darker);
+}
+
+.bottom-menu-dashboard {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+}
+
+.bottom-menu-dashboard .li {
+    width: 100%;
+}
+
+.top-menu-dashboard {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border-bottom: var(--border);
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    margin-bottom: auto;
+}
+
+.top-menu-dashboard i, .bottom-menu-dashboard i{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.top-menu-dashboard li, .bottom-menu-dashboard li{
+    margin: auto;
+    width: 100%;
+    text-align: right;
+}
+
+.top-menu-dashboard li a, .bottom-menu-dashboard li a{
+    padding-right: 10px;
+}
+
+.navbar-nav{
+    background-color: transparent;
+    opacity: 1;
+    border: none;
+    border-radius: 0;
+    border-color: transparent;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.sidebar .menu-list{
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    flex-grow: 1; /* Allows the top menu to grow naturally */
+    justify-content: space-between; /* Push bottom menu to the bottom */
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+    .sidebar {
+        width: 150px;
+    }
+}

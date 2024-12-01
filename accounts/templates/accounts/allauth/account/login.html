@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n allauth account crispy_forms_tags static %}
+
+{% block title %}
+    {% translate "Sign In" %}
+{% endblock title %}
+
+{% block content %}
+<!-- Extra CSS block for authentication styles -->
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}" >
+{% endblock extra_css %}
+
+<div class="error-page">
+    <div class="text-center">
+        <!-- Page heading -->
+        <h1>
+            {% translate "Sign In" %}
+        </h1>
+
+        <!-- Check if SOCIALACCOUNT_ONLY is not enabled -->
+        {% if not SOCIALACCOUNT_ONLY %}
+            <p class="small">
+                {% trans "If you have not created an account yet, then please" %}
+                <a href="{{ signup_url }}">
+                    {% trans "sign up" %}
+                </a>
+                {% trans "first." %}
+            </p>
+
+            <!-- Sign-in form -->
+            {% url 'account_login' as login_url %}
+            <form method="post" action="{{ login_url }}" class="form p-2">
+                {% csrf_token %}
+                {{ form|crispy }}
+                {{ redirect_field }}
+
+                <!-- Sign-in button -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success w-25 mb-2">
+                        {% translate "Sign In" %}
+                    </button>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_body %}
+    {{ block.super }}
+    <!-- Include WebAuthn script if PASSKEY_LOGIN_ENABLED is true -->
+    {% if PASSKEY_LOGIN_ENABLED %}
+        {% include "mfa/webauthn/snippets/login_script.html" with button_id="passkey_login" %}
+    {% endif %}
+{% endblock extra_body %}

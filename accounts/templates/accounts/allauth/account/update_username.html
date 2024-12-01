@@ -1,0 +1,33 @@
+{% extends "accounts/account.html" %}
+{% load i18n allauth account crispy_forms_tags static %}
+
+{% block title %}
+    {% trans "Update Username" %}
+{% endblock title %}
+
+<!-- Including the CSS for styling -->
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/account_management.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock extra_css %}
+
+{% block account-content %}
+<div class="error-page">
+    <div class="text-center">
+        <!-- Page heading -->
+        <h1>{% trans "Update Username" %}</h1>
+
+        <!-- Username update form -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-success">
+                {% trans "Update Username" %}
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock account-content %}

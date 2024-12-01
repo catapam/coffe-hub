@@ -1,0 +1,153 @@
+{% extends "accounts/account.html" %}
+{% load i18n allauth account crispy_forms_tags static %}
+
+{% block title %}
+    {% translate "Email Addresses" %}
+{% endblock title %}
+
+<!-- Extra CSS block for dashboard styles -->
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/account_management.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock extra_css %}
+
+{% block account-content %}
+<div class="error-page">
+    <div class="text-center">
+        <!-- Page heading -->
+        <h1>
+            {% translate "Email Addresses" %}
+        </h1>
+
+        {% if emailaddresses %}
+            <p>
+                {% translate 'The following email addresses are associated with your account:' %}
+            </p>
+
+            <!-- Email list form -->
+            {% url 'account_email' as email_url %}
+            <form method="post" action="{{ email_url }}">
+                <div class="list-emails">
+                    {% csrf_token %}
+
+                    <!-- Primary email radio buttons -->
+                    {% for radio in emailaddress_radios %}
+                        {% with emailaddress=radio.emailaddress %}
+                            {% if emailaddress.primary %}
+                            <div class="form-group">
+                                <label>
+                                    <input type="radio" name="email" value="{{ emailaddress.email }}" id="{{ radio.id }}" {% if radio.checked %}checked{% endif %}>
+                                    {{ emailaddress.email }}
+                                    
+                                    <!-- Email verification badges -->
+                                    {% if emailaddress.verified %}
+                                    <span class="badge bg-success">
+                                        <i class="fa-solid fa-certificate verified" aria-hidden="true"></i>
+                                        {% translate "Verified" %}
+                                    </span>
+                                    {% else %}
+                                    <span class="badge bg-warning">
+                                        <i class="fa-solid fa-certificate unverified" aria-hidden="true"></i>
+                                        {% translate "Unverified" %}
+                                    </span>
+                                    {% endif %}
+
+                                    <!-- Primary badge -->
+                                    <span class="badge bg-primary">
+                                        {% translate "Primary" %}
+                                    </span>
+                                </label>
+                            </div>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+
+                    <!-- Non-primary email radio buttons -->
+                    {% for radio in emailaddress_radios %}
+                        {% with emailaddress=radio.emailaddress %}
+                            {% if not emailaddress.primary %}
+                            <div class="form-group">
+                                <label>
+                                    <input type="radio" name="email" value="{{ emailaddress.email }}" id="{{ radio.id }}" {% if radio.checked %}checked{% endif %}>
+                                    {{ emailaddress.email }}
+                                    
+                                    <!-- Email verification badges -->
+                                    {% if emailaddress.verified %}
+                                    <span class="badge bg-success">
+                                        <i class="fa-solid fa-certificate verified" aria-hidden="true"></i>
+                                        {% translate "Verified" %}
+                                    </span>
+                                    {% else %}
+                                    <span class="badge bg-warning">
+                                        <i class="fa-solid fa-certificate unverified" aria-hidden="true"></i>
+                                        {% translate "Unverified" %}
+                                    </span>
+                                    {% endif %}
+                                </label>
+                            </div>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+
+                <!-- Form actions -->
+                <div class="form-actions">
+                    <button type="submit" name="action_primary" class="btn btn-info w-33 mb-2">
+                        {% translate 'Make Primary' %}
+                    </button>
+                    <button type="submit" name="action_send" class="btn btn-warning w-33 mb-2">
+                        {% translate 'Re-send Verification' %}
+                    </button>
+                    <button type="submit" name="action_remove" class="btn btn-danger w-33 mb-2">
+                        {% translate 'Remove' %}
+                    </button>
+                </div>
+            </form>
+        {% else %}
+            {% include "account/snippets/warn_no_email.html" %}
+        {% endif %}
+
+        <!-- Add email address section -->
+        {% if can_add_email %}
+        <div id="add-email-section">
+            <h2>
+                {% translate "Add Email Address" %}
+            </h2>
+            {% url 'account_email' as action_url %}
+            <form method="post" action="{{ action_url }}">
+                <div class="form-body">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                </div>
+
+                <!-- Add email button -->
+                <div class="form-actions">
+                    <button type="submit" name="action_add" class="btn btn-success w-50 mb-2">
+                        {% translate "Add Email" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock account-content %}
+
+{% block extra_js %}
+{{ block.super }}
+<!-- Confirmation dialog for removing email address -->
+<script>
+(function() {
+  var message = "{% translate 'Do you really want to remove the selected email address?' %}";
+  var actions = document.getElementsByName('action_remove');
+  if (actions.length) {
+    actions[0].addEventListener("click", function(e) {
+      if (! confirm(message)) {
+        e.preventDefault();
+      }
+    });
+  }
+})();
+</script>
+{% endblock extra_js %}

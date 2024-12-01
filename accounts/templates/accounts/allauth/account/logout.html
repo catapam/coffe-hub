@@ -1,0 +1,44 @@
+{% extends "accounts/account.html" %}
+{% load i18n allauth account crispy_forms_tags static %}
+
+{% block title %}
+    {% translate "Sign Out" %}
+{% endblock title %}
+
+<!-- Extra CSS block for dashboard styles -->
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/account_management.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock extra_css %}
+
+{% block account-content %}
+<div class="error-page">
+    <div class="text-center">
+        <!-- Page heading -->
+        <h1>
+            {% translate "Sign Out" %}
+        </h1>
+
+        <p class="small">
+            {% translate "Are you sure you want to sign out? test" %}
+        </p>
+
+        <!-- Sign-out form -->
+        {% url 'account_logout' as action_url %}
+        <form method="post" action="{{ action_url }}">
+            <div class="form-body">
+                {% csrf_token %}
+                {{ redirect_field }}
+            </div>
+
+            <!-- Sign-out button -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success w-50 mb-2">
+                    {% translate "Sign Out" %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock account-content %}

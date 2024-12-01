@@ -19,4 +19,8 @@
     /* Font Variables */
     --font-primary: "Nunito", Arial, sans-serif;
     --font-heading: "Lato", Georgia, serif;
+
+    /* Other */
+    --green-accent: #198754;
+    --red-accent: #dc3545;
 }

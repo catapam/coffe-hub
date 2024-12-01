@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load i18n allauth account crispy_forms_tags static %}
+
+{% block title %}
+    {% translate "Sign In" %}
+{% endblock title %}
+
+{% block content %}
+<!-- Including the CSS for styling -->
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}" >
+{% endblock extra_css %}
+
+<!-- Main content with ARIA role for accessibility -->
+<main role="main" aria-labelledby="sign-in-heading">
+    <div class="error-page">
+        <div class="text-center">
+            
+            <!-- Accessible heading for the page -->
+            <h1 id="sign-in-heading">
+                {% translate "Enter Sign-In Code" %}
+            </h1>
+
+            <!-- Email link and descriptive paragraph -->
+            {% setvar email_link %}
+                <a href="mailto:{{ email }}">{{ email }}</a>
+            {% endsetvar %}
+            <p>
+                {% blocktranslate %}We’ve sent a code to {{ email_link }}. The code expires shortly, so please enter it soon.{% endblocktranslate %}
+            </p>
+            
+            <!-- Form for entering sign-in code -->
+            {% url 'account_confirm_login_code' as login_url %}
+            <form method="post" action="{{ login_url }}" class="entrance login">
+                <div>
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    {{ redirect_field }}
+                </div>
+                
+                <!-- Sign-in button -->
+                <div class="actions">
+                    <button type="submit" class="btn btn-success w-50 mb-2">
+                        {% translate "Sign In" %}
+                    </button>
+                </div>
+            </form>
+
+            <!-- Alternative sign-in options button -->
+            <h2>
+                {% url 'account_login' as login_url %}
+                <a href="{{ login_url }}" class="btn btn-link w-50 mb-2">
+                    {% translate "Other sign-in options" %}
+                </a>
+            </h2>
+        </div>
+    </div>
+</main>
+{% endblock content %}

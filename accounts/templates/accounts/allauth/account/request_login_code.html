@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n allauth account crispy_forms_tags static %}
+
+{% block title %}
+    {% translate "Sign In" %}
+{% endblock title %}
+
+{% block content %}
+<!-- Extra CSS block for authentication styles -->
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock extra_css %}
+
+<div class="error-page">
+    <div class="text-center">
+        <!-- Page heading -->
+        <h1>
+            {% translate "Mail me a sign-in code" %}
+        </h1>
+
+        <!-- Instructional text -->
+        <p>
+            {% blocktrans %}You will receive an email containing a special code for a password-free sign-in.{% endblocktrans %}
+        </p>
+
+        <!-- Sign-in code request form -->
+        {% url 'account_request_login_code' as login_url %}
+        <form method="post" action="{{ login_url }}">
+            <div class="form-body">
+                {% csrf_token %}
+                {{ form|crispy }}
+                {{ redirect_field }}
+            </div>
+
+            <!-- Request code button -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success w-25 mb-2">
+                    {% translate "Request Code" %}
+                </button>
+            </div>
+        </form>
+
+        <!-- Other sign-in options -->
+        <h2>
+            {% url 'account_login' as login_url %}
+            <a href="{{ login_url }}" class="btn btn-link w-25 mb-2">
+                {% translate "Other sign-in options" %}
+            </a>
+        </h2>
+    </div>
+</div>
+{% endblock content %}

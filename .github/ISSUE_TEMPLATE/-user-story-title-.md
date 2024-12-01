@@ -20,7 +20,7 @@ As a [role], I want to [specific goal] so that [reason/benefit].
 - [ ] [Task 3]
 
 ### Linked Issues:
-- Epic N: [EPIC NAME](https://github.com/catapam/investnest/issues/N)
+- Epic N: [EPIC NAME](https://github.com/catapam/coffe-hub/issues/N)
 - User Story
 - Bug
 - Documentation

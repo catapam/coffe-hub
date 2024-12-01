@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n allauth account crispy_forms_tags static %}
+
+{% block content %}
+<!-- Extra CSS block for dashboard styles -->
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock extra_css %}
+
+<div class="error-page">
+    <div class="text-center">
+        <!-- Instructional text -->
+        <p>
+            {% blocktrans %}Enter your password:{% endblocktrans %}
+        </p>
+
+        <!-- Reauthentication form -->
+        {% url 'account_reauthenticate' as action_url %}
+        <form method="post" action="{{ action_url }}">
+            <div class="form-body">
+                {% csrf_token %}
+                {{ form|crispy }}
+                {{ redirect_field }}
+            </div>
+
+            <!-- Confirm button -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success w-25 mb-2">
+                    {% translate "Confirm" %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

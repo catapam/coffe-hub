@@ -15,9 +15,9 @@ As a [role], I want to [high-level goal] so that [reason/benefit].
 - [ ] [Criteria 3]
 
 ###User Stories:
-- [NAME](https://github.com/catapam/investnest/issues/N)
-- [NAME](https://github.com/catapam/investnest/issues/N)
-- [NAME](https://github.com/catapam/investnest/issues/N)
+- [NAME](https://github.com/catapam/coffe-hub/issues/N)
+- [NAME](https://github.com/catapam/coffe-hub/issues/N)
+- [NAME](https://github.com/catapam/coffe-hub/issues/N)
 
 ### Additional Information:
 [Any additional information or context]
