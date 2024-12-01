@@ -32,13 +32,13 @@
             <!-- Review Stars -->
             <div class="review-stars mb-3">
                 {% if view == 'detail' %}
-                    {% with rating=product.rating %}
+                    {% with product.rating as rating %}
                         {% for star in total_review %}
                             <i class="star {% if star < rating %}filled{% endif %}">★</i>
                         {% endfor %}
                     {% endwith %}
                 {% else %}
-                    {% with rating=product_data.product.rating %}
+                    {% with product_data.product.rating as rating %}
                         {% for star in total_review %}
                             <i class="star {% if star < rating %}filled{% endif %}">★</i>
                         {% endfor %}
@@ -102,27 +102,19 @@
 
             <!-- Price or Stock Status -->
             <h5 class="card-subtitle mt-3">
-                {% if view == 'detail' %}
-                    {% if default_stock_status == 'Out of Stock' %}
-                        <span id="price-display-{{ product.id }}" class="text-danger"><strong>Out of Stock</strong></span>
-                    {% else %}
-                        <span id="price-display-{{ product.id }}"><strong>$<span>{{ default_price }}</span> <span>each</span></strong></span>
-                    {% endif %}
+                {% if default_stock_status == 'Out of Stock' or product_data.variant_stock == 0 %}
+                    <span id="price-display-{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" class="text-danger">
+                        <strong>Out of Stock</strong>
+                    </span>
                 {% else %}
-                    {% if product_data.variant_stock == 0 %}
-                        <span id="price-display-{{ product_data.product.id }}" class="text-danger"><strong>Out of Stock</strong></span>
-                    {% else %}
-                        <span id="price-display-{{ product_data.product.id }}"><strong>$<span>{{ product_data.variant_price }}</span> <span>each</span></strong></span>
-                    {% endif %}
+                    <span id="price-display-{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}">
+                        <strong>
+                            $<span>{% if view == 'detail' %}{{ default_price }}{% else %}{{ product_data.variant_price }}{% endif %}</span>
+                            <span>each</span>
+                        </strong>
+                    </span>
                 {% endif %}
             </h5>
-
-            <!-- Price or Stock Status -->
-            <!-- <div class="d-flex justify-content-end mb-3">
-                <h5 class="card-subtitle mt-3">
-                    <span id="price-display-{{ product.id }}"></span>
-                </h5>
-            </div> -->
 
             <!-- Buy Button -->
             <a id="buy-button-{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}"
