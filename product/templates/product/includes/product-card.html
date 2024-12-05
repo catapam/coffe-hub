@@ -1,30 +1,45 @@
 {% load static %}
+{% load crispy_forms_tags %}
+{% load i18n %}
 
 <div class="product-card {% if view == 'detail' %}container mt-5 product-page page-container{% else %}card{% endif %}">
     <div class="{% if view == 'detail' %}row{% endif %}">
+        {% if request.user.is_superuser and view == 'detail' %}
+            {% csrf_token %}
+        {% endif %}
 
         <!-- Product Image Section -->
-        <div class="{% if view == 'detail' %}col-md-6 d-flex align-items-center justify-content-center{% else %}background-gradient{% endif %}">
+        <div class="{% if view == 'detail' %}col-md-6 d-flex align-items-center justify-content-center{% else %}background-gradient{% endif %} position-relative">
             <div class="{% if view == 'detail' %}card{% endif %}">
                 <div class="{% if view == 'detail' %}background-gradient{% endif %}">
                     <div class="content-gradient">
-                        <img class="card-img-top"
-                             src="{% if view == 'detail' %}{{ product.image }}{% else %}{{ product_data.product.image }}{% endif %}"
-                             alt="{% if view == 'detail' %}{{ product.name }}{% else %}{{ product_data.product.name }}{% endif %}">
+                        <img id="product-image-{{ product.id }}" class="card-img-top"
+                            src="{% if view == 'detail' %}{{ product.image }}{% else %}{{ product_data.product.image }}{% endif %}"
+                            alt="{% if view == 'detail' %}{{ product.name }}{% else %}{{ product_data.product.name }}{% endif %}">
                     </div>
                 </div>
+
+                <!-- Image Upload Icon for Superusers -->
+                {% if request.user.is_superuser and view == 'detail' %}
+                    <div class="image-upload-icon menu-icon position-absolute">
+                        <label for="id_image_path" class="sr-only">Change Product Image</label>
+                        <input id="id_image_path" 
+                               type="file" 
+                               name="image_path" 
+                               class="form-control d-none"
+                               onchange="previewImage(this, 'product-image-{{ product.id }}')">
+                        <i class="fa-solid fa-upload upload-icon menu-item"
+                           onclick="document.getElementById('id_image_path').click()"></i>
+                    </div>
+                {% endif %}
             </div>
         </div>
 
-        <!-- Product Details Section -->
+        <!-- Product Name Section -->
         <div class="{% if view == 'detail' %}col-md-6{% else %}card-body{% endif %}">
             {% if view == 'detail' %}
-                <!-- Title -->
                     {% if request.user.is_superuser %}
-                        <label for="name-{{ product.id }}" class="form-label">
-                            Name
-                        </label>
-                        <input id="name-{{ product.id }}" type="text" name="name" class="form-control overflow-auto" value="{{ product.name }}">
+                        {{ product_form.name|as_crispy_field }}
                     {% else %}
                         <h2 class="card-title">
                             {{ product.name }}
@@ -58,16 +73,16 @@
 
             <!-- Product Description -->
             {% if view == 'detail' %}
-            <label for="description-{{ product.id }}" class="form-label">
-                Description
-            </label>
-            {% if request.user.is_superuser %}
-                <textarea id="description-{{ product.id }}" name="description" class="form-control mb-2 overflow-auto" rows="3">{{ product.description }}</textarea>
-            {% else %}
-                <p class="card-text mx-auto">
-                    {{ product.description }}
-                </p>
-            {% endif %}
+                {% if request.user.is_superuser %}
+                    {{ product_form.description|as_crispy_field }}
+                {% else %}
+                    <label for="description" class="form-label">
+                        Description
+                    </label>
+                    <p class="card-text mx-auto" id="description">
+                        {{ product.description }}
+                    </p>
+                {% endif %}
             {% else %}
             <p class="card-text mx-auto">
                 {{ product_data.product.description }}
@@ -122,23 +137,27 @@
 
                 <!-- Quantity/Stock Selector -->
                 <div class="col-md-6 mx-auto{% if view == 'detail' %}selector-group{% endif %}">
-                    <label for="{% if request.user.is_superuser %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
-                        class="form-label {% if view == 'detail' %}selector-label{% endif %}">
-                        {% if request.user.is_superuser %}Stock{% else %}Quantity{% endif %}
-                    </label>
-                    <input id="{% if request.user.is_superuser %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
-                        type="number" 
-                        class="form-control quantity {% if view == 'detail' %}selector-input{% endif %}"
-                        min="1" 
-                        {% if not request.user.is_superuser %}max="{% if view == 'detail' %}{{ default_variant.stock }}{% else %}{{ product_data.variant_stock }}{% endif %}"{% endif %}
-                        value="{% if request.user.is_superuser and view == 'detail' %}
-                                    {{ default_variant.stock|default:0 }}
-                                {% elif request.user.is_superuser and view != 'detail' %}
-                                    {{ product_data.variant_stock|default:0 }}
-                                {% else %}
-                                    1
-                                {% endif %}"
-                        {% if view != 'detail' and request.user.is_superuser %}disabled{% endif %}>
+                    {% if request.user.is_superuser and view == 'detail' %}
+                        {{ variant_form.stock|as_crispy_field }}
+                    {% else %}
+                        <label for="{% if request.user.is_superuser %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
+                            class="form-label {% if view == 'detail' %}selector-label{% endif %}">
+                            {% if request.user.is_superuser %}Stock{% else %}Quantity{% endif %}
+                        </label>
+                        <input id="{% if request.user.is_superuser %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
+                            type="number" 
+                            class="form-control quantity {% if view == 'detail' %}selector-input{% endif %}"
+                            min="1" 
+                            {% if not request.user.is_superuser %}max="{% if view == 'detail' %}{{ default_variant.stock }}{% else %}{{ product_data.variant_stock }}{% endif %}"{% endif %}
+                            value="{% if request.user.is_superuser and view == 'detail' %}
+                                        {{ default_variant.stock|default:0 }}
+                                    {% elif request.user.is_superuser and view != 'detail' %}
+                                        {{ product_data.variant_stock|default:0 }}
+                                    {% else %}
+                                        1
+                                    {% endif %}"
+                            {% if view != 'detail' and request.user.is_superuser %}disabled{% endif %}>
+                    {% endif %}
                 </div>
             </div>
 
@@ -153,10 +172,7 @@
                 </h5>
             {% elif view == 'detail' %}
                 {% if request.user.is_superuser %}
-                    <label for="price-edit-{{ product.id }}" class="form-label">
-                        Price
-                    </label>
-                    <input id="price-edit-{{ product.id }}" type="number" name="price" class="form-control" value="{{ default_price }}">
+                    {{ variant_form.price|as_crispy_field }}
                 {% else %}
                 <h5 class="card-subtitle mt-3" id="price-{{ product.id }}">
                     {% if default_stock_status == 'Out of Stock' %}

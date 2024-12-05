@@ -751,6 +751,18 @@ option[data-stock="0"] {
     border-radius: var(--bs-border-radius);
 }
 
+/* Product image selector */
+.position-relative {
+    position: relative;
+}
+
+.image-upload-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
 /* Desktop styles */
 @media (min-width: 992px) {
     /* Logo aligned to the left */

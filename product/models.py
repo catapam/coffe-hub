@@ -17,9 +17,9 @@ class Product(models.Model):
     name = models.CharField(max_length=35)
     slug = models.SlugField(unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
-    description = models.TextField(blank=True, null=True,max_length=70)
+    description = models.TextField(blank=True, null=True, max_length=70)
     rating = models.FloatField(default=0, help_text="Average rating (0-5).")
-    # image = models.ImageField(upload_to='products/', blank=True, null=True)
+    image_path = models.ImageField(upload_to='images/products/', blank=True, null=True)  # Product-specific image
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -27,8 +27,12 @@ class Product(models.Model):
         return self.name
 
     def image(self):
-        # Return the placeholder image URL
-        return static('images/product-holder.webp')
+        """
+        Returns the product image URL. Falls back to a placeholder image if no image is provided.
+        """
+        if self.image_path:
+            return self.image_path.url  # Return the uploaded image URL
+        return static('images/product-holder.webp')  # Return the fallback placeholder image
 
     def get_buy_url(self):
         return reverse("product")  # Adjust as needed for your app's URLs
@@ -57,7 +61,6 @@ class Product(models.Model):
             "default_price": default_price,
             "default_stock_status": default_stock_status,
         }
-
 
 
 class ProductVariant(models.Model):

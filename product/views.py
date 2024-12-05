@@ -4,6 +4,7 @@ from .models import Product, ProductVariant, Category
 from django.db.models import Min, F, Case, When, Value, IntegerField, Subquery, OuterRef, Q
 from django.views.generic.edit import UpdateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from .forms import ProductEditForm, ProductVariantForm
 
 
 class ProductListView(ListView):
@@ -179,7 +180,11 @@ class ProductDetailView(DetailView):
         default_stock_status = "In Stock" if default_variant and default_variant.stock > 0 else "Out of Stock"
         default_price = default_variant.price if default_variant else None
 
+        # Check if user is an admin
         is_admin = self.request.user.is_authenticated and self.request.user.is_superuser
+        # Pass the form to the context
+        product_form = ProductEditForm(instance=product) if is_admin else None
+        variant_form = ProductVariantForm(instance=default_variant) if is_admin else None
 
         context.update({
             'variants': variants,
@@ -192,6 +197,8 @@ class ProductDetailView(DetailView):
             'view': 'detail',
             'buy_url': product.get_buy_url,
             'is_admin': is_admin,
+            'product_form': product_form,
+            'variant_form': variant_form,
         })
         return context
 
