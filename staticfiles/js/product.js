@@ -11,38 +11,53 @@ class ProductCardHandler {
         sizeSelectors.forEach(sizeSelect => {
             // Trigger updates for each size selector on DOM load
             this.updateProductCard(sizeSelect);
-            this.updateBuyUrl(sizeSelect);
+            this.updateProductUrl(sizeSelect);
 
             // Add event listener for size changes
             sizeSelect.addEventListener("change", () => {
                 this.updateProductCard(sizeSelect);
-                this.updateBuyUrl(sizeSelect);
+                this.updateProductUrl(sizeSelect);
             });
         });
     }
 
     updateProductCard(sizeSelect) {
         if (!sizeSelect) return;
-
+        
         // Find the parent card containing the size selector
-        const cardElement = sizeSelect.closest(".card");
-        if (!cardElement) return;
+        var cardElement = sizeSelect.closest(".product-card");
+        if (!cardElement) {
+            return;
+        }
 
         // Get the selected option details
         const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
         if (!selectedOption) return;
-
-        const price = selectedOption.dataset.price || 0;
+    
+        const price = selectedOption.dataset.price;
         const stock = parseInt(selectedOption.dataset.stock || 0, 10);
-
+    
         // Update elements within this specific card
         this.updatePriceDisplay(cardElement, price, stock);
         this.updateBuyButton(cardElement, stock);
+        this.updateStockInput(cardElement, stock);
     }
+    
+    updateStockInput(cardElement, stock) {
+        // Find the stock/quantity input within the specific card
+        const stockInput = cardElement.querySelector(`#stock-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
+        if (stockInput) {
+            stockInput.value = stock; // Update the stock input value
+        } else{
+            const quantityInput = cardElement.querySelector(`#quantity-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
+            quantityInput.value = 1;
+        }
+    }    
 
     updatePriceDisplay(cardElement, price, stock) {
         // Find the price display within the specific card
-        const priceDisplay = cardElement.querySelector(`#price-display-${cardElement.querySelector('.size').id.split('-')[2]}`);
+        const priceDisplay = cardElement.querySelector(`#price-${cardElement.querySelector('.size').id.split('-')[2]}`);
+        const priceEdit = cardElement.querySelector(`#price-edit-${cardElement.querySelector('.size').id.split('-')[2]}`);
         if (priceDisplay) {
             if (stock > 0) {
                 priceDisplay.innerHTML = `<strong>$${price} <span>each</span></strong>`;
@@ -51,6 +66,8 @@ class ProductCardHandler {
                 priceDisplay.innerHTML = `<strong>Out of Stock</strong>`;
                 priceDisplay.classList.add(this.outOfStockClass);
             }
+        } else {
+            priceEdit.value = `${price}`;
         }
     }
 
@@ -68,25 +85,42 @@ class ProductCardHandler {
         }
     }
 
-    updateBuyUrl(sizeSelect) {
+    updateProductUrl(sizeSelect) {
         if (!sizeSelect) return;
-
+    
         // Extract slug or ID from the select element's ID
         const selectId = sizeSelect.id; // Example: size-select-<slug or id>
         const slug = selectId.split('-')[2]; // Extract slug or ID
-
-        // Find the link element using the slug
-        const link = document.getElementById(`detail-link-${slug}`);
-
+    
         // Get the base URL and selected size
         const base_url = sizeSelect.getAttribute("data-base-url");
         const size = sizeSelect.value;
-
-        // Update the href attribute if the link exists
-        if (link && base_url) {
-            link.href = `${base_url}?size=${size}`;
+    
+        // Check if we are on the detail view
+        const isDetailView = document.querySelector(".product-card.container"); // Unique class for detail view
+    
+        if (isDetailView) {
+            // Update the current page's URL
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.set("size", size); // Update the size parameter
+            window.history.replaceState(null, "", newUrl.toString());
+        } else {
+            // Update 'detail-link' and 'edit-link' only for list view
+            const detailLink = document.getElementById(`detail-link-${slug}`);
+            const editLink = document.getElementById(`edit-link-${slug}`);
+    
+            // Update 'detail-link' if it exists
+            if (detailLink && base_url) {
+                detailLink.href = `${base_url}?size=${size}`;
+            }
+    
+            // Update 'edit-link' if it exists
+            if (editLink && base_url) {
+                editLink.href = `${base_url}?size=${size}`;
+            }
         }
     }
+      
 }
 
 // Initialize the handler on DOM load

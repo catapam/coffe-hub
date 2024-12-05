@@ -38,9 +38,9 @@ class LoginRequiredMiddleware(MiddlewareMixin):
             # Allow access to certain URLs without authentication
             allowed_urls = [
                 'account_login', 'account_signup', 'account_reset_password',
-                'home', 'about', 'privacy_policy', 'products', 'product_details', 
+                'home', 'about', 'privacy_policy', 'products', 'product_detail', 
                 'product_list', 'custom_401', 'custom_404', 'wireframes',
-                'account_reset_password_done',
+                'account_reset_password_done', 'help',
                 'account_reset_password_from_key',
                 'account_confirm_email', 'account_verified_email_required',
                 'account_email_verification_sent'                

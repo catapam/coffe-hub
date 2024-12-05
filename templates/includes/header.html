@@ -35,14 +35,14 @@
                 <ul class="navbar-nav">
                     <!-- Active page indication using aria-current for accessibility -->
                     <li class="nav-item ">
-                        <a class="nav-link menu-item" aria-current="page" href="/#">Shop</a>
+                        <a class="nav-link menu-item" aria-current="page" href="{% url 'product' %}">Shop</a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'about' %}" class="nav-link menu-item" aria-current="page">About</a>
                     </li>
                     
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle d-block d-lg-none menu-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle d-block d-lg-none menu-item" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Account
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">

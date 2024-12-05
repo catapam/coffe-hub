@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="{% if view == 'detail' %}container mt-5 product-page page-container{% else %}card{% endif %}">
+<div class="product-card {% if view == 'detail' %}container mt-5 product-page page-container{% else %}card{% endif %}">
     <div class="{% if view == 'detail' %}row{% endif %}">
 
         <!-- Product Image Section -->
@@ -19,7 +19,17 @@
         <!-- Product Details Section -->
         <div class="{% if view == 'detail' %}col-md-6{% else %}card-body{% endif %}">
             {% if view == 'detail' %}
-                <h2 class="card-title">{{ product.name }}</h2>
+                <!-- Title -->
+                    {% if request.user.is_superuser %}
+                        <label for="name-{{ product.id }}" class="form-label">
+                            Name
+                        </label>
+                        <input id="name-{{ product.id }}" type="text" name="name" class="form-control overflow-auto" value="{{ product.name }}">
+                    {% else %}
+                        <h2 class="card-title">
+                            {{ product.name }}
+                        </h2>
+                    {% endif %}
             {% else %}
                 <h5 class="card-title mx-auto">
                     <a id="detail-link-{{ product_data.product.id }}"
@@ -47,33 +57,47 @@
             </div>
 
             <!-- Product Description -->
-            <p class="card-text mx-auto">
-                {% if view == 'detail' %}
+            {% if view == 'detail' %}
+            <label for="description-{{ product.id }}" class="form-label">
+                Description
+            </label>
+            {% if request.user.is_superuser %}
+                <textarea id="description-{{ product.id }}" name="description" class="form-control mb-2 overflow-auto" rows="3">{{ product.description }}</textarea>
+            {% else %}
+                <p class="card-text mx-auto">
                     {{ product.description }}
-                {% else %}
-                    {{ product_data.product.description }}
-                {% endif %}
+                </p>
+            {% endif %}
+            {% else %}
+            <p class="card-text mx-auto">
+                {{ product_data.product.description }}
             </p>
+            {% endif %}
 
-            <!-- Size and Quantity Selectors -->
-            <div class="{% if view == 'detail' %}d-flex gap-3 mb-3{% else %}row card-row{% endif %}">
+            <!-- Size and Quantity/Stock Selectors -->
+            <div class="row g-3 align-items-end mb-3 {% if view == 'detail' %}selectors-row{% else %}card-row{% endif %}">
                 <!-- Size Selector -->
-                <div class="{% if view == 'detail' %}w-50{% else %}col-6 mx-auto{% endif %}">
+                <div class="col-md-6 mx-auto{% if view == 'detail' %}selector-group{% endif %}">
                     {% if view == 'detail' %}
                         {% with stock_by_size.items as size_data %}
-                            <label for="size-select-{{ product.id }}" class="form-label">Size</label>
-                            <select id="size-select-{{ product.id }}" class="form-select size select-dropdown"
-                                    onchange="location.href='?size=' + this.value">
-                                {% for size, data in size_data %}
-                                    <option value="{{ size }}"
-                                            data-price="{{ data.price }}"
-                                            data-stock="{{ data.stock }}"
-                                            {% if size == default_size %}selected{% endif %}
-                                            {% if data.stock == 0 %}class="text-muted"{% endif %}>
-                                        {{ size }}{% if data.stock == 0 %} (Out of Stock){% endif %}
-                                    </option>
-                                {% endfor %}
-                            </select>
+                            <div class="gap-2 align-items-end">
+                                <label for="size-select-{{ product.id }}" class="form-label selector-label">Size</label>
+                                {% if request.user.is_superuser %}
+                                    <button class="btn btn-success btn-sm selector-new-button">Add</button>
+                                {% endif %}
+                            </div>
+                            <select id="size-select-{{ product.id }}" 
+                                    class="form-select size select-dropdown selector-input">
+                                    {% for size, data in size_data %}
+                                        <option value="{{ size }}"
+                                                data-price="{{ data.price }}"
+                                                data-stock="{{ data.stock }}"
+                                                {% if size == default_size %}selected{% endif %}
+                                                {% if data.stock == 0 %}class="text-muted"{% endif %}>
+                                            {{ size }}{% if data.stock == 0 %}{% endif %}
+                                        </option>
+                                    {% endfor %}
+                            </select>   
                         {% endwith %}
                     {% else %}
                         {% with product_data.stock_by_size.items as size_data %}
@@ -87,45 +111,86 @@
                                                 data-stock="{{ data.stock }}"
                                                 {% if size == product_data.variant_size %}selected{% endif %}
                                                 {% if data.stock == 0 %}class="text-muted"{% endif %}>
-                                            {{ size }}{% if data.stock == 0 %} (Out of Stock){% endif %}
+                                            {{ size }}{% if data.stock == 0 %}{% endif %}
                                         </option>
                                     {% endif %}
                                 {% endfor %}
                             </select>
                         {% endwith %}
                     {% endif %}
-                </div>                
+                </div>
 
-                <!-- Quantity Selector -->
-                <div class="{% if view == 'detail' %}w-50{% else %}col-6 mx-auto{% endif %}">
-                    <label for="quantity-select-{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" class="form-label">Quantity</label>
-                    <input id="quantity-select-{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" type="number" class="form-control quantity" min="1" value="1">
+                <!-- Quantity/Stock Selector -->
+                <div class="col-md-6 mx-auto{% if view == 'detail' %}selector-group{% endif %}">
+                    <label for="{% if request.user.is_superuser %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
+                        class="form-label {% if view == 'detail' %}selector-label{% endif %}">
+                        {% if request.user.is_superuser %}Stock{% else %}Quantity{% endif %}
+                    </label>
+                    <input id="{% if request.user.is_superuser %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
+                        type="number" 
+                        class="form-control quantity {% if view == 'detail' %}selector-input{% endif %}"
+                        min="1" 
+                        {% if not request.user.is_superuser %}max="{% if view == 'detail' %}{{ default_variant.stock }}{% else %}{{ product_data.variant_stock }}{% endif %}"{% endif %}
+                        value="{% if request.user.is_superuser and view == 'detail' %}
+                                    {{ default_variant.stock|default:0 }}
+                                {% elif request.user.is_superuser and view != 'detail' %}
+                                    {{ product_data.variant_stock|default:0 }}
+                                {% else %}
+                                    1
+                                {% endif %}"
+                        {% if view != 'detail' and request.user.is_superuser %}disabled{% endif %}>
                 </div>
             </div>
 
             <!-- Price or Stock Status -->
-            <h5 class="card-subtitle mt-3">
-                {% if default_stock_status == 'Out of Stock' or product_data.variant_stock == 0 %}
-                    <span id="price-display-{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" class="text-danger">
-                        <strong>Out of Stock</strong>
-                    </span>
+            {% if view == 'list' %}
+                <h5 class="card-subtitle mt-3" id="price-{{ product_data.product.id }}">
+                    {% if default_stock_status == 'Out of Stock' %}
+                        <span class="text-danger"><strong>Out of Stock</strong></span>
+                    {% else %}
+                        <span><strong>${{ product_data.variant_price }} <span>each</span></strong></span>
+                    {% endif %}
+                </h5>
+            {% elif view == 'detail' %}
+                {% if request.user.is_superuser %}
+                    <label for="price-edit-{{ product.id }}" class="form-label">
+                        Price
+                    </label>
+                    <input id="price-edit-{{ product.id }}" type="number" name="price" class="form-control" value="{{ default_price }}">
                 {% else %}
-                    <span id="price-display-{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}">
-                        <strong>
-                            $<span>{% if view == 'detail' %}{{ default_price }}{% else %}{{ product_data.variant_price }}{% endif %}</span>
-                            <span>each</span>
-                        </strong>
-                    </span>
+                <h5 class="card-subtitle mt-3" id="price-{{ product.id }}">
+                    {% if default_stock_status == 'Out of Stock' %}
+                        <span class="text-danger"><strong>Out of Stock</strong></span>
+                    {% else %}
+                        <span><strong>${{ default_price }} <span>each</span></strong></span>
+                    {% endif %}
+                </h5>
                 {% endif %}
-            </h5>
+            {% endif %}
 
-            <!-- Buy Button -->
-            <a id="buy-button-{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}"
-                href="{% if view == 'detail' %}{{ product.get_buy_url }}{% else %}{{ product_data.product.get_buy_url }}{% endif %}"
-                class="btn btn-secondary {% if view == 'list' %}btn-sm{% else %}btn-buy{% endif %} {% if view == 'detail' and default_stock_status == 'Out of Stock' or product_data.variant_stock == 0 %}disabled{% endif %}"
-                {% if view == 'detail' and default_stock_status == 'Out of Stock' or product_data.variant_stock == 0 %}disabled{% endif %}>
-                    Buy
-            </a>
+            <!-- Buttons -->
+            {% if request.user.is_superuser %}
+                {% if view == 'detail' %}
+                <div class="col mb-2 btn-group">
+                    <button class="btn btn-success mt-2">Save</button>
+                    <button class="btn btn-warning mt-2">Deactivate Size</button>
+                    <button class="btn btn-danger mt-2">Deactivate Product</button>
+                </div>                
+                {% else %}
+                <a id="edit-link-{{ product_data.product.id }}"
+                    href="{% url 'product_detail' slug=product_data.product.slug %}?size={{ product_data.variant_size }}"
+                    class="btn btn-secondary {% if view == 'list' %}btn-sm{% else %}btn-buy{% endif %}"
+                    data-base-url="{% url 'product_detail' slug=product_data.product.slug %}">
+                    Edit
+                </a>
+                {% endif %}
+            {% else %}
+                <a id="buy-button-{{ product.id }}"
+                   href="{{ product.get_buy_url }}"
+                   class="btn btn-secondary btn-buy {% if view == 'list' %}btn-sm{% endif %} {% if default_stock_status == 'Out of Stock' %}disabled{% endif %}">
+                   Buy
+                </a>
+            {% endif %}
         </div>
     </div>
 </div>

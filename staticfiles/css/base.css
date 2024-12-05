@@ -229,6 +229,14 @@ footer li{
     border-color: var(--text-secondary-color);
 }
 
+.btn-extra-small {
+    font-size: 0.75rem;
+}
+
+.btn-extra-small.btn {
+    padding: 0.2rem 0.4rem;
+}
+
 /* Navbar */
 .navbar {
     position: fixed; /* Fixed to the top */
@@ -290,10 +298,11 @@ footer li{
 
 .navbar-nav{
     background-color: var(--bg-darker);
-    opacity: 0.95;
+    opacity: 1;
     border: var(--border);
     border-radius: var(--bs-border-radius);
-    border-color: var(--text-secondary-color);
+    border-color: var(--bg-lighter);
+    box-shadow: 0 0 2px var(--text-primary-color);
     max-width: 10rem;
     max-height: 80%;
     margin-left: auto;
@@ -337,22 +346,27 @@ footer li{
 .dropdown-menu {
     right: 0;
     border: var(--border);
-    border-color: var(--text-secondary-color);
+    border-color: var(--bg-lighter);
+    box-shadow: 0 0 2px var(--text-primary-color);
     left: auto;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
 }
 
 .dropdown-menu[data-bs-popper]{
     left: auto;
 }
+
 .navbar-nav .dropdown-menu {
     position: absolute;
     right: -11.5px;
-    top: 44px;
+    top: 35px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     left: auto;
     border: var(--border);
-    border-color: var(--text-secondary-color);
+    border-color: var(--bg-lighter);
+    box-shadow: 0 0 2px var(--text-primary-color);
     background-color: var(--bg-dark);
     opacity: 1;
 }
@@ -550,7 +564,6 @@ input{
 }
 
 .card-text, .card-subtitle {
-    margin-top: 10px;
     margin-bottom: 5px;
 }
 
@@ -677,9 +690,51 @@ input{
     width: 50%;
 }
 
+.btn-group {
+    margin-top: 5px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap */
+    gap: 2px; /* Add space between buttons */
+    justify-content: center; /* Center buttons within the parent */
+    border-radius: var(--bs-border-radius);
+}
+
+.btn-group .btn {
+    flex: 1 1 33%; /* Buttons will grow, shrink, and have a max width of 48% */
+    max-width: 33%; /* Ensure no button exceeds 48% of the parent width */
+}
+
 option[data-stock="0"] {
     color: grey;
     font-style: italic;
+}
+
+/* Product selectors */
+/* Grouped styling for edit product selectors */
+.selector-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* product Labels */
+.selector-label {
+    height: 25px;
+    line-height: 25px;
+    align-self: flex-start;
+}
+
+/* Admin edit product Inputs */
+.selector-input {
+    height: 40px;
+}
+
+/* New size Button */
+.selector-new-button {
+    height: 25px;
+    line-height: 20px;
+    padding: 0 0.5rem;
+    align-self: flex-start;
 }
 
 /* Help page */
@@ -716,8 +771,8 @@ option[data-stock="0"] {
         background-color: transparent;
         opacity: 1;
         border: none;
-        border-radius: 0;
-        border-color: none;
+        box-shadow: none;
+        border-color: transparent;
         max-width: 100%;
         max-height: 100%;
         margin-left: 10px;

@@ -3,7 +3,7 @@ from django.urls import path, include
 from .views import Custom404View, Custom401View
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("admin/", admin.site.urls, name='admin'),
 
     # Home app URLs
     path('', include('store.urls')),

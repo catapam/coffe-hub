@@ -2,6 +2,9 @@ from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404, redirect
 from .models import Product, ProductVariant, Category
 from django.db.models import Min, F, Case, When, Value, IntegerField, Subquery, OuterRef, Q
+from django.views.generic.edit import UpdateView, View
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 
 class ProductListView(ListView):
     model = Product
@@ -19,16 +22,15 @@ class ProductListView(ListView):
         search_query = self.request.GET.get('q')  # Capture the search query
 
         if sort_by in ['price_asc', 'price_desc']:
-            # Flatten all variants into a single list and order by price
             queryset = ProductVariant.objects.annotate(
                 adjusted_price=Case(
                     When(stock__gt=0, then=F('price')),
-                    default=Value(0),  # Out-of-stock products are treated as price 0
+                    default=Value(0),
                     output_field=IntegerField(),
                 )
             )
 
-            # Apply filters for category, price, rating, and search query
+            # Apply filters
             if selected_categories and "" not in selected_categories:
                 queryset = queryset.filter(product__category__slug__in=selected_categories)
             if price_min:
@@ -43,15 +45,12 @@ class ProductListView(ListView):
                     Q(product__description__icontains=search_query)
                 )
 
-            # Exclude out-of-stock variants if "show_out_of_stock" is not active
             if not show_out_of_stock:
                 queryset = queryset.filter(stock__gt=0)
 
-            # Order by price
             queryset = queryset.order_by('adjusted_price' if sort_by == 'price_asc' else '-adjusted_price')
 
         else:
-            # Default behavior: Show one card per product with its default variant
             available_variant = ProductVariant.objects.filter(
                 product=OuterRef('pk'), stock__gt=0
             ).order_by('price')
@@ -62,11 +61,9 @@ class ProductListView(ListView):
                 default_variant_size=Subquery(available_variant.values('size')[:1]),
             )
 
-            # Exclude products with no stock if "show_out_of_stock" is not active
             if not show_out_of_stock:
                 queryset = queryset.filter(default_variant_stock__gt=0)
 
-            # Apply filters
             if selected_categories and "" not in selected_categories:
                 queryset = queryset.filter(category__slug__in=selected_categories)
             if price_min:
@@ -89,9 +86,7 @@ class ProductListView(ListView):
         products_with_context = []
 
         if isinstance(self.object_list.first(), ProductVariant):
-            # Handle flattened variants for price sorting
             for variant in self.object_list:
-                # Fetch all stock and prices for this product
                 stock_by_size = {
                     v.size: {"price": v.price, "stock": v.stock}
                     for v in ProductVariant.objects.filter(product=variant.product)
@@ -99,21 +94,18 @@ class ProductListView(ListView):
 
                 products_with_context.append({
                     "product": variant.product,
-                    "variant_size": variant.size,  # Set the current variant as default size
+                    "variant_size": variant.size,
                     "variant_price": variant.adjusted_price,
                     "variant_stock": variant.stock,
-                    "stock_by_size": stock_by_size,  # Include all sizes
+                    "stock_by_size": stock_by_size,
                 })
         else:
-            # Handle default single-card rendering per product
             for product in self.object_list:
-                # Fetch all stock and prices for this product
                 stock_by_size = {
                     v.size: {"price": v.price, "stock": v.stock}
                     for v in ProductVariant.objects.filter(product=product)
                 }
 
-                # Use the default variant for size, price, and stock
                 products_with_context.append({
                     "product": product,
                     "variant_size": product.default_variant_size,
@@ -123,12 +115,11 @@ class ProductListView(ListView):
                     "buy_url": product.get_buy_url,
                 })
 
-
         context.update({
             'products_with_context': products_with_context,
             'categories': Category.objects.values('slug', 'name'),
             'selected_categories': self.request.GET.getlist('category[]'),
-            'total_review': range(5),  # For star ratings
+            'total_review': range(5),
             'sorting_options': {
                 'price_asc': 'Price: Low to High',
                 'price_desc': 'Price: High to Low',
@@ -138,11 +129,12 @@ class ProductListView(ListView):
                 'rating_desc': 'Rating: High to Low',
             },
             'show_out_of_stock': self.request.GET.get('show_out_of_stock') == 'on',
-            'search_query': self.request.GET.get('q', ''),  # Pass the search query to the context
+            'search_query': self.request.GET.get('q', ''),
             'view': 'list',
         })
 
         return context
+
 
 class ProductDetailView(DetailView):
     model = Product
@@ -155,10 +147,9 @@ class ProductDetailView(DetailView):
         sizes = [variant.size for variant in variants]
         stock_by_size = {variant.size: variant for variant in variants}
 
-        # Determine the first size with stock if no size is provided
         if 'size' not in request.GET:
             default_size = next(
-                (size for size in sizes if stock_by_size[size].stock > 0), 
+                (size for size in sizes if stock_by_size[size].stock > 0),
                 sizes[0] if sizes else None
             )
             if default_size:
@@ -170,27 +161,25 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         product = self.object
 
-        # Fetch variants and organize sizes and stock
         variants = product.variants.all()
         sizes = [variant.size for variant in variants]
         stock_by_size = {variant.size: variant for variant in variants}
 
-        # Get selected size from query parameter
         selected_size = self.request.GET.get('size')
 
-        # Validate selected size or fallback to the first in-stock size
         if selected_size and selected_size in stock_by_size:
             default_size = selected_size
         else:
             default_size = next(
-                (size for size in sizes if stock_by_size[size].stock > 0), 
+                (size for size in sizes if stock_by_size[size].stock > 0),
                 sizes[0] if sizes else None
             )
 
-        # Determine stock status and price for the default size
         default_variant = stock_by_size.get(default_size)
         default_stock_status = "In Stock" if default_variant and default_variant.stock > 0 else "Out of Stock"
         default_price = default_variant.price if default_variant else None
+
+        is_admin = self.request.user.is_authenticated and self.request.user.is_superuser
 
         context.update({
             'variants': variants,
@@ -199,8 +188,31 @@ class ProductDetailView(DetailView):
             'default_size': default_size,
             'default_stock_status': default_stock_status,
             'default_price': default_price,
-            'total_review': range(5),  # For star ratings
+            'total_review': range(5),
             'view': 'detail',
             'buy_url': product.get_buy_url,
+            'is_admin': is_admin,
         })
         return context
+
+class ProductEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Product
+    fields = ['name', 'description', 'rating', 'category', 'is_active']
+    template_name = 'product/admin_product_edit.html'
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+
+class ProductDeactivateView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def post(self, request, *args, **kwargs):
+        product = get_object_or_404(Product, pk=kwargs['pk'])
+        product.is_active = False
+        product.save()
+        return redirect('product')

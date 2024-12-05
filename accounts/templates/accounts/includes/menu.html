@@ -53,7 +53,7 @@
             {% endif %}
 
             <li>
-                <a href="/accounts/logout/" class="menu-item logout-dashboard nav-link" aria-label="Logout">
+                <a href="{% url 'account_logout' %}" class="menu-item logout-dashboard nav-link" aria-label="Logout">
                     <span class="menu-text">Logout</span>
                     <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
                 </a>
