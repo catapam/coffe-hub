@@ -67,14 +67,15 @@ class ProductCardHandler {
 
     updateStockInput(cardElement, stock) {
         // Find the stock/quantity input within the specific card
-        const stockInput = cardElement.querySelector(`#id_stock`);
+        let stockInput = cardElement.querySelector(`#id_stock`);
         const quantityInput = cardElement.querySelector(`#quantity-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
         if (stockInput) {
             stockInput.value = stock; // Update the stock input value
         } else if (quantityInput){
             quantityInput.value = 1;
         } else{
-            console.log("Stock object error")
+            stockInput = `#stock-select-${cardElement.querySelector('.size').id.split('-')[2]}`
+            stockInput.value = stock; 
         }
     }
 

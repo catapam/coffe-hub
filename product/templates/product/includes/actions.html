@@ -1,0 +1,22 @@
+{% if request.user.is_superuser %}
+    {% if view == 'detail' %}
+    <div class="col mb-2 btn-group">
+        <button class="btn btn-success mt-2">Save</button>
+        <button class="btn btn-warning mt-2">Deactivate Size</button>
+        <button class="btn btn-danger mt-2">Deactivate Product</button>
+    </div>                
+    {% else %}
+    <a id="edit-link-{{ product_data.product.id }}"
+        href="{% url 'product_detail' slug=product_data.product.slug %}?size={{ product_data.variant_size }}"
+        class="btn btn-secondary {% if view == 'list' %}btn-sm{% else %}btn-buy{% endif %}"
+        data-base-url="{% url 'product_detail' slug=product_data.product.slug %}">
+        Edit
+    </a>
+    {% endif %}
+{% else %}
+    <a id="buy-button-{{ product.id }}"
+        href="{{ product.get_buy_url }}"
+        class="btn btn-secondary btn-buy {% if view == 'list' %}btn-sm{% endif %} {% if default_stock_status == 'Out of Stock' %}disabled{% endif %}">
+        Buy
+    </a>
+{% endif %}

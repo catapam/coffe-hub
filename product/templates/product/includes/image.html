@@ -1,0 +1,26 @@
+
+<div class="{% if view == 'detail' %}col-md-6 d-flex align-items-center justify-content-center{% else %}background-gradient{% endif %} position-relative">
+    <div class="{% if view == 'detail' %}card{% endif %}">
+        <div class="{% if view == 'detail' %}background-gradient{% endif %}">
+            <div class="content-gradient">
+                <img id="product-image-{{ product.id }}" class="card-img-top"
+                    src="{% if view == 'detail' %}{{ product.image }}{% else %}{{ product_data.product.image }}{% endif %}"
+                    alt="{% if view == 'detail' %}{{ product.name }}{% else %}{{ product_data.product.name }}{% endif %}">
+            </div>
+        </div>
+
+        <!-- Image Upload Icon for Superusers -->
+        {% if request.user.is_superuser and view == 'detail' %}
+            <div class="image-upload-icon menu-icon position-absolute">
+                <label for="id_image_path" class="sr-only">Change Product Image</label>
+                <input id="id_image_path" 
+                       type="file" 
+                       name="image_path" 
+                       class="form-control d-none"
+                       onchange="previewImage(this, 'product-image-{{ product.id }}')">
+                <i class="fa-solid fa-upload upload-icon menu-item"
+                   onclick="document.getElementById('id_image_path').click()"></i>
+            </div>
+        {% endif %}
+    </div>
+</div>

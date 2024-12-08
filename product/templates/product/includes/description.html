@@ -1,0 +1,16 @@
+{% if view == 'detail' %}
+    {% if request.user.is_superuser %}
+        {{ product_form.description|as_crispy_field }}
+    {% else %}
+        <label for="description" class="form-label">
+            Description
+        </label>
+        <p class="card-text mx-auto" id="description">
+            {{ product.description }}
+        </p>
+    {% endif %}
+{% else %}
+    <p class="card-text mx-auto mt-2">
+        {{ product_data.product.description }}
+    </p>
+{% endif %}

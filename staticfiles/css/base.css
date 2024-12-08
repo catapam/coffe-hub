@@ -552,6 +552,10 @@ input{
     color: var(--text-secondary-color) !important; /* Filled color for selected stars */
 }
 
+.review-stars p {
+    margin: 0;
+}
+
 .card .form-control, .card .form-select{
     max-width: 80%;
     margin: auto;
@@ -761,6 +765,22 @@ option[data-stock="0"] {
     top: 10px;
     right: 10px;
     z-index: 10;
+    
+}
+
+#div_id_name{
+    margin-top: 1.5rem;
+}
+
+/* Layout shift fix */
+@media (min-width: 768px) {
+    #div_id_stock{
+        margin-bottom: 0 !important;
+    }
+
+    #div_id_price{
+        margin-top: 1rem;
+    }
 }
 
 /* Desktop styles */
