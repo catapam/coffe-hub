@@ -50,7 +50,7 @@
             <label for="rating" class="form-label">Min Rating</label>
             <select id="rating" name="rating" class="form-select">
                 <option value="">All</option>
-                {% for star in total_review %}
+                {% for star in max_review %}
                 <option value="{{ star }}" {% if request.GET.rating == star|stringformat:"d" %}selected{% endif %}>
                     {{ star }} Star{% if star > 1 %}s{% endif %}
                 </option>

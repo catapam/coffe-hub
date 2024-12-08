@@ -1,7 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.templatetags.static import static
-
+from django.conf import settings
+from django.db.models import Avg
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -19,7 +20,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     description = models.TextField(blank=True, null=True, max_length=70)
     rating = models.FloatField(default=0, help_text="Average rating (0-5).")
-    image_path = models.ImageField(upload_to='images/products/', blank=True, null=True)  # Product-specific image
+    image_path = models.ImageField(upload_to='images/products/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -27,20 +28,14 @@ class Product(models.Model):
         return self.name
 
     def image(self):
-        """
-        Returns the product image URL. Falls back to a placeholder image if no image is provided.
-        """
         if self.image_path:
-            return self.image_path.url  # Return the uploaded image URL
-        return static('images/product-holder.webp')  # Return the fallback placeholder image
+            return self.image_path.url
+        return static('images/product-holder.webp')
 
     def get_buy_url(self):
-        return reverse("product")  # Adjust as needed for your app's URLs
+        return reverse("product")  # Adjust as needed
 
     def get_card_context(self):
-        """
-        Generate context for rendering this product's card.
-        """
         variants = self.variants.all()
         stock_by_size = {
             variant.size: {"price": variant.price, "stock": variant.stock}
@@ -50,8 +45,8 @@ class Product(models.Model):
         default_size = variants[0].size if variants else None
         default_price = stock_by_size[default_size]["price"] if default_size else 0
         default_stock_status = (
-            "In Stock" if stock_by_size[default_size]["stock"] > 0 else "Out of Stock"
-            if default_size else "Out of Stock"
+            "In Stock" if default_size and stock_by_size[default_size]["stock"] > 0 
+            else "Out of Stock"
         )
 
         return {
@@ -62,11 +57,19 @@ class Product(models.Model):
             "default_stock_status": default_stock_status,
         }
 
+    @property
+    def average_rating(self):
+        avg = self.reviews.aggregate(average=Avg('rating'))['average']
+        if avg is None:
+            return 0.0
+        return round(avg, 1)  # Round to one decimal place
+
+
 
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants')
     size = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=10, decimal_places=2)  # Price specific to the size
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -74,3 +77,17 @@ class ProductVariant(models.Model):
 
     class Meta:
         unique_together = ('product', 'size')
+
+
+class ProductReview(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+    )
+    rating = models.IntegerField(help_text="Integer rating 0-5")
+    comment = models.CharField(max_length=100, blank=True, help_text="Short review (max 100 chars)")
+    silenced = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Review of {self.product.name} by {self.user if self.user else 'Anonymous'}: {self.rating}"

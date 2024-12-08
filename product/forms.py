@@ -1,5 +1,6 @@
 from django import forms
-from .models import Product, ProductVariant
+from .models import Product, ProductVariant, ProductReview
+
 
 class ProductEditForm(forms.ModelForm):
     """
@@ -81,3 +82,24 @@ class ProductVariantForm(forms.ModelForm):
             self.fields['size'].initial = instance.size
             self.fields['price'].initial = instance.price
             self.fields['stock'].initial = instance.stock
+            
+
+class ProductReviewForm(forms.ModelForm):
+    class Meta:
+        model = ProductReview
+        fields = ['rating', 'comment']
+        widgets = {
+            'rating': forms.NumberInput(attrs={
+                'min': 0, 'max': 5, 'step': 1
+            }),
+            'comment': forms.Textarea(attrs={
+                'maxlength': 100, 'rows': 2, 'placeholder': 'Write a short comment...'
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Set the initial rating value to 0 if the form is not bound (no POST data).
+        if not self.is_bound:
+            self.fields['rating'].initial = 0
+

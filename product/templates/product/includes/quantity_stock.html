@@ -16,7 +16,7 @@
                     {% elif request.user.is_superuser and view != 'detail' %}
                         {{ product_data.variant_stock|default:0 }}
                     {% else %}
-                        1
+                    1
                     {% endif %}"
             {% if view != 'detail' and request.user.is_superuser %}disabled{% endif %}>
     {% endif %}

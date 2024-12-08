@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, ProductVariant, Category
+from .models import Product, ProductVariant, Category, ProductReview
 
 class ProductVariantInline(admin.TabularInline):
     model = ProductVariant
@@ -18,3 +18,23 @@ class ProductAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'created_at')
     prepopulated_fields = {'slug': ('name',)}
+
+
+@admin.register(ProductReview)
+class ProductReviewAdmin(admin.ModelAdmin):
+    list_display = ('product', 'user', 'rating', 'silenced', 'comment', 'created_at')
+    list_filter = ('product', 'rating', 'created_at')
+    search_fields = ('product__name', 'user__username', 'comment')
+    ordering = ('-created_at',)
+
+    def has_change_permission(self, request, obj=None):
+        """
+        Allow edits only if the user is a superuser.
+        """
+        return request.user.is_superuser
+
+    def has_delete_permission(self, request, obj=None):
+        """
+        Allow deletes only if the user is a superuser.
+        """
+        return request.user.is_superuser

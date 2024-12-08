@@ -1,11 +1,10 @@
 from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404, redirect
 from .models import Product, ProductVariant, Category
-from django.db.models import Min, F, Case, When, Value, IntegerField, Subquery, OuterRef, Q
+from django.db.models import Min, F, Case, When, Value, IntegerField, Subquery, OuterRef, Q, Count
 from django.views.generic.edit import UpdateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .forms import ProductEditForm, ProductVariantForm
-
+from .forms import ProductEditForm, ProductVariantForm, ProductReviewForm
 
 class ProductListView(ListView):
     model = Product
@@ -13,7 +12,6 @@ class ProductListView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        # Check for sorting and filtering parameters
         sort_by = self.request.GET.get('sort_by')
         show_out_of_stock = self.request.GET.get('show_out_of_stock') == 'on'
         selected_categories = self.request.GET.getlist('category[]')
@@ -120,7 +118,7 @@ class ProductListView(ListView):
             'products_with_context': products_with_context,
             'categories': Category.objects.values('slug', 'name'),
             'selected_categories': self.request.GET.getlist('category[]'),
-            'total_review': range(5),
+            'max_review': range(5),
             'sorting_options': {
                 'price_asc': 'Price: Low to High',
                 'price_desc': 'Price: High to Low',
@@ -158,7 +156,25 @@ class ProductDetailView(DetailView):
 
         return super().get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
+    def post(self, request, *args, **kwargs):
+        # Handle new review submissions
+        self.object = self.get_object()
+        form = ProductReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = self.object
+            review.user = request.user if request.user.is_authenticated else None
+            review.save()
+            # Update product rating
+            self.object.rating = self.object.average_rating
+            self.object.save()
+            return redirect('product_detail', slug=self.object.slug)
+        else:
+            # If form is invalid, re-render the page with errors
+            return self.get(request, *args, **kwargs)
+
+
+    def get_context_data(self, **kwargs):    
         context = super().get_context_data(**kwargs)
         product = self.object
 
@@ -167,12 +183,11 @@ class ProductDetailView(DetailView):
         stock_by_size = {variant.size: variant for variant in variants}
 
         selected_size = self.request.GET.get('size')
-
         if selected_size and selected_size in stock_by_size:
             default_size = selected_size
         else:
             default_size = next(
-                (size for size in sizes if stock_by_size[size].stock > 0),
+                (size for size in sizes if size in stock_by_size and stock_by_size[size].stock > 0),
                 sizes[0] if sizes else None
             )
 
@@ -180,11 +195,33 @@ class ProductDetailView(DetailView):
         default_stock_status = "In Stock" if default_variant and default_variant.stock > 0 else "Out of Stock"
         default_price = default_variant.price if default_variant else None
 
-        # Check if user is an admin
         is_admin = self.request.user.is_authenticated and self.request.user.is_superuser
-        # Pass the form to the context
         product_form = ProductEditForm(instance=product) if is_admin else None
         variant_form = ProductVariantForm(instance=default_variant) if is_admin else None
+
+        # Get a count of all reviews grouped by rating
+        rating_summary = product.reviews.values('rating').annotate(count=Count('rating')).order_by('rating')
+        total_reviews = product.reviews.count()
+
+        # Initialize a dictionary with all rating levels (0-5) set to 0
+        rating_summary_dict = {i: 0 for i in range(6)}
+
+        # Update the dictionary with actual counts from the query
+        for entry in rating_summary:
+            rating = entry['rating']
+            count = entry['count']
+            if rating in rating_summary_dict:
+                rating_summary_dict[rating] = count
+
+        # Filter reviews based on user role
+        if is_admin:
+            # Admin: Show all silenced comments but exclude non-commented ones
+            visible_reviews = product.reviews.filter(~Q(comment="")).order_by('-created_at')
+        else:
+            # Non-admin: Exclude silenced and non-commented reviews
+            visible_reviews = product.reviews.filter(silenced=False).exclude(comment="").order_by('-created_at')
+
+        review_form = ProductReviewForm()
 
         context.update({
             'variants': variants,
@@ -193,14 +230,19 @@ class ProductDetailView(DetailView):
             'default_size': default_size,
             'default_stock_status': default_stock_status,
             'default_price': default_price,
-            'total_review': range(5),
+            'max_review': range(5),
             'view': 'detail',
             'buy_url': product.get_buy_url,
             'is_admin': is_admin,
             'product_form': product_form,
             'variant_form': variant_form,
+            'reviews': visible_reviews,  # Filtered reviews for display
+            'review_form': review_form,
+            'rating_summary': rating_summary_dict,
+            'total_reviews': total_reviews,
         })
         return context
+
 
 class ProductEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product

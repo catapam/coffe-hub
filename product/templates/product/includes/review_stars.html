@@ -1,17 +1,17 @@
 <div class="review-stars">
     {% if view == 'detail' %}
         {% with product.rating as rating %}
-            {% for star in total_review %}
+            {% for star in max_review %}
                 <i class="star {% if star < rating %}filled{% endif %}">★</i>
             {% endfor %}
         {% endwith %}
-        <p>({{ product.rating }})</p>
+        <p class="text-muted">({{ product.rating }})</p>
     {% else %}
         {% with product_data.product.rating as rating %}
-            {% for star in total_review %}
+            {% for star in max_review %}
                 <i class="star {% if star < rating %}filled{% endif %}">★</i>
             {% endfor %}
         {% endwith %}
-        <p>({{ product_data.product.rating }})</p>
+        <p class="text-muted">({{ product_data.product.rating }})</p>
     {% endif %}
 </div>
