@@ -6,6 +6,53 @@ from django.views.generic.edit import FormView
 from django.views.generic.base import RedirectView
 from .forms import UpdateUsernameForm
 from django.shortcuts import redirect
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import login
+
+
+class CustomLoginView(LoginView):
+    """
+    Custom login view to handle redirecting the user to the previous page
+    if they directly accessed the login page and provided valid credentials.
+    """
+    template_name = 'accounts/allauth/account/login.html'
+    redirect_authenticated_user = True  # Automatically redirect logged-in users
+    next_page = reverse_lazy('home')  # Default redirect after successful login
+
+    def form_valid(self, form):
+        """
+        If the form is valid, log the user in and redirect them.
+        """
+        # Log the user in
+        login(self.request, form.get_user())
+
+        # Check if a previous page was stored in the session
+        previous_page = self.request.session.pop('previous_page', None)
+
+        # Redirect to the previous page if available; otherwise, default to `next_page`
+        if previous_page:
+            return redirect(previous_page)
+        else:
+            return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        """
+        Handle GET requests. Capture the previous page for direct login requests.
+        """
+        if 'next' not in request.GET:
+            # Capture the HTTP_REFERER as the previous page, if available
+            previous_page = request.META.get('HTTP_REFERER')
+            if previous_page and previous_page != request.build_absolute_uri(reverse_lazy('account_login')):
+                request.session['previous_page'] = previous_page
+
+        return super().get(request, *args, **kwargs)
+
+    def get_success_url(self):
+        """
+        Determine the URL to redirect to after login.
+        """
+        # Default to the next parameter or `next_page`
+        return self.get_redirect_url() or self.next_page
 
 
 @method_decorator(login_required, name='dispatch')

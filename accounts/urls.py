@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UpdateUsernameView, RedirectUserView
+from .views import UpdateUsernameView, RedirectUserView, CustomLoginView
 
 # Define the URL patterns for the 'accounts' app
 urlpatterns = [
@@ -8,6 +8,9 @@ urlpatterns = [
 
     # URL for updating the user's username
     path('user/', UpdateUsernameView.as_view(), name='account_user'),
+
+    # custom login
+    path('login/', CustomLoginView.as_view(), name='account_login'),
 
     # Temporary placeholders for account management
     path('address/', RedirectUserView.as_view(), name='account_address'),

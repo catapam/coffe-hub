@@ -38,13 +38,13 @@
         <!-- Product Name Section -->
         <div class="{% if view == 'detail' %}col-md-6{% else %}card-body{% endif %}">
             {% if view == 'detail' %}
-                    {% if request.user.is_superuser %}
-                        {{ product_form.name|as_crispy_field }}
-                    {% else %}
-                        <h2 class="card-title">
-                            {{ product.name }}
-                        </h2>
-                    {% endif %}
+                {% if request.user.is_superuser %}
+                    {{ product_form.name|as_crispy_field }}
+                {% else %}
+                    <h2 class="card-title">
+                        {{ product.name }}
+                    </h2>
+                {% endif %}
             {% else %}
                 <h5 class="card-title mx-auto">
                     <a id="detail-link-{{ product_data.product.id }}"
@@ -84,9 +84,9 @@
                     </p>
                 {% endif %}
             {% else %}
-            <p class="card-text mx-auto">
-                {{ product_data.product.description }}
-            </p>
+                <p class="card-text mx-auto">
+                    {{ product_data.product.description }}
+                </p>
             {% endif %}
 
             <!-- Size and Quantity/Stock Selectors -->
@@ -109,7 +109,7 @@
                                                 data-stock="{{ data.stock }}"
                                                 {% if size == default_size %}selected{% endif %}
                                                 {% if data.stock == 0 %}class="text-muted"{% endif %}>
-                                            {{ size }}{% if data.stock == 0 %}{% endif %}
+                                            {{ size }}
                                         </option>
                                     {% endfor %}
                             </select>   
@@ -126,7 +126,7 @@
                                                 data-stock="{{ data.stock }}"
                                                 {% if size == product_data.variant_size %}selected{% endif %}
                                                 {% if data.stock == 0 %}class="text-muted"{% endif %}>
-                                            {{ size }}{% if data.stock == 0 %}{% endif %}
+                                            {{ size }}
                                         </option>
                                     {% endif %}
                                 {% endfor %}
@@ -210,3 +210,4 @@
         </div>
     </div>
 </div>
+

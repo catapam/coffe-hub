@@ -38,20 +38,26 @@ class LoginRequiredMiddleware(MiddlewareMixin):
             # Allow access to certain URLs without authentication
             allowed_urls = [
                 'account_login', 'account_signup', 'account_reset_password',
-                'home', 'about', 'privacy_policy', 'products', 'product_detail', 
+                'home', 'about', 'privacy_policy', 'product', 'product_detail', 
                 'product_list', 'custom_401', 'custom_404', 'wireframes',
                 'account_reset_password_done', 'help',
                 'account_reset_password_from_key',
                 'account_confirm_email', 'account_verified_email_required',
                 'account_email_verification_sent'                
-                ]
+            ]
+
             if current_url not in allowed_urls:
-                # Display a warning message and redirect to login page
+                # Redirect due to middleware restriction
                 messages.warning(request, 'Please log in to access this page.')
                 return redirect(
                     f'{reverse("account_login")}?{REDIRECT_FIELD_NAME}='
                     f'{request.get_full_path()}'
                 )
+            elif current_url == 'account_login' and 'next' not in request.GET:
+                # Direct request to login page, capture the referring page
+                previous_page = request.META.get('HTTP_REFERER', '/')
+                if previous_page and previous_page != request.build_absolute_uri(reverse('account_login')):
+                    request.session['previous_page'] = previous_page
 
         # Enforce superuser access for the admin panel
         elif request.path.startswith(reverse('admin:index')):
@@ -63,19 +69,6 @@ class LoginRequiredMiddleware(MiddlewareMixin):
                 )
             elif not request.user.is_superuser:
                 # Redirect non-superusers to custom 401 page
-                return redirect('custom_401')
-
-        # Restrict access to the /operations/ section for staff and superusers
-        elif request.path.startswith('/operations/'):
-            if not request.user.is_authenticated:
-                # Redirect unauthenticated users to login
-                messages.warning(request, 'Please log in to access this page.')
-                return redirect(
-                    f'{reverse("account_login")}?{REDIRECT_FIELD_NAME}='
-                    f'{request.get_full_path()}'
-                )
-            elif not request.user.is_staff:
-                # Redirect non-staff users to custom 401 page
                 return redirect('custom_401')
 
         # Allow access if no restrictions are met

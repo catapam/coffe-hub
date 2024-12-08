@@ -3,7 +3,7 @@
 <!-- Products Grid -->
 <div class="row g-4">
     {% for product_data in products_with_context %}
-    <div class="col-12 col-md-4 col-lg-3">
+    <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
         {% include 'product/includes/product-card.html' with view='list' %}
     </div>
     {% empty %}

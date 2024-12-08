@@ -9,8 +9,8 @@ urlpatterns = [
     path('', include('store.urls')),
 
     # Authentication and account management URLs from 'allauth' and custom app
-    path('accounts/', include('allauth.urls')),  # Third-party auth package
     path('accounts/', include('accounts.urls')),  # Custom account-related URLs
+    path('accounts/', include('allauth.urls')),  # Third-party auth package
 
     # Products
     path('products/', include('product.urls')),

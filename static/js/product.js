@@ -1,3 +1,16 @@
+function previewImage(input, imageId) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const imageElement = document.getElementById(imageId);
+            if (imageElement) {
+                imageElement.src = e.target.result;
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
 class ProductCardHandler {
     constructor() {
         this.disabledClass = "disabled";
@@ -54,19 +67,27 @@ class ProductCardHandler {
 
     updateStockInput(cardElement, stock) {
         // Find the stock/quantity input within the specific card
-        const stockInput = cardElement.querySelector(`#stock-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
+        const stockInput = cardElement.querySelector(`#id_stock`);
+        const quantityInput = cardElement.querySelector(`#quantity-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
         if (stockInput) {
             stockInput.value = stock; // Update the stock input value
-        } else {
-            const quantityInput = cardElement.querySelector(`#quantity-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
+        } else if (quantityInput){
             quantityInput.value = 1;
+        } else{
+            console.log("Stock object error")
         }
     }
 
     updatePriceDisplay(cardElement, price, stock) {
-        // Find the price display within the specific card
-        const priceDisplay = cardElement.querySelector(`#price-${cardElement.querySelector('.size').id.split('-')[2]}`);
-        const priceEdit = cardElement.querySelector(`#price-edit-${cardElement.querySelector('.size').id.split('-')[2]}`);
+        const sizeInput = cardElement.querySelector('.size');
+        let slug = '';
+        if (sizeInput) {
+            slug = sizeInput.id.split('-')[2];
+        }
+    
+        const priceDisplay = cardElement.querySelector(`#price-${slug}`);
+        const priceEdit = cardElement.querySelector(`#id_price`);
+    
         if (priceDisplay) {
             if (stock > 0) {
                 priceDisplay.innerHTML = `<strong>$${price} <span>each</span></strong>`;
@@ -75,10 +96,10 @@ class ProductCardHandler {
                 priceDisplay.innerHTML = `<strong>Out of Stock</strong>`;
                 priceDisplay.classList.add(this.outOfStockClass);
             }
-        } else {
+        } else if (priceEdit) {
             priceEdit.value = `${price}`;
         }
-    }
+    }    
 
     updateBuyButton(cardElement, stock) {
         // Find the buy button within the specific card
@@ -128,20 +149,7 @@ class ProductCardHandler {
                 editLink.href = `${base_url}?size=${size}`;
             }
         }
-    }
-
-    previewImage(input, imageId) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const imageElement = document.getElementById(imageId);
-                if (imageElement) {
-                    imageElement.src = e.target.result;
-                }
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+    }    
 }
 
 // Initialize the handler on DOM load
