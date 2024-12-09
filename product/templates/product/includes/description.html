@@ -1,5 +1,5 @@
 {% if view == 'detail' %}
-    {% if request.user.is_superuser %}
+    {% if is_admin %}
         {{ product_form.description|as_crispy_field }}
     {% else %}
         <label for="description" class="form-label">

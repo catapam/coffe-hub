@@ -1,23 +1,23 @@
 <div class="col-md-6 mx-auto {% if view == 'detail' %}selector-group{% else %}mt-2{% endif %}">
-    {% if request.user.is_superuser and view == 'detail' %}
+    {% if is_admin and view == 'detail' %}
         {{ variant_form.stock|as_crispy_field }}
     {% else %}
-        <label for="{% if request.user.is_superuser %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
+        <label for="{% if is_admin %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
             class="form-label {% if view == 'detail' %}selector-label{% endif %}">
-            {% if request.user.is_superuser %}Stock{% else %}Quantity{% endif %}
+            {% if is_admin %}Stock{% else %}Quantity{% endif %}
         </label>
-        <input id="{% if request.user.is_superuser %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
+        <input id="{% if is_admin %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
             type="number" 
             class="form-control quantity {% if view == 'detail' %}selector-input{% endif %}"
             min="1" 
-            {% if not request.user.is_superuser %}max="{% if view == 'detail' %}{{ default_variant.stock }}{% else %}{{ product_data.variant_stock }}{% endif %}"{% endif %}
-            value="{% if request.user.is_superuser and view == 'detail' %}
+            {% if not is_admin %}max="{% if view == 'detail' %}{{ default_variant.stock }}{% else %}{{ product_data.variant_stock }}{% endif %}"{% endif %}
+            value="{% if is_admin and view == 'detail' %}
                         {{ default_variant.stock|default:0 }}
-                    {% elif request.user.is_superuser and view != 'detail' %}
+                    {% elif is_admin and view != 'detail' %}
                         {{ product_data.variant_stock|default:0 }}
                     {% else %}
                     1
                     {% endif %}"
-            {% if view != 'detail' and request.user.is_superuser %}disabled{% endif %}>
+            {% if view != 'detail' and is_admin %}disabled{% endif %}>
     {% endif %}
 </div>

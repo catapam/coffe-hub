@@ -1,5 +1,5 @@
 <!-- Price or Stock Status -->
-{% if request.user.is_superuser and view == 'detail'%}
+{% if is_admin and view == 'detail'%}
     {{ variant_form.price|as_crispy_field }}
 {% else %}
     <h5 class="card-subtitle mt-2" id="{% if view == 'list' %}price-{{ product_data.product.id }}{% else %}price-{{ product.id }}{% endif %}">

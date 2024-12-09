@@ -844,6 +844,10 @@ option[data-stock="0"] {
     color: gray;
 }
 
+.silenced-indicator {
+    color: var(--red-accent) !important;
+}
+
 
 /* Layout shift fix */
 @media (min-width: 768px) {

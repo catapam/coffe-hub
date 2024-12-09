@@ -10,7 +10,7 @@
         </div>
 
         <!-- Image Upload Icon for Superusers -->
-        {% if request.user.is_superuser and view == 'detail' %}
+        {% if is_admin and view == 'detail' %}
             <div class="image-upload-icon menu-icon position-absolute">
                 <label for="id_image_path" class="sr-only">Change Product Image</label>
                 <input id="id_image_path" 

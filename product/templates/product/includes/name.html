@@ -1,5 +1,5 @@
 {% if view == 'detail' %}
-    {% if request.user.is_superuser %}
+    {% if is_admin %}
         {{ product_form.name|as_crispy_field }}
     {% else %}
         <h2 class="card-title">

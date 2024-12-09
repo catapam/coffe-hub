@@ -1,10 +1,20 @@
-{% if request.user.is_superuser %}
+{% if is_admin %}
     {% if view == 'detail' %}
     <div class="col mb-2 btn-group">
-        <button class="btn btn-success mt-2">Save</button>
-        <button class="btn btn-warning mt-2">Deactivate Size</button>
-        <button class="btn btn-danger mt-2">Deactivate Product</button>
-    </div>                
+        <button type="submit" class="btn btn-success mt-2">Save</button>
+        <button type="button" 
+                class="btn {% if product.variants.first.active %}btn-danger{% else %}btn-success{% endif %} mt-2 toggle-variant-btn" 
+                data-url="{% url 'variant_deactivate' pk=product.variants.first.id %}" 
+                data-active="{{ product.variants.first.active|yesno:'true,false' }}">
+            {% if product.variants.first.active %}Deactivate Size{% else %}Activate Size{% endif %}
+        </button>
+        <button type="button" 
+                class="btn {% if product.active %}btn-danger{% else %}btn-success{% endif %} mt-2 toggle-product-btn" 
+                data-url="{% url 'product_deactivate' pk=product.id %}" 
+                data-active="{{ product.active|yesno:'true,false' }}">
+            {% if product.active %}Deactivate Product{% else %}Activate Product{% endif %}
+        </button>
+    </div>   
     {% else %}
     <a id="edit-link-{{ product_data.product.id }}"
         href="{% url 'product_detail' slug=product_data.product.slug %}?size={{ product_data.variant_size }}"

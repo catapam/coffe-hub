@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}
+    {{ product.name }}
+{% endblock %}
+
 {% block content %}
     {% include 'product/includes/product_card.html' with view='detail' %}
 {% endblock %}

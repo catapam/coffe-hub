@@ -1,6 +1,6 @@
 {% if view == 'detail' %}
 <div class="mt-3 card-body rating-container mt-5">
-    {% if not request.user.is_superuser %}
+    {% if not is_admin %}
         <form method="post" class="rating-form">
             {% csrf_token %}
             <!-- Clickable Star Rating -->

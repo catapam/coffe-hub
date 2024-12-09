@@ -41,22 +41,36 @@ class ProductCardHandler {
 
     updateProductCard(sizeSelect) {
         if (!sizeSelect) return;
-
+    
         const cardElement = sizeSelect.closest(".product-card");
         if (!cardElement) {
             return;
         }
-
+    
         const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
         if (!selectedOption) return;
-
+    
         const price = selectedOption.dataset.price;
         const stock = parseInt(selectedOption.dataset.stock || 0, 10);
-
+        const variantActive = selectedOption.dataset.active === "true";
+        const variantId = selectedOption.dataset.variantId;
+    
         this.updatePriceDisplay(cardElement, price, stock);
         this.updateBuyButton(cardElement, stock);
         this.updateStockInput(cardElement, stock);
+        this.updateVariantButton(cardElement, variantActive, variantId);
     }
+    
+    updateVariantButton(cardElement, isActive, variantId) {
+        const variantButton = cardElement.querySelector(".toggle-variant-btn");
+        if (!variantButton || !variantId) return;
+    
+        variantButton.setAttribute("data-url", `/products/variant/${variantId}/deactivate/`);
+        variantButton.setAttribute("data-active", isActive ? "true" : "false");
+        variantButton.classList.toggle("btn-danger", isActive);
+        variantButton.classList.toggle("btn-success", !isActive);
+        variantButton.textContent = isActive ? "Deactivate Size" : "Activate Size";
+    }  
 
     updateStockInput(cardElement, stock) {
         let stockInput = cardElement.querySelector(`#id_stock`);
@@ -196,10 +210,11 @@ class StarRatingHandler {
     }
 }
 
-class ReviewFilterHandler {
-    constructor(filterSelector, reviewSelector) {
+class ReviewHandler {
+    constructor(filterSelector, reviewSelector, noResultsMessageSelector) {
         this.filters = document.querySelectorAll(filterSelector);
         this.reviews = document.querySelectorAll(reviewSelector);
+        this.noResultsMessage = document.querySelector(noResultsMessageSelector);
 
         if (this.filters.length > 0 && this.reviews.length > 0) {
             this.init();
@@ -218,66 +233,163 @@ class ReviewFilterHandler {
     }
 
     filterReviews(filterValue) {
+        let reviewsShown = 0;
+
         this.reviews.forEach(review => {
             const reviewRating = parseInt(review.getAttribute("data-rating"), 10);
 
             if (filterValue === "all" || reviewRating === filterValue) {
                 review.style.display = "block";
+                reviewsShown++;
             } else {
                 review.style.display = "none";
             }
         });
+
+        if (this.noResultsMessage) {
+            this.noResultsMessage.style.display = reviewsShown === 0 ? "block" : "none";
+        }
     }
 }
 
-class ReviewActionHandler {
-    constructor(actionSelector) {
-        this.actions = document.querySelectorAll(actionSelector);
-        if (this.actions.length > 0) {
+class ReviewSilenceHandler {
+    constructor(buttonSelector, reviewContainerSelector) {
+        this.buttons = document.querySelectorAll(buttonSelector);
+        this.reviewContainerSelector = reviewContainerSelector;
+
+        if (this.buttons.length > 0) {
             this.init();
         }
     }
 
     init() {
-        this.actions.forEach(action => {
-            action.addEventListener('click', (event) => {
-                event.preventDefault();
-                const reviewId = action.dataset.reviewId;
-                const isSilenced = action.dataset.silenced === "true";
+        this.buttons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent default anchor behavior
+                const url = button.getAttribute('data-url');
+                const reviewId = button.getAttribute('data-review-id');
 
-                // Send an AJAX request to toggle silenced state
-                fetch(`/reviews/toggle/${reviewId}/`, {
-                    method: "POST",
+                if (!url || !reviewId) return;
+
+                // Make the POST request
+                fetch(url, {
+                    method: 'POST',
                     headers: {
-                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
-                        "Content-Type": "application/json"
+                        'X-CSRFToken': this.getCSRFToken(),
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ silenced: !isSilenced })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Update the button UI based on new state
-                        action.dataset.silenced = (!isSilenced).toString();
-                        action.classList.toggle("btn-primary", !isSilenced);
-                        action.classList.toggle("btn-secondary", isSilenced);
-                        action.innerHTML = isSilenced
-                            ? '<i class="fa-solid fa-comment-slash"></i>'
-                            : '<i class="fa-solid fa-comment"></i>';
+                        this.updateReviewState(button, reviewId, data.silenced);
                     } else {
-                        console.error("Failed to toggle silenced state.");
+                        console.error('Error toggling silence:', data.error);
                     }
                 })
-                .catch(error => console.error("Error toggling silenced state:", error));
+                .catch(error => console.error('Request failed:', error));
             });
         });
     }
+
+    updateReviewState(button, reviewId, silenced) {
+        // Update button state
+        this.toggleButtonState(button, silenced);
+
+        // Find the review container by ID
+        const reviewContainer = document.querySelector(
+            `${this.reviewContainerSelector}[data-review-id="${reviewId}"]`
+        );
+
+        if (reviewContainer) {
+            // Update silenced styles
+            const commentElement = reviewContainer.querySelector('.review-comment');
+            const silencedIndicator = reviewContainer.querySelector('.silenced-indicator');
+            if (commentElement && silencedIndicator) {
+                if (silenced) {
+                    commentElement.classList.add('silenced');
+                    silencedIndicator.classList.add('d-flex');
+                    silencedIndicator.classList.remove('d-none');
+                } else {
+                    commentElement.classList.remove('silenced');
+                    silencedIndicator.classList.add('d-none');
+                    silencedIndicator.classList.remove('d-flex');
+                }
+            }
+        }
+    }
+
+    toggleButtonState(button, silenced) {
+        button.classList.toggle('btn-primary', !silenced);
+        button.classList.toggle('btn-secondary', silenced);
+
+        const icon = button.querySelector('i');
+        if (icon) {
+            icon.classList.toggle('fa-eye-slash', !silenced);
+            icon.classList.toggle('fa-eye', silenced);
+        }
+
+        button.setAttribute('data-silenced', silenced ? 'true' : 'false');
+    }
+
+    getCSRFToken() {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+        return csrfToken ? csrfToken.value : '';
+    }
 }
+
+class ProductActivationHandler {
+    constructor(buttonSelector) {
+        this.buttons = document.querySelectorAll(buttonSelector);
+
+        if (this.buttons.length > 0) {
+            this.init();
+        }
+    }
+
+    init() {
+        this.buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                const url = button.getAttribute("data-url");
+                if (!url) return;
+
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": this.getCSRFToken(),
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.updateButtonState(button, data.active);
+                        }
+                    });
+            });
+        });
+    }  
+
+    updateButtonState(button, isActive) {
+        const buttonText = button.textContent.trim().replace(/(Activate|Deactivate)/, "");
+        button.classList.toggle("btn-success", !isActive);
+        button.classList.toggle("btn-danger", isActive);
+        button.textContent = `${isActive ? "Deactivate" : "Activate"} ${buttonText}`;
+    }    
+
+    getCSRFToken() {
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
+        return csrfToken ? csrfToken.value : "";
+    }
+}
+
 
 // Initialize handlers on DOM load
 document.addEventListener("DOMContentLoaded", () => {
     new ProductCardHandler();
     new StarRatingHandler('#star-rating', 'id_rating');
-    new ReviewFilterHandler('.filter', '.review');
-    new ReviewActionHandler('.toggle-silence');
+    new ReviewHandler(".filter", ".review-container", "#no-reviews-message");
+    new ReviewSilenceHandler('.toggle-silence-btn', '.review-container');
+    new ProductActivationHandler(".toggle-product-btn");
+    new ProductActivationHandler(".toggle-variant-btn");
 });

@@ -5,22 +5,26 @@ from django.conf import settings
 from django.db.models import Avg
 
 class Category(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(unique=True)
-    description = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=255, unique=True, blank=False)
+    slug = models.SlugField(unique=True, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
 
 class Product(models.Model):
-    name = models.CharField(max_length=35)
-    slug = models.SlugField(unique=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    name = models.CharField(max_length=35,unique=True, blank=False)
+    slug = models.SlugField(unique=True, blank=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', blank=False)
     description = models.TextField(blank=True, null=True, max_length=70)
     rating = models.FloatField(default=0, help_text="Average rating (0-5).")
     image_path = models.ImageField(upload_to='images/products/', blank=True, null=True)
+    active = models.BooleanField(default=True, help_text="Set to False to deactivate the product.")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -33,7 +37,7 @@ class Product(models.Model):
         return static('images/product-holder.webp')
 
     def get_buy_url(self):
-        return reverse("product")  # Adjust as needed
+        return reverse("product")
 
     def get_card_context(self):
         variants = self.variants.all()
@@ -65,12 +69,14 @@ class Product(models.Model):
         return round(avg, 1)  # Round to one decimal place
 
 
-
 class ProductVariant(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants')
-    size = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants', blank=False)
+    size = models.CharField(max_length=10, blank=False)
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     stock = models.PositiveIntegerField(default=0)
+    active = models.BooleanField(default=True, help_text="Set to False to deactivate the variant.")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.product.name} - {self.size}"
@@ -80,11 +86,11 @@ class ProductVariant(models.Model):
 
 
 class ProductReview(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews', blank=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
     )
-    rating = models.IntegerField(help_text="Integer rating 0-5")
+    rating = models.IntegerField(help_text="Integer rating 0-5", blank=False)
     comment = models.CharField(max_length=100, blank=True, help_text="Short review (max 100 chars)")
     silenced = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

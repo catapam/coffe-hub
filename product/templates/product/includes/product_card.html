@@ -4,7 +4,7 @@
 
 <div class="product-card {% if view == 'detail' %}container mt-5 product-page page-container{% else %}card{% endif %}">
     <div class="{% if view == 'detail' %}row{% endif %}">
-        {% if request.user.is_superuser and view == 'detail' %}
+        {% if is_admin %}
             {% csrf_token %}
         {% endif %}
         

@@ -6,7 +6,7 @@
     <div id="review_title" class="row align-items-center">
         <h4 class="mt-5 col-auto">Reviews</h4>
         <p class="mt-5 col-auto">
-            <span id="filter-total" class="filter clickable menu-item">({{ total_reviews }})</span>
+            <span id="filter-total" class="filter clickable menu-item">(Show all)</span>
         </p>
     </div>
 
@@ -27,29 +27,34 @@
     <!-- Filtered reviews -->
     <div id="review-list">
         {% for review in reviews %}
-            <hr>
-            <div class="row align-items-center">
-                <div class="review mt-3 col" data-rating="{{ review.rating }}">
-                    {% if review.user %}
-                        <p><strong>{{ review.user }}</strong>: ({{ review.rating }}/5)</p>
-                    {% else %}
-                        <p><strong>Anonymous</strong>: ({{ review.rating }}/5 - {{review.created_at}})</p>
-                    {% endif %}
-                    <p class="{% if review.silenced %}silenced{% endif %}">{{ review.comment }}</p>
-                </div>
-                {% if request.user.is_superuser %}
-                    <div class="col text-end">
+            <div class="review-container row align-items-center mt-3" data-review-id="{{ review.id }}" data-rating="{{ review.rating }}" {% if review.silenced and not is_admin %}style="display: none;"{% endif %}>
+                <hr class="col-12">
+                <div class="review-content d-flex justify-content-between align-items-center">
+                    <div>
+                        {% if review.user %}
+                            <p><strong>{{ review.user }}</strong>: ({{ review.rating }}/5)</p>
+                        {% else %}
+                            <p><strong>Anonymous</strong>: ({{ review.rating }}/5 - {{ review.created_at }})</p>
+                        {% endif %}
+                        <p class="review-comment {% if review.silenced %}silenced{% endif %}">{{ review.comment }}</p>
+                        <p class="silenced-indicator {% if review.silenced %}d-flex{% else %}d-none{% endif %}">(Silenced)</p>
+                    </div>
+                    {% if is_admin %}
                         <a href="#" class="btn btn-sm {% if not review.silenced %}btn-primary{% else %}btn-secondary{% endif %} toggle-silence-btn"
+                        data-url="{% url 'toggle_silence' review.id %}"
                         data-review-id="{{ review.id }}"
                         data-silenced="{{ review.silenced|yesno:'true,false' }}">
-                            <i class="fa-solid {% if not review.silenced %}fa-comment-slash{% else %}fa-comment{% endif %}"></i>
+                            <i class="fa-solid fa-eye{% if not review.silenced %}-slash{% endif %}"></i>
                         </a>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
         {% empty %}
-            <p>No reviews yet. Be the first to review!</p>
+        <hr class="col-12">
+        <p class="text-center mt-3">No reviews yet. Be the first to review!</p>
         {% endfor %}
-    </div>
+        <hr class="col-12">
+        <p id="no-reviews-message" class="text-center mt-3" style="display: none;">No reviews found with the selected filter. <span class="filter clickable menu-item">(Show all)</span></p>
+    </div>       
 </div>
 {% endif %}

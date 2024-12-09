@@ -1,23 +1,45 @@
 from django.contrib import admin
 from .models import Product, ProductVariant, Category, ProductReview
 
+
 class ProductVariantInline(admin.TabularInline):
     model = ProductVariant
     extra = 1
-    fields = ('size', 'price', 'stock')  # Include price in the inline form
+    fields = ('size', 'active', 'price', 'stock') 
+
+
+class ProductReviewInline(admin.TabularInline):
+    model = ProductReview
+    extra = 0
+    fields = ('user', 'rating', 'comment', 'silenced', 'created_at')
+    readonly_fields = ('created_at',)
+    show_change_link = True
+    can_delete = False
+
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'rating', 'created_at', 'updated_at')
+    list_display = ('name', 'category', 'active', 'rating', 'created_at', 'updated_at')
     list_filter = ('category', 'created_at', 'updated_at')
     search_fields = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)}
-    inlines = [ProductVariantInline]
+    inlines = [ProductVariantInline, ProductReviewInline] 
+
+
+class ProductInline(admin.TabularInline):
+    model = Product
+    extra = 0
+    fields = ('name', 'rating', 'active', 'created_at')
+    readonly_fields = ('created_at',)
+    show_change_link = True
+    can_delete = False
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'created_at')
     prepopulated_fields = {'slug': ('name',)}
+    inlines = [ProductInline] 
 
 
 @admin.register(ProductReview)

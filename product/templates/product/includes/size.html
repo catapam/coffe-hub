@@ -4,7 +4,7 @@
         {% with stock_by_size.items as size_data %}
             <div class="gap-2 align-items-end">
                 <label for="size-select-{{ product.id }}" class="form-label selector-label">Size</label>
-                {% if request.user.is_superuser %}
+                {% if is_admin %}
                     <button class="btn btn-success btn-sm selector-new-button">+</button>
                 {% endif %}
             </div>
@@ -14,6 +14,8 @@
                         <option value="{{ size }}"
                                 data-price="{{ data.price }}"
                                 data-stock="{{ data.stock }}"
+                                data-active="{{ data.active|yesno:'true,false' }}"
+                                data-variant-id="{{ data.id }}"
                                 {% if size == default_size %}selected{% endif %}
                                 {% if data.stock == 0 %}class="text-muted"{% endif %}>
                             {{ size }}

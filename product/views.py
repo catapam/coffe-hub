@@ -1,10 +1,14 @@
 from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404, redirect
-from .models import Product, ProductVariant, Category
+from .models import Product, ProductVariant, Category, ProductReview
 from django.db.models import Min, F, Case, When, Value, IntegerField, Subquery, OuterRef, Q, Count
 from django.views.generic.edit import UpdateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import ProductEditForm, ProductVariantForm, ProductReviewForm
+from django.http import JsonResponse, Http404
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.contrib import messages
 
 class ProductListView(ListView):
     model = Product
@@ -20,7 +24,10 @@ class ProductListView(ListView):
         min_rating = self.request.GET.get('rating')
         search_query = self.request.GET.get('q')  # Capture the search query
 
+        is_admin = self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user.is_staff)
+
         if sort_by in ['price_asc', 'price_desc']:
+            # Starting from ProductVariant queryset
             queryset = ProductVariant.objects.annotate(
                 adjusted_price=Case(
                     When(stock__gt=0, then=F('price')),
@@ -28,6 +35,10 @@ class ProductListView(ListView):
                     output_field=IntegerField(),
                 )
             )
+
+            # If not admin, only consider active products and active variants
+            if not is_admin:
+                queryset = queryset.filter(product__active=True, active=True)
 
             # Apply filters
             if selected_categories and "" not in selected_categories:
@@ -50,6 +61,7 @@ class ProductListView(ListView):
             queryset = queryset.order_by('adjusted_price' if sort_by == 'price_asc' else '-adjusted_price')
 
         else:
+            # Starting from Product queryset
             available_variant = ProductVariant.objects.filter(
                 product=OuterRef('pk'), stock__gt=0
             ).order_by('price')
@@ -59,6 +71,11 @@ class ProductListView(ListView):
                 default_variant_stock=Subquery(available_variant.values('stock')[:1]),
                 default_variant_size=Subquery(available_variant.values('size')[:1]),
             )
+
+            # If not admin: only consider active products that have at least one active variant
+            # By joining with variants__active=True, we ensure products have active variants
+            if not is_admin:
+                queryset = queryset.filter(active=True, variants__active=True)
 
             if not show_out_of_stock:
                 queryset = queryset.filter(default_variant_stock__gt=0)
@@ -83,12 +100,15 @@ class ProductListView(ListView):
         context = super().get_context_data(**kwargs)
 
         products_with_context = []
+        is_admin = self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user.is_staff)
 
-        if isinstance(self.object_list.first(), ProductVariant):
+        if self.object_list.first() and isinstance(self.object_list.first(), ProductVariant):
+            # If queryset is variants
             for variant in self.object_list:
+                # If not admin, only show active variants (already filtered in queryset)
                 stock_by_size = {
                     v.size: {"price": v.price, "stock": v.stock}
-                    for v in ProductVariant.objects.filter(product=variant.product)
+                    for v in ProductVariant.objects.filter(product=variant.product, active=True if not is_admin else True)
                 }
 
                 products_with_context.append({
@@ -99,10 +119,13 @@ class ProductListView(ListView):
                     "stock_by_size": stock_by_size,
                 })
         else:
+            # If queryset is products
             for product in self.object_list:
+                # If not admin, only show active variants
+                variants_qs = product.variants.filter(active=True) if not is_admin else product.variants.all()
                 stock_by_size = {
                     v.size: {"price": v.price, "stock": v.stock}
-                    for v in ProductVariant.objects.filter(product=product)
+                    for v in variants_qs
                 }
 
                 products_with_context.append({
@@ -130,6 +153,7 @@ class ProductListView(ListView):
             'show_out_of_stock': self.request.GET.get('show_out_of_stock') == 'on',
             'search_query': self.request.GET.get('q', ''),
             'view': 'list',
+            'is_admin': is_admin,
         })
 
         return context
@@ -142,17 +166,61 @@ class ProductDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         product = self.get_object()
-        variants = product.variants.all()
-        sizes = [variant.size for variant in variants]
-        stock_by_size = {variant.size: variant for variant in variants}
 
+        is_admin = request.user.is_authenticated and (request.user.is_superuser or request.user.is_staff)
+
+        # If not admin and product not active, show error and 404
+        if not is_admin and not product.active:
+            messages.error(request, "This product is no longer available.")
+            raise Http404
+
+        # Filter variants based on admin status
+        variants_qs = product.variants.all() if is_admin else product.variants.filter(active=True)
+
+        # If no active variants for non-admin user, 404 with message
+        if not is_admin and variants_qs.count() == 0:
+            messages.error(request, "This product is no longer available.")
+            raise Http404
+
+        sizes = [variant.size for variant in variants_qs]
+        stock_by_size = {variant.size: variant for variant in variants_qs}
+
+        selected_size = request.GET.get('size')
+
+        # If a size is provided but that variant is not active (for non-admin) or doesn't exist, find a fallback
+        if selected_size and selected_size not in stock_by_size:
+            # Try fallback variant selection
+            fallback_variant = None
+            # First try one with stock > 0
+            for v in variants_qs:
+                if v.stock > 0:
+                    fallback_variant = v
+                    break
+            # If no variant with stock, pick the first active variant anyway
+            if not fallback_variant and variants_qs:
+                fallback_variant = variants_qs.first()
+            # If still no fallback_variant, product/variants no longer available
+            if not fallback_variant:
+                messages.error(request, "This product is no longer available.")
+                raise Http404
+            return redirect(f"{request.path}?size={fallback_variant.size}")
+
+        # If no size specified, pick a default
         if 'size' not in request.GET:
-            default_size = next(
-                (size for size in sizes if stock_by_size[size].stock > 0),
-                sizes[0] if sizes else None
-            )
-            if default_size:
-                return redirect(f"{request.path}?size={default_size}")
+            default_variant = None
+            # If possible, pick one with stock
+            for v in variants_qs:
+                if v.stock > 0:
+                    default_variant = v
+                    break
+            # If no stock variant found, pick the first active variant if any
+            if not default_variant and variants_qs:
+                default_variant = variants_qs.first()
+            # If no variants at all (should be covered above), 404
+            if not default_variant:
+                messages.error(request, "This product is no longer available.")
+                raise Http404
+            return redirect(f"{request.path}?size={default_variant.size}")
 
         return super().get(request, *args, **kwargs)
 
@@ -173,12 +241,14 @@ class ProductDetailView(DetailView):
             # If form is invalid, re-render the page with errors
             return self.get(request, *args, **kwargs)
 
-
     def get_context_data(self, **kwargs):    
         context = super().get_context_data(**kwargs)
         product = self.object
 
-        variants = product.variants.all()
+        is_admin = self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user.is_staff)
+        # Filter variants based on admin status
+        variants = product.variants.all().order_by('price') if is_admin else product.variants.filter(active=True).order_by('price')  # Order by price
+
         sizes = [variant.size for variant in variants]
         stock_by_size = {variant.size: variant for variant in variants}
 
@@ -186,18 +256,19 @@ class ProductDetailView(DetailView):
         if selected_size and selected_size in stock_by_size:
             default_size = selected_size
         else:
-            default_size = next(
-                (size for size in sizes if size in stock_by_size and stock_by_size[size].stock > 0),
-                sizes[0] if sizes else None
-            )
+            # If requested size not in active variants or no size selected
+            # We already handled fallback logic in get(), so just trust here
+            if sizes:
+                default_size = sizes[0]
+            else:
+                default_size = None
 
         default_variant = stock_by_size.get(default_size)
         default_stock_status = "In Stock" if default_variant and default_variant.stock > 0 else "Out of Stock"
         default_price = default_variant.price if default_variant else None
 
-        is_admin = self.request.user.is_authenticated and self.request.user.is_superuser
         product_form = ProductEditForm(instance=product) if is_admin else None
-        variant_form = ProductVariantForm(instance=default_variant) if is_admin else None
+        variant_form = ProductVariantForm(instance=default_variant) if is_admin and default_variant else None
 
         # Get a count of all reviews grouped by rating
         rating_summary = product.reviews.values('rating').annotate(count=Count('rating')).order_by('rating')
@@ -236,7 +307,7 @@ class ProductDetailView(DetailView):
             'is_admin': is_admin,
             'product_form': product_form,
             'variant_form': variant_form,
-            'reviews': visible_reviews,  # Filtered reviews for display
+            'reviews': visible_reviews, 
             'review_form': review_form,
             'rating_summary': rating_summary_dict,
             'total_reviews': total_reviews,
@@ -246,11 +317,11 @@ class ProductDetailView(DetailView):
 
 class ProductEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
-    fields = ['name', 'description', 'rating', 'category', 'is_active']
-    template_name = 'product/admin_product_edit.html'
+    fields = ['name', 'description', 'category', 'active']
+    template_name = 'product/product_detail.html'
 
     def test_func(self):
-        return self.request.user.is_superuser
+        return self.request.user.is_superuser or self.request.user.is_staff
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -258,10 +329,46 @@ class ProductEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class ProductDeactivateView(LoginRequiredMixin, UserPassesTestMixin, View):
     def test_func(self):
-        return self.request.user.is_superuser
+        return self.request.user.is_superuser or self.request.user.is_staff
 
-    def post(self, request, *args, **kwargs):
-        product = get_object_or_404(Product, pk=kwargs['pk'])
-        product.is_active = False
-        product.save()
-        return redirect('product')
+    def post(self, request, pk):
+        if not request.user.is_superuser:
+            return JsonResponse({"success": False, "error": "Unauthorized"}, status=403)
+        try:
+            product = Product.objects.get(pk=pk)
+            product.active = not product.active  # Toggle the active state
+            product.save()
+            return JsonResponse({"success": True, "active": product.active})
+        except Product.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Product not found"}, status=404)
+
+
+class VariantDeactivateView(View):
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
+    
+    def post(self, request, pk):
+        if not request.user.is_superuser:
+            return JsonResponse({"success": False, "error": "Unauthorized"}, status=403)
+        try:
+            variant = ProductVariant.objects.get(pk=pk)
+            variant.active = not variant.active  # Toggle the active state
+            variant.save()
+            return JsonResponse({"success": True, "active": variant.active})
+        except ProductVariant.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Variant not found"}, status=404)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ReviewSilenceToggler(View):
+    def post(self, request, review_id):
+        if not request.user.is_superuser:
+            return JsonResponse({"success": False, "error": "Unauthorized"}, status=403)
+
+        try:
+            review = ProductReview.objects.get(id=review_id)
+            review.silenced = not review.silenced
+            review.save()
+            return JsonResponse({"success": True, "silenced": review.silenced})
+        except ProductReview.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Review not found"}, status=404)
