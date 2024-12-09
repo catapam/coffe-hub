@@ -75,16 +75,20 @@ class ProductCardHandler {
     updateStockInput(cardElement, stock) {
         let stockInput = cardElement.querySelector(`#id_stock`);
         const quantityInput = cardElement.querySelector(`#quantity-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
-
+    
         if (stockInput) {
-            stockInput.value = stock;
+            stockInput.value = stock; // Update stock input if found
         } else if (quantityInput) {
-            quantityInput.value = 1;
+            quantityInput.value = 1; // Set default quantity input value if found
         } else {
-            stockInput = `#stock-select-${cardElement.querySelector('.size').id.split('-')[2]}`;
-            stockInput.value = stock; 
+            // Find the stock input element using querySelector
+            stockInput = cardElement.querySelector(`#stock-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
+            if (stockInput) {
+                stockInput.value = `${stock}`; // Update the value of the stock input
+            } 
         }
     }
+    
 
     updatePriceDisplay(cardElement, price, stock) {
         const sizeInput = cardElement.querySelector('.size');

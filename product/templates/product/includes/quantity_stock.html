@@ -11,13 +11,7 @@
             class="form-control quantity {% if view == 'detail' %}selector-input{% endif %}"
             min="1" 
             {% if not is_admin %}max="{% if view == 'detail' %}{{ default_variant.stock }}{% else %}{{ product_data.variant_stock }}{% endif %}"{% endif %}
-            value="{% if is_admin and view == 'detail' %}
-                        {{ default_variant.stock|default:0 }}
-                    {% elif is_admin and view != 'detail' %}
-                        {{ product_data.variant_stock|default:0 }}
-                    {% else %}
-                    1
-                    {% endif %}"
+            value="{% if is_admin and view == 'detail' %}{{ default_variant.stock|default:0 }}{% elif is_admin and view != 'detail' %}{{ product_data.variant_stock|default:0 }}{% else %}1{% endif %}"
             {% if view != 'detail' and is_admin %}disabled{% endif %}>
     {% endif %}
 </div>
