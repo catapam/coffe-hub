@@ -89,7 +89,6 @@ class ProductCardHandler {
         }
     }
     
-
     updatePriceDisplay(cardElement, price, stock) {
         const sizeInput = cardElement.querySelector('.size');
         let slug = '';
@@ -387,13 +386,75 @@ class ProductActivationHandler {
     }
 }
 
+class SelectorHandler {
+    constructor(type) {
+        this.type = type; // 'category' or 'size'
+        this.init();
+    }
+
+    init() {
+        this.addButton = document.querySelector(`#add_${this.type}`);
+        this.editButton = document.querySelector(`#edit_${this.type}`);
+        this.cancelButton = document.querySelector(`#cancel_${this.type}`);
+        this.saveButton = document.querySelector(`#save_${this.type}`);
+
+        if (this.addButton && this.editButton && this.cancelButton && this.saveButton) {
+            this.selectElement = document.querySelector(`.${this.type}`);
+            this.inputElement = document.querySelector(`.${this.type}-input`);
+
+            this.addButton.addEventListener("click", (event) => this.toggleInput(event, "add"));
+            this.editButton.addEventListener("click", (event) => this.toggleInput(event, "edit"));
+            this.cancelButton.addEventListener("click", (event) => this.toggleInput(event, "cancel"));
+            this.saveButton.addEventListener("click", (event) => this.toggleInput(event, "save"));
+        }
+    }
+
+    toggleInput(event, action) {
+        const clickedButton = event.target;
+        const parentSelectorGroup = clickedButton.closest(".selector-group");
+
+        // Ensure the required elements are found
+        if (!this.selectElement || !this.inputElement) return;
+
+        // Handle different button actions
+        if (action === "edit") {
+            const selectedOption = this.selectElement.options[this.selectElement.selectedIndex];
+            this.inputElement.value = selectedOption ? selectedOption.textContent.trim() : ""; // Set input to selected name
+        } else if (action === "add") {
+            this.inputElement.value = ""; // Reset input to empty for 'New'
+            this.inputElement.placeholder = `New ${this.type}`; // Ensure placeholder is correct
+        }
+
+        // Disable all elements outside the current `.selector-group`
+        document.querySelectorAll(".product-card input, .product-card button, .product-card select, .product-card textarea").forEach((element) => {
+            if (!element.closest(".selector-group") || element.closest(".selector-group") !== parentSelectorGroup) {
+                element.disabled = !element.disabled;
+            }
+        });
+
+        // Toggle visibility of elements inside the current `.selector-group`
+        this.selectElement.classList.toggle("d-none");
+        this.inputElement.classList.toggle("d-none");
+        parentSelectorGroup.querySelectorAll("button").forEach((button) => {
+            button.classList.toggle("d-none");
+        });
+
+        // Focus on the input element if visible
+        if (!this.inputElement.classList.contains("d-none")) {
+            this.inputElement.focus();
+        }
+    }
+}
 
 // Initialize handlers on DOM load
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
     new ProductCardHandler();
     new StarRatingHandler('#star-rating', 'id_rating');
-    new ReviewHandler(".filter", ".review-container", "#no-reviews-message");
+    new ReviewHandler('.filter', '.review-container', '#no-reviews-message');
     new ReviewSilenceHandler('.toggle-silence-btn', '.review-container');
-    new ProductActivationHandler(".toggle-product-btn");
-    new ProductActivationHandler(".toggle-variant-btn");
+    new ProductActivationHandler('.toggle-product-btn');
+    new ProductActivationHandler('.toggle-variant-btn');
+    new SelectorHandler("category");
+    new SelectorHandler("size");
 });
+

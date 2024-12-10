@@ -1,0 +1,64 @@
+<!-- Generic Selector -->
+<div class="col-md-6 mx-auto {% if view == 'detail' %}selector-group{% else %}mt-2{% endif %}">
+    {% if view == 'detail' %}
+        <div class="gap-2 align-items-end row d-flex">
+            <label for="{{ type }}-select-{{ product.id }}" class="form-label selector-label col">{{ type|capfirst }}</label>
+            {% if is_admin %}
+            <div class="d-flex justify-content-end gap-2 col action-btn-form">
+                <button class="btn btn-secondary btn-sm selector-edit-button" id="edit_{{ type }}" type="button">
+                    <i class="fa-solid fa-pencil"></i>
+                </button>
+                <button class="btn btn-success btn-sm selector-add-button" id="add_{{ type }}" type="button">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button class="btn btn-danger btn-sm selector-cancel-button d-none" id="cancel_{{ type }}" type="button">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <button class="btn btn-success btn-sm selector-save-button d-none" id="save_{{ type }}" type="button">
+                    <i class="fa-solid fa-save"></i>
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <!-- Dropdown -->
+    {% if view == 'list' %}
+    <label for="{{ type }}-select-{{ product_data.product.id }}" class="form-label selector-label col">{{ type|capfirst }}</label>
+    {% endif %}
+    <select id="{{ type }}-select-{{ product.id }}" 
+            class="form-select {{ type }} select-dropdown selector-input mt-1"
+            {% if view == 'list' %}
+            data-base-url="{% url 'product_detail' slug=product_data.product.slug %}"
+            {% endif %}>
+        {% if type == 'category' %}
+            {% for item in items %}
+                <option value="{{ item.name }}"
+                        {% if item.value == selected_value %}selected{% endif %}
+                        {% if item.disabled %}class="text-muted"{% endif %}>
+                    {{ item.name }}
+                </option>
+            {% endfor %}
+        {% else %}
+            {% for item, data in items %}
+                <option value="{{ item }}"
+                        data-price="{{ data.price }}"
+                        data-stock="{{ data.stock }}"
+                        data-active="{{ data.active|yesno:'true,false' }}"
+                        data-variant-id="{{ data.id }}"
+                        {% if item == selected_value %}selected{% endif %}
+                        {% if data.disabled %}class="text-muted"{% endif %}>
+                    {{ item }}
+                </option>
+            {% endfor %}
+        {% endif %}
+    </select>
+
+    {% if view == 'detail' %}
+    <!-- Text input for new {{ type }} (hidden by default) -->
+    <input type="text" 
+        id="{{ type }}-input-{{ product.id }}" 
+        class="form-control {{ type }}-input d-none mt-1" 
+        placeholder="New {{ type|capfirst }}">
+    {% endif %}
+</div>

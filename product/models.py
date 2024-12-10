@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db.models import Avg
 
 class Category(models.Model):
-    name = models.CharField(max_length=255, unique=True, blank=False)
+    name = models.CharField(max_length=15, unique=True, blank=False)
     slug = models.SlugField(unique=True, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

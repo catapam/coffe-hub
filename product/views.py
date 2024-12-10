@@ -139,7 +139,7 @@ class ProductListView(ListView):
 
         context.update({
             'products_with_context': products_with_context,
-            'categories': Category.objects.values('slug', 'name'),
+            'category': Category.objects.values('slug', 'name'),
             'selected_categories': self.request.GET.getlist('category[]'),
             'max_review': range(5),
             'sorting_options': {
@@ -246,6 +246,7 @@ class ProductDetailView(DetailView):
         product = self.object
 
         is_admin = self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user.is_staff)
+        
         # Filter variants based on admin status
         variants = product.variants.all().order_by('price') if is_admin else product.variants.filter(active=True).order_by('price')  # Order by price
 
@@ -293,7 +294,11 @@ class ProductDetailView(DetailView):
             visible_reviews = product.reviews.filter(silenced=False).exclude(comment="").order_by('-created_at')
 
         review_form = ProductReviewForm()
-
+        category_items = [
+            {"slug": category.slug, "name": category.name}
+            for category in Category.objects.all()
+        ]
+        
         context.update({
             'variants': variants,
             'sizes': sizes,
@@ -311,6 +316,7 @@ class ProductDetailView(DetailView):
             'review_form': review_form,
             'rating_summary': rating_summary_dict,
             'total_reviews': total_reviews,
+            'category_items': category_items,
         })
         return context
 

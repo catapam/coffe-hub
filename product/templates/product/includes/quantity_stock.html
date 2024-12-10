@@ -1,17 +1,19 @@
-<div class="col-md-6 mx-auto {% if view == 'detail' %}selector-group{% else %}mt-2{% endif %}">
-    {% if is_admin and view == 'detail' %}
+{% if is_admin and view == 'detail' %}
+    <div class="col-md-6 mx-auto selector-group">
         {{ variant_form.stock|as_crispy_field }}
-    {% else %}
+    </div>
+{% else %}
+    <div class="col-md-6 mx-auto {% if view == 'detail' %}selector-group{% else %}mt-2{% endif %}">
         <label for="{% if is_admin %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
             class="form-label {% if view == 'detail' %}selector-label{% endif %}">
             {% if is_admin %}Stock{% else %}Quantity{% endif %}
         </label>
         <input id="{% if is_admin %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
             type="number" 
-            class="form-control quantity {% if view == 'detail' %}selector-input{% endif %}"
+            class="form-control quantity mt-1 {% if view == 'detail' %}selector-input{% endif %}"
             min="1" 
             {% if not is_admin %}max="{% if view == 'detail' %}{{ default_variant.stock }}{% else %}{{ product_data.variant_stock }}{% endif %}"{% endif %}
             value="{% if is_admin and view == 'detail' %}{{ default_variant.stock|default:0 }}{% elif is_admin and view != 'detail' %}{{ product_data.variant_stock|default:0 }}{% else %}1{% endif %}"
             {% if view != 'detail' and is_admin %}disabled{% endif %}>
-    {% endif %}
-</div>
+    </div>
+{% endif %}

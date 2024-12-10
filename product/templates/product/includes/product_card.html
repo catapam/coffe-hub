@@ -17,10 +17,11 @@
             {% include 'product/includes/name.html' %}
 
             <!-- Review Stars -->
-            {% include 'product/includes/review_stars.html' %}
-
-            <!-- Category -->
-            {% include 'product/includes/category.html' %}
+            {% if not is_admin %}
+                {% include 'product/includes/review_stars.html' %}
+            {% elif view == 'list' %}
+                {% include 'product/includes/review_stars.html' %}
+            {% endif %}
 
             <!-- Description -->
             {% include 'product/includes/description.html' %}
@@ -28,14 +29,30 @@
             <!-- Size and Quantity/Stock -->
             <div class="row g-3 align-items-end {% if view == 'detail' %}selectors-row{% else %}card-row{% endif %}">
                 <!-- Size -->
-                {% include 'product/includes/size.html' %}
+                {% if view == 'list' %}
+                    {% include 'product/includes/selector.html' with type="size" items=product_data.stock_by_size.items selected_value=product_data.variant_size %}
+                {% else %}
+                    {% include 'product/includes/selector.html' with type="size" items=stock_by_size.items selected_value=default_size %}
+                {% endif %}
 
                 <!-- Quantity/Stock Selector -->
-                {% include 'product/includes/quantity_stock.html' %}
+                {% if not is_admin or view == 'list' %}
+                    {% include 'product/includes/quantity_stock.html' %}
+                {% else %}
+                    <!-- Category -->
+                    {% include 'product/includes/selector.html' with type="category" items=category_items selected_value=selected_category %}
+                {% endif %}
             </div>
 
             <!-- Price -->
-            {% include 'product/includes/price.html' %}
+            {% if not is_admin or view == 'list' %}
+                {% include 'product/includes/price.html' %}
+            {% else %}
+                <div class="row g-3 align-items-end {% if view == 'detail' %}selectors-row{% else %}card-row{% endif %}">
+                    {% include 'product/includes/price.html' %}
+                    {% include 'product/includes/quantity_stock.html' %}
+                </div>
+            {% endif %}
 
             <!-- Buttons -->
             {% include 'product/includes/actions.html' %}
