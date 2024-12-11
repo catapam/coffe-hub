@@ -37,9 +37,13 @@ class ProductInline(admin.TabularInline):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at')
-    prepopulated_fields = {'slug': ('name',)}
+    exclude = ('slug',)  # Exclude slug field from the admin form
+    list_display = ('name', 'slug', 'created_at')
     inlines = [ProductInline] 
+
+    def save_model(self, request, obj, form, change):
+        # Automatically set the slug using the model's save method
+        obj.save()
 
 
 @admin.register(ProductReview)

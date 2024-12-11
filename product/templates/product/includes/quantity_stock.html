@@ -4,11 +4,11 @@
     </div>
 {% else %}
     <div class="col-md-6 mx-auto {% if view == 'detail' %}selector-group{% else %}mt-2{% endif %}">
-        <label for="{% if is_admin %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
+        <label for="{% if is_admin %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product.id }}{% endif %}" 
             class="form-label {% if view == 'detail' %}selector-label{% endif %}">
             {% if is_admin %}Stock{% else %}Quantity{% endif %}
         </label>
-        <input id="{% if is_admin %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product_data.product.id }}{% endif %}" 
+        <input id="{% if is_admin %}stock-select-{% else %}quantity-select-{% endif %}{% if view == 'detail' %}{{ product.id }}{% else %}{{ product.id }}{% endif %}" 
             type="number" 
             class="form-control quantity mt-1 {% if view == 'detail' %}selector-input{% endif %}"
             min="1" 

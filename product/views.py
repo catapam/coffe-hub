@@ -70,6 +70,7 @@ class ProductListView(ListView):
                 default_variant_price=Subquery(available_variant.values('price')[:1]),
                 default_variant_stock=Subquery(available_variant.values('stock')[:1]),
                 default_variant_size=Subquery(available_variant.values('size')[:1]),
+                default_variant_active=Subquery(available_variant.values('active')[:1]),
             )
 
             # If not admin: only consider active products that have at least one active variant
@@ -107,24 +108,33 @@ class ProductListView(ListView):
             for variant in self.object_list:
                 # If not admin, only show active variants (already filtered in queryset)
                 stock_by_size = {
-                    v.size: {"price": v.price, "stock": v.stock}
-                    for v in ProductVariant.objects.filter(product=variant.product, active=True if not is_admin else True)
-                }
+                    v.size: {
+                        "price": v.price,
+                        "stock": v.stock,
+                        "id": v.id,
+                        "active": v.active,
+                    }
+                for v in (ProductVariant.objects.filter(product=variant.product, active=True) if not is_admin else ProductVariant.objects.filter(product=variant.product))                }
 
                 products_with_context.append({
                     "product": variant.product,
                     "variant_size": variant.size,
                     "variant_price": variant.adjusted_price,
                     "variant_stock": variant.stock,
+                    "size_active": variant.active,
                     "stock_by_size": stock_by_size,
                 })
         else:
             # If queryset is products
             for product in self.object_list:
-                # If not admin, only show active variants
-                variants_qs = product.variants.filter(active=True) if not is_admin else product.variants.all()
+                variants_qs = product.variants.all() if is_admin else product.variants.filter(active=True)
                 stock_by_size = {
-                    v.size: {"price": v.price, "stock": v.stock}
+                    v.size: {
+                        "price": v.price,
+                        "stock": v.stock,
+                        "id": v.id,  # Ensure variant ID is passed
+                        "active": v.active,
+                    }
                     for v in variants_qs
                 }
 
@@ -133,6 +143,7 @@ class ProductListView(ListView):
                     "variant_size": product.default_variant_size,
                     "variant_price": product.default_variant_price,
                     "variant_stock": product.default_variant_stock,
+                    "size_active": product.default_variant_active,
                     "stock_by_size": stock_by_size,
                     "buy_url": product.get_buy_url,
                 })
@@ -267,6 +278,7 @@ class ProductDetailView(DetailView):
         default_variant = stock_by_size.get(default_size)
         default_stock_status = "In Stock" if default_variant and default_variant.stock > 0 else "Out of Stock"
         default_price = default_variant.price if default_variant else None
+        size_active = default_variant.active
 
         product_form = ProductEditForm(instance=product) if is_admin else None
         variant_form = ProductVariantForm(instance=default_variant) if is_admin and default_variant else None
@@ -306,6 +318,7 @@ class ProductDetailView(DetailView):
             'default_size': default_size,
             'default_stock_status': default_stock_status,
             'default_price': default_price,
+            'size_active': size_active,
             'max_review': range(5),
             'view': 'detail',
             'buy_url': product.get_buy_url,

@@ -3,10 +3,9 @@
     <div class="col mb-2 btn-group">
         <button type="submit" class="btn btn-success mt-2">Save</button>
         <button type="button" 
-                class="btn {% if product.variants.first.active %}btn-danger{% else %}btn-success{% endif %} mt-2 toggle-variant-btn" 
-                data-url="{% url 'variant_deactivate' pk=product.variants.first.id %}" 
-                data-active="{{ product.variants.first.active|yesno:'true,false' }}">
-            {% if product.variants.first.active %}Deactivate Size{% else %}Activate Size{% endif %}
+                class="btn mt-2 toggle-variant-btn" 
+                data-url="" 
+                data-active="">
         </button>
         <button type="button" 
                 class="btn {% if product.active %}btn-danger{% else %}btn-success{% endif %} mt-2 toggle-product-btn" 
@@ -16,10 +15,10 @@
         </button>
     </div>   
     {% else %}
-    <a id="edit-link-{{ product_data.product.id }}"
-        href="{% url 'product_detail' slug=product_data.product.slug %}?size={{ product_data.variant_size }}"
+    <a id="edit-link-{{ product.id }}"
+        href="{% url 'product_detail' slug=product.slug %}?size={{ product_data.variant_size }}"
         class="btn btn-secondary {% if view == 'list' %}btn-sm{% else %}btn-buy{% endif %}"
-        data-base-url="{% url 'product_detail' slug=product_data.product.slug %}">
+        data-base-url="{% url 'product_detail' slug=product.slug %}">
         Edit
     </a>
     {% endif %}

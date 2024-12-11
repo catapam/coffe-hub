@@ -24,12 +24,12 @@
 
     <!-- Dropdown -->
     {% if view == 'list' %}
-    <label for="{{ type }}-select-{{ product_data.product.id }}" class="form-label selector-label col">{{ type|capfirst }}</label>
+    <label for="{{ type }}-select-{{ product.id }}" class="form-label selector-label col">{{ type|capfirst }}</label>
     {% endif %}
-    <select id="{{ type }}-select-{{ product.id }}" 
-            class="form-select {{ type }} select-dropdown selector-input mt-1"
+    <select id="{{ type }}-select-{% if view == 'list' %}{{ product.id }}{% else %}{{ product.id }}{% endif %}" 
+            class="form-select {{ type }} select-dropdown{% if view == 'detail' %} selector-input mt-1{% endif %}"
             {% if view == 'list' %}
-            data-base-url="{% url 'product_detail' slug=product_data.product.slug %}"
+            data-base-url="{% url 'product_detail' slug=product.slug %}"
             {% endif %}>
         {% if type == 'category' %}
             {% for item in items %}

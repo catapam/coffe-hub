@@ -1,11 +1,15 @@
-
 <div class="{% if view == 'detail' %}col-md-6 d-flex align-items-center justify-content-center{% else %}background-gradient{% endif %} position-relative">
     <div class="{% if view == 'detail' %}card{% endif %}">
         <div class="{% if view == 'detail' %}background-gradient{% endif %}">
             <div class="content-gradient">
+                {% if is_admin %}
+                    {% include 'product/includes/badge.html' %}
+                {% endif %}
+
+                <!-- Product Image -->
                 <img id="product-image-{{ product.id }}" class="card-img-top"
-                    src="{% if view == 'detail' %}{{ product.image }}{% else %}{{ product_data.product.image }}{% endif %}"
-                    alt="{% if view == 'detail' %}{{ product.name }}{% else %}{{ product_data.product.name }}{% endif %}">
+                    src="{% if view == 'detail' %}{{ product.image }}{% else %}{{ product.image }}{% endif %}"
+                    alt="{% if view == 'detail' %}{{ product.name }}{% else %}{{ product.name }}{% endif %}">
             </div>
         </div>
 

@@ -58,18 +58,28 @@ class ProductCardHandler {
         this.updatePriceDisplay(cardElement, price, stock);
         this.updateBuyButton(cardElement, stock);
         this.updateStockInput(cardElement, stock);
-        this.updateVariantButton(cardElement, variantActive, variantId);
+        this.updateVariantState(cardElement, variantActive, variantId);
     }
     
-    updateVariantButton(cardElement, isActive, variantId) {
+    updateVariantState(cardElement, isActive, variantId) {
         const variantButton = cardElement.querySelector(".toggle-variant-btn");
-        if (!variantButton || !variantId) return;
-    
-        variantButton.setAttribute("data-url", `/products/variant/${variantId}/deactivate/`);
-        variantButton.setAttribute("data-active", isActive ? "true" : "false");
-        variantButton.classList.toggle("btn-danger", isActive);
-        variantButton.classList.toggle("btn-success", !isActive);
-        variantButton.textContent = isActive ? "Deactivate Size" : "Activate Size";
+        const variantBadge = cardElement.querySelector(`#badge-size-${cardElement.querySelector('.size').id.split('-')[2]}`);
+        
+        if (variantBadge){
+            variantBadge.classList.toggle("badge-active", isActive);
+            variantBadge.classList.toggle("badge-inactive", !isActive);
+            variantBadge.textContent = isActive ? "Size: Active" : "Size: Inactive";
+        } 
+
+        if (variantId){
+            if (variantButton){
+                variantButton.setAttribute("data-url", `/products/variant/${variantId}/deactivate/`);
+                variantButton.setAttribute("data-active", isActive ? "true" : "false");
+                variantButton.classList.toggle("btn-danger", isActive);
+                variantButton.classList.toggle("btn-success", !isActive);
+                variantButton.textContent = isActive ? "Deactivate Size" : "Activate Size";
+            }
+        } 
     }  
 
     updateStockInput(cardElement, stock) {

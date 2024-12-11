@@ -1,0 +1,5 @@
+<!-- Badges -->
+<div class="badge-container position-absolute top-0 start-0 p-2">
+    <span class="badge badge-{% if product.active %}active">Product: Active{% else %}inactive">Product: Inactive{% endif %}</span>
+    <span id="badge-size-{{ product.id }}"class="badge badge-{% if product_data.size_active %}active">Size: Active{% else %}inactive">Size: Inactive{% endif %}</span>
+</div>

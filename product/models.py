@@ -3,11 +3,19 @@ from django.urls import reverse
 from django.templatetags.static import static
 from django.conf import settings
 from django.db.models import Avg
+import re
 
 class Category(models.Model):
-    name = models.CharField(max_length=15, unique=True, blank=False)
-    slug = models.SlugField(unique=True, blank=False)
+    name = models.CharField(max_length=20, unique=True, blank=False)
+    slug = models.SlugField(unique=True, blank=False, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        clean_name = re.sub(r'[^\w\s-]', '', self.name) 
+        clean_name = clean_name.replace('-', '_')
+        clean_name = clean_name.replace(' ', '_')
+        self.slug = clean_name.lower()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -74,10 +82,10 @@ class ProductVariant(models.Model):
     size = models.CharField(max_length=10, blank=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     stock = models.PositiveIntegerField(default=0)
-    active = models.BooleanField(default=True, help_text="Set to False to deactivate the variant.")
+    active = models.BooleanField(default=True, help_text="Set to False to deactivate the size.")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    
     def __str__(self):
         return f"{self.product.name} - {self.size}"
 

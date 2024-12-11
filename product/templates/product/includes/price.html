@@ -4,7 +4,7 @@
         {{ variant_form.price|as_crispy_field }}
     </div>
 {% else %}
-    <h5 class="card-subtitle mt-2" id="{% if view == 'list' %}price-{{ product_data.product.id }}{% else %}price-{{ product.id }}{% endif %}">
+    <h5 class="card-subtitle mt-2" id="price-{{ product.id }}">
         {% if default_stock_status == 'Out of Stock' %}
             <span class="text-danger"><strong>Out of Stock</strong></span>
         {% else %}

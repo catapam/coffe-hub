@@ -8,9 +8,9 @@
     {% endif %}
 {% else %}
     <h5 class="card-title mx-auto">
-        <a id="detail-link-{{ product_data.product.id }}"
-            href="{% url 'product_detail' slug=product_data.product.slug %}?size={{ product_data.variant_size }}">
-            {{ product_data.product.name }}
+        <a id="detail-link-{{ product.id }}"
+            href="{% url 'product_detail' slug=product.slug %}?size={{ product_data.variant_size }}">
+            {{ product.name }}
         </a>
     </h5>
 {% endif %}
