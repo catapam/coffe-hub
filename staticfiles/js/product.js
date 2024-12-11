@@ -205,10 +205,12 @@ class StarRatingHandler {
     handleMouseOver(star) {
         const hoverValue = parseInt(star.getAttribute('data-value'), 10);
         this.updateStars(hoverValue, 'hovered');
+        this.updateStars(hoverValue, 'unhovered');
     }
 
     handleMouseOut() {
         this.stars.forEach(s => s.classList.remove('hovered'));
+        this.stars.forEach(s => s.classList.remove('unhovered'));
     }
 
     updateStars(value, className) {
@@ -218,6 +220,8 @@ class StarRatingHandler {
                 s.classList.toggle('filled', starValue <= value);
             } else if (className === 'hovered') {
                 s.classList.toggle('hovered', starValue <= value);
+            } else if (className === 'unhovered') {
+                s.classList.toggle('unhovered', starValue >= value);
             }
         });
     }
@@ -377,18 +381,59 @@ class ProductActivationHandler {
                     .then(data => {
                         if (data.success) {
                             this.updateButtonState(button, data.active);
+                            this.updateBadges(button, data);
+                        } else {
+                            console.error("Failed to update state:", data.error);
                         }
-                    });
+                    })
+                    .catch(error => console.error("Request failed:", error));
             });
         });
-    }  
+    }
 
     updateButtonState(button, isActive) {
         const buttonText = button.textContent.trim().replace(/(Activate|Deactivate)/, "");
         button.classList.toggle("btn-success", !isActive);
         button.classList.toggle("btn-danger", isActive);
         button.textContent = `${isActive ? "Deactivate" : "Activate"} ${buttonText}`;
-    }    
+        button.setAttribute("data-active", isActive ? "true" : "false");
+    }
+
+    updateBadges(button, data) {
+        const cardElement = button.closest(".product-card");
+        if (!cardElement) return;
+
+        const badgeContainer = cardElement.querySelector(".badge-container");
+        if (!badgeContainer) return;
+
+        // Check if the button is for the product or the size
+        const isProductButton = button.classList.contains("toggle-product-btn");
+        const isSizeButton = button.classList.contains("toggle-variant-btn");
+
+        if (isProductButton) {
+            // Update Product Badge
+            const productBadge = badgeContainer.querySelector(`#badge-product-${cardElement.querySelector('.size').id.split('-')[2]}`);
+            if (productBadge) {
+                const isActive = data.active; // Product active state from response
+                productBadge.classList.toggle("badge-active", isActive);
+                productBadge.classList.toggle("badge-inactive", !isActive);
+                productBadge.textContent = `Product: ${isActive ? "Active" : "Inactive"}`;
+            }
+        }
+
+        if (isSizeButton) {
+            // Update Size/Variant Badge
+            const variantBadge = badgeContainer.querySelector(`#badge-size-${cardElement.querySelector('.size').id.split('-')[2]}`);
+            if (variantBadge) {
+                variantBadge.classList.toggle("badge-active");
+                variantBadge.classList.toggle("badge-inactive");
+
+                const isActive = variantBadge.classList.contains("badge-active"); 
+                variantBadge.textContent = isActive ? "Size: Active" : "Size: Inactive";
+            }
+        }
+    }
+
 
     getCSRFToken() {
         const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
@@ -396,9 +441,11 @@ class ProductActivationHandler {
     }
 }
 
+
 class SelectorHandler {
     constructor(type) {
         this.type = type; // 'category' or 'size'
+        this.lastAction = null; // track whether last action was 'add' or 'edit'
         this.init();
     }
 
@@ -412,10 +459,22 @@ class SelectorHandler {
             this.selectElement = document.querySelector(`.${this.type}`);
             this.inputElement = document.querySelector(`.${this.type}-input`);
 
-            this.addButton.addEventListener("click", (event) => this.toggleInput(event, "add"));
-            this.editButton.addEventListener("click", (event) => this.toggleInput(event, "edit"));
-            this.cancelButton.addEventListener("click", (event) => this.toggleInput(event, "cancel"));
-            this.saveButton.addEventListener("click", (event) => this.toggleInput(event, "save"));
+            this.addButton.addEventListener("click", (event) => {
+                this.lastAction = "add";
+                this.toggleInput(event, "add");
+            });
+            this.editButton.addEventListener("click", (event) => {
+                this.lastAction = "edit";
+                this.toggleInput(event, "edit");
+            });
+            this.cancelButton.addEventListener("click", (event) => {
+                this.lastAction = null;
+                this.toggleInput(event, "cancel");
+            });
+            this.saveButton.addEventListener("click", (event) => {
+                this.toggleInput(event, "save");
+                this.handleSave();
+            });
         }
     }
 
@@ -423,36 +482,101 @@ class SelectorHandler {
         const clickedButton = event.target;
         const parentSelectorGroup = clickedButton.closest(".selector-group");
 
-        // Ensure the required elements are found
         if (!this.selectElement || !this.inputElement) return;
 
-        // Handle different button actions
         if (action === "edit") {
             const selectedOption = this.selectElement.options[this.selectElement.selectedIndex];
-            this.inputElement.value = selectedOption ? selectedOption.textContent.trim() : ""; // Set input to selected name
+            this.inputElement.value = selectedOption ? selectedOption.textContent.trim() : "";
         } else if (action === "add") {
-            this.inputElement.value = ""; // Reset input to empty for 'New'
-            this.inputElement.placeholder = `New ${this.type}`; // Ensure placeholder is correct
+            this.inputElement.value = "";
+            this.inputElement.placeholder = `New ${this.type}`;
         }
 
-        // Disable all elements outside the current `.selector-group`
-        document.querySelectorAll(".product-card input, .product-card button, .product-card select, .product-card textarea").forEach((element) => {
-            if (!element.closest(".selector-group") || element.closest(".selector-group") !== parentSelectorGroup) {
-                element.disabled = !element.disabled;
+        // Toggle UI elements
+        this.selectElement.classList.toggle("d-none", action !== "cancel" && action !== "save");
+        this.inputElement.classList.toggle("d-none", action === "cancel" || action === "save");
+        parentSelectorGroup.querySelectorAll("button").forEach((button) => {
+            if (button.id === `edit_${this.type}` || button.id === `add_${this.type}`) {
+                // Show these if we are canceling or after saving
+                button.classList.toggle("d-none", !(action === "cancel" || action === "save"));
+            } else {
+                // Show cancel/save during editing/adding
+                button.classList.toggle("d-none", (action === "cancel" || action === "save"));
             }
         });
 
-        // Toggle visibility of elements inside the current `.selector-group`
-        this.selectElement.classList.toggle("d-none");
-        this.inputElement.classList.toggle("d-none");
-        parentSelectorGroup.querySelectorAll("button").forEach((button) => {
-            button.classList.toggle("d-none");
-        });
+        // Re-enable all disabled elements if cancel/save
+        if (action === "cancel" || action === "save") {
+            document.querySelectorAll(".product-card input, .product-card button, .product-card select, .product-card textarea").forEach((element) => {
+                element.disabled = false;
+            });
+        } else {
+            // Disable all elements outside current selector-group if editing/adding
+            document.querySelectorAll(".product-card input, .product-card button, .product-card select, .product-card textarea").forEach((element) => {
+                if (!element.closest(".selector-group") || element.closest(".selector-group") !== parentSelectorGroup) {
+                    element.disabled = true;
+                }
+            });
+        }
 
-        // Focus on the input element if visible
-        if (!this.inputElement.classList.contains("d-none")) {
+        // Focus on input if visible
+        if (!this.inputElement.classList.contains("d-none") && (action === "add" || action === "edit")) {
             this.inputElement.focus();
         }
+    }
+
+    handleSave() {
+        const newName = this.inputElement.value.trim();
+        if (!newName) return; // no empty submissions
+
+        const selectedOption = this.selectElement.options[this.selectElement.selectedIndex];
+        const currentValue = selectedOption ? selectedOption.value : null;
+
+        // Prepare data to send to the server
+        const payload = {
+            action: this.lastAction,
+            type: this.type,
+            name: newName,
+            current_value: currentValue,
+            product_id: this.selectElement.id.split('-').pop() // extract product ID from select ID if needed
+        };
+
+        // Send AJAX request to your Django endpoint
+        fetch(`/products/${this.type}/save/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": this.getCSRFToken(),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update UI: Add or update the option in the dropdown
+                if (this.lastAction === "add") {
+                    const newOption = document.createElement("option");
+                    newOption.value = data.slug;
+                    newOption.textContent = data.name;
+                    this.selectElement.add(newOption);
+                    this.selectElement.value = data.slug;
+                } else if (this.lastAction === "edit") {
+                    if (selectedOption) {
+                        selectedOption.value = data.slug;
+                        selectedOption.textContent = data.name;
+                    }
+                }
+                this.lastAction = null;
+            } else {
+                console.error("Error saving:", data.error);
+            }
+        })
+        .catch(error => console.error("Request failed:", error));
+    }
+
+    getCSRFToken() {
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
+        return csrfToken ? csrfToken.value : "";
     }
 }
 

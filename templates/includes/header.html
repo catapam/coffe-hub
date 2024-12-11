@@ -19,7 +19,7 @@
 
             <!-- Cart menu -->
             <div class="cart-menu d-block d-lg-none menu-icon">
-                <a class="nav-link" href="/" aria-label="Cart button">
+                <a class="nav-link" href="{% url 'cart' %}" aria-label="Cart button">
                     <i class="fa-solid fa-cart-shopping menu-item" aria-label="Cart menu"></i>
                 </a>
             </div>
@@ -69,12 +69,14 @@
                 </form>
             </div>                   
             
+            {% if not request.user.is_superuser and not request.user.is_staff %}
             <!-- Cart menu -->
             <div class="cart-menu d-none d-lg-block menu-icon">
-                <a class="nav-link" href="/" aria-label="Cart button">
+                <a class="nav-link" href="{% url 'cart' %}" aria-label="Cart button">
                     <i class="fa-solid fa-cart-shopping menu-item" aria-label="Cart menu"></i>
                 </a>
             </div>
+            {% endif %}
             
             <!-- User menu for desktop -->
             <div class="user-menu menu-icon d-none d-lg-block">

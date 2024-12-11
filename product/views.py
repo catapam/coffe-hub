@@ -9,6 +9,8 @@ from django.http import JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+import json
+
 
 class ProductListView(ListView):
     model = Product
@@ -312,6 +314,7 @@ class ProductDetailView(DetailView):
         ]
         
         context.update({
+            'product': product,
             'variants': variants,
             'sizes': sizes,
             'stock_by_size': stock_by_size,
@@ -379,6 +382,86 @@ class VariantDeactivateView(View):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
+class SaveSelector(View):
+    def post(self, request, selector_type):
+        data = json.loads(request.body.decode('utf-8'))
+        action = data.get('action')
+        name = data.get('name')
+        current_value = data.get('current_value')
+        product_id = data.get('product_id', None)
+
+        if selector_type == "category":
+            return self.handle_category(action, name, current_value)
+        elif selector_type == "size":
+            return self.handle_size(action, name, current_value, product_id)
+        else:
+            return JsonResponse({"success": False, "error": "Invalid selector type."}, status=400)
+
+    def handle_category(self, action, name, current_value):
+        if action == "add":
+            # Create a new category
+            new_category = Category.objects.create(name=name)
+            return JsonResponse({
+                "success": True,
+                "name": new_category.name,
+                "slug": new_category.slug
+            })
+
+        elif action == "edit" and current_value:
+            # Update existing category
+            try:
+                category = Category.objects.get(name=current_value)
+                category.name = name
+                category.save()
+                return JsonResponse({
+                    "success": True,
+                    "name": category.name,
+                    "slug": category.slug
+                })
+            except Category.DoesNotExist:
+                return JsonResponse({"success": False, "error": "Category not found."}, status=404)
+
+        return JsonResponse({"success": False, "error": "Invalid action or missing data."}, status=400)
+
+    def handle_size(self, action, name, current_value, product_id):
+        if not product_id:
+            return JsonResponse({"success": False, "error": "Missing product_id."}, status=400)
+        
+        product = get_object_or_404(Product, pk=product_id)
+
+        if action == "add":
+            # Add a new variant for the product
+            # Default values are just placeholders; adjust as needed.
+            variant = ProductVariant.objects.create(
+                product=product,
+                size=name,
+                price=0,
+                stock=0
+            )
+            return JsonResponse({
+                "success": True,
+                "name": variant.size,
+                "slug": variant.size
+            })
+
+        elif action == "edit" and current_value:
+            # Update existing variant
+            try:
+                variant = ProductVariant.objects.get(product=product, size=current_value)
+                variant.size = name
+                variant.save()
+                return JsonResponse({
+                    "success": True,
+                    "name": variant.size,
+                    "slug": variant.size
+                })
+            except ProductVariant.DoesNotExist:
+                return JsonResponse({"success": False, "error": "Variant not found."}, status=404)
+
+        return JsonResponse({"success": False, "error": "Invalid action or missing data."}, status=400)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
 class ReviewSilenceToggler(View):
     def post(self, request, review_id):
         if not request.user.is_superuser:
@@ -391,3 +474,4 @@ class ReviewSilenceToggler(View):
             return JsonResponse({"success": True, "silenced": review.silenced})
         except ProductReview.DoesNotExist:
             return JsonResponse({"success": False, "error": "Review not found"}, status=404)
+

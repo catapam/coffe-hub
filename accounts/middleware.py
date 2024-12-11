@@ -43,7 +43,7 @@ class LoginRequiredMiddleware(MiddlewareMixin):
                 'account_reset_password_done', 'help',
                 'account_reset_password_from_key',
                 'account_confirm_email', 'account_verified_email_required',
-                'account_email_verification_sent'                
+                'account_email_verification_sent', 'cart', 'add_to_cart'               
             ]
 
             if current_url not in allowed_urls:

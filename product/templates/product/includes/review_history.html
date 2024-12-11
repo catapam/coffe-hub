@@ -16,7 +16,7 @@
             <li class="list-group-item justify-content-between col clickable filter menu-item" data-filter="{{ star }}">
                 {% if star >= 0 %}
                     {% for star_number in max_review %}
-                        <i class="star {% if star_number <= star|add:-1 %}filled{% endif %}">★</i>
+                        <svg class="star icon icon-coffee-bean {% if star_number <= star|add:-1 %}filled{% endif %}"><use xlink:href="#icon-coffee-bean"></use></svg>
                     {% endfor %}
                 {% endif %}
                 <span class="badge bg-primary rounded-pill">{{ count }}</span>

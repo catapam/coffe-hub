@@ -27,7 +27,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=35,unique=True, blank=False)
-    slug = models.SlugField(unique=True, blank=False)
+    slug = models.SlugField(unique=True, blank=False, editable=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', blank=False)
     description = models.TextField(blank=True, null=True, max_length=70)
     rating = models.FloatField(default=0, help_text="Average rating (0-5).")
@@ -38,6 +38,14 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        # Generate a slug from the name
+        clean_name = re.sub(r'[^\w\s-]', '', self.name)  # Remove special characters
+        clean_name = clean_name.replace('-', '_')
+        clean_name = clean_name.replace(' ', '_')
+        self.slug = clean_name.lower()
+        super().save(*args, **kwargs)
 
     def image(self):
         if self.image_path:

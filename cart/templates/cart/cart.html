@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Shopping cart
+{% endblock %}
+
+<!-- Including the CSS for styling -->
+{% block extra_css %}
+
+{% endblock extra_css %}
+
+{% block content %}
+<div role="main" aria-labelledby="shopping-cart" class="shopping-cart page-container">
+    <h1 class="mb-5">Shopping cart</h1>
+</div>
+
+{% endblock content %}
+
+<!-- Page specific scripts -->
+{% block extra_js %}
+{{ block.super }}
+    <script src="{% static 'js/cart.js' %}" defer></script>
+{% endblock extra_js %}

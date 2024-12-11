@@ -30,7 +30,8 @@
             class="form-select {{ type }} select-dropdown{% if view == 'detail' %} selector-input mt-1{% endif %}"
             {% if view == 'list' %}
             data-base-url="{% url 'product_detail' slug=product.slug %}"
-            {% endif %}>
+            {% endif %}
+            name="{{ type }}">
         {% if type == 'category' %}
             {% for item in items %}
                 <option value="{{ item.name }}"

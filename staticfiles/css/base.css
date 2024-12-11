@@ -326,7 +326,7 @@ footer li{
     justify-content: flex-end;
 }
 
-.menu-icon i {
+.menu-icon i , .menu-icon svg{
     font-size: 2rem;
     cursor: pointer;
     min-width: 60px;
@@ -335,7 +335,7 @@ footer li{
     padding-left: 20px;
 }
 
-.menu-icon i:hover {
+.menu-icon i:hover, .menu-icon svg:hover {
     color: var(--text-secondary-color);
 }
 
@@ -506,6 +506,7 @@ input{
     color: var(--text-secondary-color);
     text-decoration: none;
     cursor: pointer;
+    font-size: small;
 }
 
 .card-title a:hover {
@@ -558,22 +559,27 @@ input{
 }
 
 #star-rating .star{
-    font-size: xx-large;
+    font-size: xxx-large;
     cursor: pointer;
 }
 
 #star-rating .star.hovered {
-    text-shadow: 0 5px 20px var(--text-secondary-color);
+    filter: drop-shadow(0 5px 20px var(--text-secondary-color));
     opacity: 0.8;
 }
 
 #star-rating .star.hovered.filled {
-    text-shadow: 0 0 10px var(--text-primary-color);
+    filter: drop-shadow(0 0 20px var(--text-primary-color));
     opacity: 1;
 }
 
-#star-rating .star.filled:hover {
-    text-shadow: 0 0 10px var(--red-accent);
+#star-rating .star.filled {
+    filter: drop-shadow(0 0 20px var(--text-primary-color));
+    opacity: 1;
+}
+
+#star-rating .star.filled.unhovered {
+    filter: drop-shadow(0 0 10px var(--red-accent));
     opacity: 1;
 }
 
@@ -877,6 +883,15 @@ option[data-stock="0"] {
 
 .badge-inactive {
     background-color: var(--red-accent);
+}
+
+/* Icon coffee */
+.icon {
+    width: 1em; /* Set width to match font size */
+    height: 1em; /* Set height to match font size */
+    fill: currentColor; /* Inherit color from the text */
+    margin-bottom: 0.3em;
+    margin-top: auto;
 }
 
 /* Layout shift fix */

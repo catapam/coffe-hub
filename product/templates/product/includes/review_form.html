@@ -10,7 +10,7 @@
                     {{ review_form.rating }}
                 </div>
                 {% for star in max_review %}
-                    <i class="fa-solid fa-star star" data-value="{{ forloop.counter }}"></i>
+                    <svg class="star icon icon-coffee-bean {% if star < rating %}filled{% endif %}" data-value="{{ forloop.counter }}"><use xlink:href="#icon-coffee-bean"></use></svg>
                 {% endfor %}
             </div>
 

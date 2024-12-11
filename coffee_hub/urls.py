@@ -15,6 +15,9 @@ urlpatterns = [
     # Products
     path('products/', include('product.urls')),
 
+    # Cart
+    path('cart/', include('cart.urls')),
+
     # Custom error pages for 404 Not Found
     path('404/', Custom404View.as_view(), name='custom_404'),
     path('401/', Custom401View.as_view(), name='custom_401'),

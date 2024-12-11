@@ -2,68 +2,69 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 
-<div class="product-card {% if view == 'detail' %}container mt-5 product-page page-container{% else %}card{% endif %}">
-    <div class="{% if view == 'detail' %}row{% endif %}">
-        {% if is_admin %}
-            {% csrf_token %}
-        {% endif %}
-        
-        <!-- Product Image -->
-        {% include 'product/includes/image.html' %}
+<form action="{% url 'add_to_cart' product.id %}" method="POST" class="form">
+    {% csrf_token %}
+    <div class="product-card {% if view == 'detail' %}container mt-5 product-page page-container{% else %}card{% endif %}">
+        <div class="{% if view == 'detail' %}row{% endif %}">
+            
+            <!-- Product Image -->
+            {% include 'product/includes/image.html' %}
 
-        <!-- Product details -->
-        <div class="{% if view == 'detail' %}col-md-6{% else %}card-body{% endif %}">
-            <!-- Name -->
-            {% include 'product/includes/name.html' %}
+            <!-- Product details -->
+            <div class="{% if view == 'detail' %}col-md-6{% else %}card-body{% endif %}">
+                <!-- Name -->
+                {% include 'product/includes/name.html' %}
 
-            <!-- Review Stars -->
-            {% if not is_admin %}
-                {% include 'product/includes/review_stars.html' %}
-            {% elif view == 'list' %}
-                {% include 'product/includes/review_stars.html' %}
-            {% endif %}
-
-            <!-- Description -->
-            {% include 'product/includes/description.html' %}
-
-            <!-- Size and Quantity/Stock -->
-            <div class="row g-3 align-items-end {% if view == 'detail' %}selectors-row{% else %}card-row{% endif %}">
-                <!-- Size -->
-                {% if view == 'list' %}
-                    {% include 'product/includes/selector.html' with type="size" items=product_data.stock_by_size.items selected_value=product_data.variant_size %}
-                {% else %}
-                    {% include 'product/includes/selector.html' with type="size" items=stock_by_size.items selected_value=default_size %}
+                <!-- Review Stars -->
+                {% if not is_admin %}
+                    {% include 'product/includes/review_stars.html' %}
+                {% elif view == 'list' %}
+                    {% include 'product/includes/review_stars.html' %}
                 {% endif %}
 
-                <!-- Quantity/Stock Selector -->
+                <!-- Description -->
+                {% include 'product/includes/description.html' %}
+
+                <!-- Size and Quantity/Stock -->
+                <div class="row g-3 align-items-end {% if view == 'detail' %}selectors-row{% else %}card-row{% endif %}">
+                    <!-- Size -->
+                    {% if view == 'list' %}
+                        {% include 'product/includes/selector.html' with type="size" items=product_data.stock_by_size.items selected_value=product_data.variant_size %}
+                    {% else %}
+                        {% include 'product/includes/selector.html' with type="size" items=stock_by_size.items selected_value=default_size %}
+                    {% endif %}
+
+                    <!-- Quantity/Stock Selector -->
+                    {% if not is_admin or view == 'list' %}
+                        {% include 'product/includes/quantity_stock.html' %}
+                    {% else %}
+                        <!-- Category -->
+                        {% include 'product/includes/selector.html' with type="category" items=category_items selected_value=selected_category %}
+                    {% endif %}
+                </div>
+
+                <!-- Price -->
                 {% if not is_admin or view == 'list' %}
-                    {% include 'product/includes/quantity_stock.html' %}
+                    {% include 'product/includes/price.html' %}
                 {% else %}
-                    <!-- Category -->
-                    {% include 'product/includes/selector.html' with type="category" items=category_items selected_value=selected_category %}
+                    <div class="row g-3 align-items-end {% if view == 'detail' %}selectors-row{% else %}card-row{% endif %}">
+                        {% include 'product/includes/price.html' %}
+                        {% include 'product/includes/quantity_stock.html' %}
+                    </div>
                 {% endif %}
+
+                <!-- Buttons -->
+                {% include 'product/includes/actions.html' %}
+
+                <!-- Review form -->
+                {% include 'product/includes/review_form.html' %}
             </div>
 
-            <!-- Price -->
-            {% if not is_admin or view == 'list' %}
-                {% include 'product/includes/price.html' %}
-            {% else %}
-                <div class="row g-3 align-items-end {% if view == 'detail' %}selectors-row{% else %}card-row{% endif %}">
-                    {% include 'product/includes/price.html' %}
-                    {% include 'product/includes/quantity_stock.html' %}
-                </div>
-            {% endif %}
-
-            <!-- Buttons -->
-            {% include 'product/includes/actions.html' %}
-
-            <!-- Review form -->
-            {% include 'product/includes/review_form.html' %}
+            <!-- Review history -->
+            {% include 'product/includes/review_history.html' %}
         </div>
-
-        <!-- Review history -->
-        {% include 'product/includes/review_history.html' %}
     </div>
-</div>
+    <input type="hidden" name="redirect_url" value="{{ request.path }}">
+</form>
 
 
