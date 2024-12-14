@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView
+from django.http import JsonResponse
 
 
 # Class-based view for handling 404 Not Found error
@@ -34,3 +35,22 @@ class Custom401View(TemplateView):
         response = super().get(request, *args, **kwargs)
         response.status_code = 401
         return response
+
+
+def set_cookie_consent(request):
+    if request.method == "POST":
+        response = JsonResponse({"success": True})
+        response.set_cookie(
+            "cookies_accepted",
+            "true",
+            max_age=31536000,  # 1 year
+            samesite="Lax",  # Options: Lax, Strict, None
+            secure=True  # Ensures the cookie is only sent over HTTPS
+        )
+        return response
+    return JsonResponse({"success": False}, status=400)
+
+def reset_cookie_consent(request):
+    response = JsonResponse({"success": True, "message": "Cookie consent reset!"})
+    response.delete_cookie("cookies_accepted", path="/")
+    return response

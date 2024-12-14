@@ -118,6 +118,54 @@ function setupOutOfStockToggle() {
     }
 }
 
+function setupCookieConsent() {
+    const banner = document.getElementById('cookie-banner');
+    const acceptButton = document.getElementById('accept-cookies');
+
+    // Check if consent is already given
+    if (document.cookie.split('; ').find(row => row.startsWith('cookies_accepted='))) {
+        banner.style.display = 'none';
+        loadDeferredImages();
+        return;
+    }
+
+    // Show the banner if consent is not given
+    banner.style.display = 'block';
+
+    // Handle acceptance
+    acceptButton.addEventListener('click', () => {
+        fetch('/set-cookie-consent/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.cookie = "cookies_accepted=true; path=/; max-age=" + 60 * 60 * 24 * 365; // 1 year
+                    banner.style.display = 'none';
+                    loadDeferredImages(); // Load images after consent
+                } else {
+                    alert('Failed to save cookie preference.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+}
+
+// Function to load deferred images
+function loadDeferredImages() {
+    const deferredImages = document.querySelectorAll('.deferred-image[data-src]');
+    deferredImages.forEach(img => {
+        const dataSrc = img.getAttribute('data-src');
+        if (dataSrc) {
+            img.src = dataSrc; // Set the actual source to the img element
+            img.removeAttribute('data-src'); // Clean up the data-src attribute
+        }
+    });
+}
+
 // Initialize all event listeners once DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function () {
     setupMobileSearchToggle();
@@ -126,4 +174,5 @@ document.addEventListener('DOMContentLoaded', function () {
     setupCategorySelection();
     updateCategoryButton();
     setupOutOfStockToggle();
+    setupCookieConsent();
 });

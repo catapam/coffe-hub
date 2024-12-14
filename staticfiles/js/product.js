@@ -586,13 +586,18 @@ class SelectorHandler {
 
 class ProductSaveHandler {
     constructor(buttonSelector) {
+        const cardElement = document.querySelector(".product-card");
         this.saveButtons = document.querySelectorAll(buttonSelector);
         this.imageInput = document.querySelector('#id_image_path'); // Assuming image input ID
-        this.previewElement = document.querySelector('#product-image-preview'); // Assuming preview element ID
+        this.previewElement = document.querySelector(`#product-image-${cardElement.querySelector('.size').id.split('-')[2]}`); // Assuming preview element ID
         this.imageFile = null; // Temporary store for the selected image
 
         if (this.saveButtons.length > 0) {
             this.init();
+        }
+        
+        if (!this.previewElement) {
+            console.error(`Preview element with ID not found.`);
         }
     }
 
@@ -613,9 +618,16 @@ class ProductSaveHandler {
         if (file) {
             this.imageFile = file; // Store the selected image file
             const reader = new FileReader();
+    
             reader.onload = (e) => {
-                this.previewElement.src = e.target.result; // Update the image preview
+                // Ensure the previewElement exists before setting the src
+                if (this.previewElement) {
+                    this.previewElement.src = e.target.result; // Update the image preview
+                } else {
+                    console.error("Preview element not found.");
+                }
             };
+    
             reader.readAsDataURL(file);
         }
     }

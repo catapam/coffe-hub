@@ -528,14 +528,14 @@ class ProductSaveView(View):
                     image_file,
                     public_id=new_file_name,  # Full path: "products/ethiopian_coffee_bean"
                     overwrite=True,           # Ensures the old file is replaced
-                    resource_type="image"     # Explicitly set resource type
+                    resource_type="image",    # Explicitly set resource type
                 )
 
-                # Save the public_id in the database
-                product.image_path = upload_result['public_id']
-
+                # Store the public_id and version from the upload result
+                product.image_path = upload_result['public_id']       # E.g., "products/ethiopian_coffee_bean"
+                product.cloudinary_version = upload_result.get('version')  # Cloudinary-assigned version
                 product.save()
-
+                
             # Update Product Variant
             variant = ProductVariant.objects.get(id=variant_id)
             variant_form = ProductVariantForm(json.loads(request.POST.get('variant', '{}')), instance=variant)
