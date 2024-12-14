@@ -587,12 +587,17 @@ class SelectorHandler {
 class ProductSaveHandler {
     constructor(buttonSelector) {
         this.saveButtons = document.querySelectorAll(buttonSelector);
+        this.imageInput = document.querySelector('#id_image_path'); // Assuming image input ID
+        this.previewElement = document.querySelector('#product-image-preview'); // Assuming preview element ID
+        this.imageFile = null; // Temporary store for the selected image
+
         if (this.saveButtons.length > 0) {
             this.init();
         }
     }
 
     init() {
+        this.imageInput.addEventListener('change', this.previewImage.bind(this));
         this.saveButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const productId = button.getAttribute('data-product-id');
@@ -601,6 +606,18 @@ class ProductSaveHandler {
                 this.saveProductAndVariant(productId, variantId, url);
             });
         });
+    }
+
+    previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            this.imageFile = file; // Store the selected image file
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.previewElement.src = e.target.result; // Update the image preview
+            };
+            reader.readAsDataURL(file);
+        }
     }
 
     getCSRFToken() {
@@ -616,7 +633,6 @@ class ProductSaveHandler {
             name: document.querySelector('#id_name').value,
             description: document.querySelector('#id_description').value,
             category: categorySelector ? categorySelector.value : null,
-            image_path: document.querySelector('#id_image_path').value,
         };
     }
 
@@ -635,19 +651,25 @@ class ProductSaveHandler {
     saveProductAndVariant(productId, variantId, url) {
         const productData = this.getProductData();
         const variantData = this.getVariantData();
-    
+        const formData = new FormData();
+
+        // Append product and variant data
+        formData.append('product_id', productId);
+        formData.append('variant_id', variantId);
+        formData.append('product', JSON.stringify(productData));
+        formData.append('variant', JSON.stringify(variantData));
+
+        // Append image file if it exists
+        if (this.imageFile) {
+            formData.append('image', this.imageFile, `${productData.name}.jpg`);
+        }
+
         fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'X-CSRFToken': this.getCSRFToken(),
             },
-            body: JSON.stringify({
-                product_id: productId,
-                variant_id: variantId,
-                product: productData,
-                variant: variantData,
-            }),
+            body: formData,
         })
             .then(response => response.json())
             .then(data => {
@@ -656,15 +678,15 @@ class ProductSaveHandler {
                 } else {
                     if (data.redirect_url) {
                         const currentQueryString = window.location.search;
-                        // Redirect to the new product detail page
-                        window.location.href = `${data.redirect_url}${currentQueryString}`;
+                        const redirectUrlWithArgs = `${data.redirect_url}${currentQueryString}`;
+                        window.location.href = redirectUrlWithArgs; // Redirect to the new product detail page
                     } else {
                         alert('Product and Variant saved successfully!');
                     }
                 }
             })
             .catch(error => console.error('Request failed:', error));
-    }    
+    }
 }
 
 // Initialize handlers on DOM load

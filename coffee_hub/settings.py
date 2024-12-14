@@ -45,9 +45,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://coffee-hub-64aa59561310.herokuapp.com",
 ]
 
-
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -68,6 +66,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',  # For Bootstrap 5 support in Crispy Forms
     'allauth',
     'allauth.account',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 SITE_ID = 1
@@ -200,6 +200,19 @@ LOGIN_REDIRECT_URL = "/"
 STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Default file storage
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Media URL for accessing files
+MEDIA_URL = '/media/'
+
+# Cloudinary configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

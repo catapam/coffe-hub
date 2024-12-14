@@ -9,7 +9,10 @@ from django.http import JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-import json
+import json, os
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from cloudinary.uploader import upload, destroy
 
 
 class ProductListView(ListView):
@@ -484,14 +487,13 @@ class ReviewSilenceToggler(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class ProductSaveView(View):
     def post(self, request, *args, **kwargs):
-        data = json.loads(request.body)
-        product_id = data.get('product_id')
-        variant_id = data.get('variant_id')
+        product_id = request.POST.get('product_id')
+        variant_id = request.POST.get('variant_id')
 
         try:
             # Update Product
             product = Product.objects.get(id=product_id)
-            product_data = data.get('product', {})
+            product_data = json.loads(request.POST.get('product', '{}'))
 
             category_name = product_data.get('category')
             category = Category.objects.filter(name=category_name).first()
@@ -506,15 +508,42 @@ class ProductSaveView(View):
             else:
                 return JsonResponse({"success": False, "errors": product_form.errors}, status=400)
 
+            # Handle Image Upload
+            if 'image' in request.FILES:
+                image_file = request.FILES['image']
+
+                # Extract file extension
+                file_extension = os.path.splitext(image_file.name)[1]  # E.g., ".jpg"
+
+                # Delete the existing image from Cloudinary if it exists
+                if product.image_path:
+                    public_id = product.image_path.public_id
+                    destroy(public_id)
+
+                # Generate a new file name based on the product slug
+                new_file_name = f"products/{product.slug}"  # Folder structure with slug as name
+
+                # Upload the new image to Cloudinary with the correct public_id
+                upload_result = upload(
+                    image_file,
+                    public_id=new_file_name,  # Full path: "products/ethiopian_coffee_bean"
+                    overwrite=True,           # Ensures the old file is replaced
+                    resource_type="image"     # Explicitly set resource type
+                )
+
+                # Save the public_id in the database
+                product.image_path = upload_result['public_id']
+
+                product.save()
+
             # Update Product Variant
             variant = ProductVariant.objects.get(id=variant_id)
-            variant_form = ProductVariantForm(data.get('variant'), instance=variant)
+            variant_form = ProductVariantForm(json.loads(request.POST.get('variant', '{}')), instance=variant)
             if variant_form.is_valid():
                 variant_form.save()
             else:
                 return JsonResponse({"success": False, "errors": variant_form.errors}, status=400)
 
-            # Redirect to product detail page
             return JsonResponse({"success": True, "redirect_url": product.get_absolute_url()})
         except Product.DoesNotExist:
             return JsonResponse({"success": False, "error": "Product not found."}, status=404)

@@ -21,7 +21,7 @@ class ProductEditForm(forms.ModelForm):
             }),
             'image_path': forms.FileInput(attrs={
                 'class': 'form-control',
-                'accept': 'image/*'
+                'accept': 'image/*',
             }),
             'category': forms.Select(attrs={
                 'class': 'form-select'

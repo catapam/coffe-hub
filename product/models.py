@@ -4,6 +4,11 @@ from django.templatetags.static import static
 from django.conf import settings
 from django.db.models import Avg
 import re
+from cloudinary.models import CloudinaryField
+from cloudinary.api import resource
+from cloudinary.exceptions import NotFound
+from cloudinary.utils import cloudinary_url
+
 
 class Category(models.Model):
     name = models.CharField(max_length=20, unique=True, blank=False)
@@ -31,7 +36,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', blank=False)
     description = models.TextField(blank=True, null=True, max_length=70)
     rating = models.FloatField(default=0, help_text="Average rating (0-5).")
-    image_path = models.ImageField(upload_to='images/products/', blank=True, null=True)
+    image_path = CloudinaryField('image', blank=True, null=True)
     active = models.BooleanField(default=True, help_text="Set to False to deactivate the product.")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -48,10 +53,32 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
     def image(self):
-        if self.image_path:
-            return self.image_path.url
-        return static('images/product-holder.webp')
+        """
+        Returns the URL of the product's image.
+        - If no image path is set, returns the static placeholder.
+        - If the image path is set but Cloudinary cannot deliver the file, falls back to the placeholder.
+        """
+        try:
+            if self.image_path:
+                # Get the public_id if image_path is a CloudinaryResource
+                public_id = self.image_path.public_id if hasattr(self.image_path, 'public_id') else self.image_path
 
+                # Verify if the image exists on Cloudinary
+                resource(public_id)  # Throws NotFound if the image is missing
+
+                # Generate the Cloudinary URL
+                url, options = cloudinary_url(public_id, secure=True)
+                return url
+        except NotFound:
+            # Image not found on Cloudinary
+            print(f"Cloudinary image not found: {self.image_path}")
+        except Exception as e:
+            # Log any other errors (e.g., connectivity issues)
+            print(f"Error fetching Cloudinary image: {e}")
+        
+        # Return the static placeholder if no image or delivery fails
+        return static('images/product-holder.webp')
+        
     def get_buy_url(self):
         return reverse("product")
 
