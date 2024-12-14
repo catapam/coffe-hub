@@ -2,21 +2,23 @@
     {% if view == 'detail' %}
     <div class="col mb-2 btn-group">
         <button type="button" class="btn btn-success save-product-btn mt-2" 
-                data-url="{% url 'product_save' %}" 
+                data-url="{% if product.id %}{% url 'product_save' %}{% else %}{% url 'product_create' %}{% endif %}" 
                 data-product-id="{{ product.id }}">
-                Save
+            {% if product.id %}Save{% else %}Create{% endif %}
         </button>
-        <button type="button" 
-                class="btn mt-2 toggle-variant-btn" 
-                data-url="" 
-                data-active="">
-        </button>
-        <button type="button" 
-                class="btn {% if product.active %}btn-danger{% else %}btn-success{% endif %} mt-2 toggle-product-btn" 
-                data-url="{% url 'product_deactivate' pk=product.id %}" 
-                data-active="{{ product.active|yesno:'true,false' }}">
-            {% if product.active %}Deactivate Product{% else %}Activate Product{% endif %}
-        </button>
+        {% if product.id %}
+            <button type="button" 
+                    class="btn mt-2 toggle-variant-btn" 
+                    data-url="" 
+                    data-active="">
+            </button>
+            <button type="button" 
+                    class="btn {% if product.active %}btn-danger{% else %}btn-success{% endif %} mt-2 toggle-product-btn" 
+                    data-url="{% url 'product_deactivate' pk=product.id %}" 
+                    data-active="{{ product.active|yesno:'true,false' }}">
+                {% if product.active %}Deactivate Product{% else %}Activate Product{% endif %}
+            </button>
+        {% endif %}
     </div>   
     {% else %}
     <a id="edit-link-{{ product.id }}"

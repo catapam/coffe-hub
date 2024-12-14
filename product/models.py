@@ -51,6 +51,12 @@ class Product(models.Model):
         clean_name = clean_name.replace('-', '_')
         clean_name = clean_name.replace(' ', '_')
         self.slug = clean_name.lower()
+
+        # Ensure the category is not reset
+        if not self.pk:
+            # If the object is being created for the first time
+            self.category = self.category
+            
         super().save(*args, **kwargs)
 
     def image(self):

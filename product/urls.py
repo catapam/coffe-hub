@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import ProductListView, ProductDetailView, ProductEditView, ProductDeactivateView, ReviewSilenceToggler, VariantDeactivateView, SaveSelector, ProductSaveView
+from .views import ProductListView, ProductDetailView, ProductEditView, ProductDeactivateView, ReviewSilenceToggler, VariantDeactivateView, SaveSelector, ProductSaveView, ProductCreateView
 
 urlpatterns = [
     path('', ProductListView.as_view(), name='product'),
-    path('create/', ProductListView.as_view(), name='product_create'),
+    path('create/', ProductCreateView.as_view(), name='product_create'),
     path('<int:pk>/edit/', ProductEditView.as_view(), name='product_edit'),
     path('<int:pk>/deactivate/', ProductDeactivateView.as_view(), name='product_deactivate'),
     path('save/', ProductSaveView.as_view(), name='product_save'),

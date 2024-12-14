@@ -532,10 +532,10 @@ class SelectorHandler {
     handleSave() {
         const newName = this.inputElement.value.trim();
         if (!newName) return; // no empty submissions
-
+    
         const selectedOption = this.selectElement.options[this.selectElement.selectedIndex];
         const currentValue = selectedOption ? selectedOption.value : null;
-
+    
         // Prepare data to send to the server
         const payload = {
             action: this.lastAction,
@@ -544,7 +544,7 @@ class SelectorHandler {
             current_value: currentValue,
             product_id: this.selectElement.id.split('-').pop() // extract product ID from select ID if needed
         };
-
+    
         // Send AJAX request to your Django endpoint
         fetch(`/products/${this.type}/save/`, {
             method: "POST",
@@ -560,13 +560,13 @@ class SelectorHandler {
                 // Update UI: Add or update the option in the dropdown
                 if (this.lastAction === "add") {
                     const newOption = document.createElement("option");
-                    newOption.value = data.slug;
+                    newOption.value = data.id; // Use ID instead of slug
                     newOption.textContent = data.name;
                     this.selectElement.add(newOption);
-                    this.selectElement.value = data.slug;
+                    this.selectElement.value = data.id; // Ensure the new category is selected by default
                 } else if (this.lastAction === "edit") {
                     if (selectedOption) {
-                        selectedOption.value = data.slug;
+                        selectedOption.value = data.id; // Use ID instead of slug
                         selectedOption.textContent = data.name;
                     }
                 }
@@ -576,7 +576,7 @@ class SelectorHandler {
             }
         })
         .catch(error => console.error("Request failed:", error));
-    }
+    }    
 
     getCSRFToken() {
         const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
@@ -638,8 +638,7 @@ class ProductSaveHandler {
     }
 
     getProductData() {
-        const productId = document.querySelector('.save-product-btn').getAttribute('data-product-id');
-        const categorySelector = document.querySelector(`#category-select-${productId}`);
+        const categorySelector = document.querySelector('[id^="category-select-"]');
 
         return {
             name: document.querySelector('#id_name').value,
@@ -664,18 +663,18 @@ class ProductSaveHandler {
         const productData = this.getProductData();
         const variantData = this.getVariantData();
         const formData = new FormData();
-
+    
         // Append product and variant data
         formData.append('product_id', productId);
         formData.append('variant_id', variantId);
         formData.append('product', JSON.stringify(productData));
         formData.append('variant', JSON.stringify(variantData));
-
+    
         // Append image file if it exists
         if (this.imageFile) {
             formData.append('image', this.imageFile, `${productData.name}.jpg`);
         }
-
+    
         fetch(url, {
             method: 'POST',
             headers: {
@@ -688,6 +687,24 @@ class ProductSaveHandler {
                 if (!data.success) {
                     console.error('Save failed:', data.errors || data.error);
                 } else {
+                    // Dynamically update the category dropdown
+                    const categorySelector = document.querySelector('[id^="category-select-"]');
+                    if (categorySelector && data.updated_category) {
+                        // Find the matching option and update its display
+                        const selectedOption = categorySelector.querySelector(`option[value="${data.updated_category.id}"]`);
+                        if (selectedOption) {
+                            selectedOption.textContent = data.updated_category.name;
+                        } else {
+                            // Add the new option if it doesn't exist
+                            const newOption = document.createElement('option');
+                            newOption.value = data.updated_category.id;
+                            newOption.textContent = data.updated_category.name;
+                            categorySelector.add(newOption);
+                            categorySelector.value = data.updated_category.id; // Select the new category
+                        }
+                    }
+        
+                    // Optionally redirect
                     if (data.redirect_url) {
                         const currentQueryString = window.location.search;
                         const redirectUrlWithArgs = `${data.redirect_url}${currentQueryString}`;
@@ -698,6 +715,7 @@ class ProductSaveHandler {
                 }
             })
             .catch(error => console.error('Request failed:', error));
+           
     }
 }
 
@@ -713,4 +731,3 @@ document.addEventListener('DOMContentLoaded', () => {
     new SelectorHandler("size");
     new ProductSaveHandler('.save-product-btn');
 });
-

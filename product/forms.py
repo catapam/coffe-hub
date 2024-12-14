@@ -32,13 +32,7 @@ class ProductEditForm(forms.ModelForm):
         """
         Initialize the form with model values as the default.
         """
-        instance = kwargs.get('instance')
         super().__init__(*args, **kwargs)
-        if instance:
-            self.fields['name'].initial = instance.name
-            self.fields['description'].initial = instance.description
-            self.fields['image_path'].initial = instance.image_path
-            self.fields['category'].initial = instance.category
 
 
 class ProductVariantForm(forms.ModelForm):

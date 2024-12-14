@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.shortcuts import get_object_or_404, redirect
 from .models import Product, ProductVariant, Category, ProductReview
 from django.db.models import Min, F, Case, When, Value, IntegerField, Subquery, OuterRef, Q, Count
@@ -315,13 +315,19 @@ class ProductDetailView(DetailView):
             visible_reviews = product.reviews.filter(silenced=False).exclude(comment="").order_by('-created_at')
 
         review_form = ProductReviewForm()
+
+        # Ensure selected_category matches the current product's category ID
+        selected_category = product.category.id
+
+        # Order categories by slug (case-insensitive via slug logic)
         category_items = [
-            {"slug": category.slug, "name": category.name}
-            for category in Category.objects.all()
+            {"id": category.id, "name": category.name}
+            for category in Category.objects.all().order_by('slug')
         ]
         
         context.update({
             'product': product,
+            'selected_category': selected_category,
             'variants': variants,
             'sizes': sizes,
             'stock_by_size': stock_by_size,
@@ -412,22 +418,24 @@ class SaveSelector(View):
             return JsonResponse({
                 "success": True,
                 "name": new_category.name,
-                "slug": new_category.slug
+                "slug": new_category.slug,
+                "id": new_category.id
             })
 
         elif action == "edit" and current_value:
             # Update existing category
             try:
-                category = Category.objects.get(name=current_value)
+                category = Category.objects.get(id=current_value)  # Ensure ID is used for lookup
                 category.name = name
                 category.save()
                 return JsonResponse({
                     "success": True,
                     "name": category.name,
-                    "slug": category.slug
+                    "id": category.id  # Use ID instead of slug
                 })
             except Category.DoesNotExist:
                 return JsonResponse({"success": False, "error": "Category not found."}, status=404)
+
 
         return JsonResponse({"success": False, "error": "Invalid action or missing data."}, status=400)
 
@@ -491,26 +499,45 @@ class ProductSaveView(View):
         variant_id = request.POST.get('variant_id')
 
         try:
-            # Update Product
+            # Fetch the Product
             product = Product.objects.get(id=product_id)
             product_data = json.loads(request.POST.get('product', '{}'))
 
-            category_name = product_data.get('category')
-            category = Category.objects.filter(name=category_name).first()
-            if not category:
-                return JsonResponse({"success": False, "error": f"Category '{category_name}' not found."}, status=400)
+            # Resolve the category using the slug passed from the front-end
+            category_id = product_data.get('category')
+            category = get_object_or_404(Category, id=category_id)
 
-            product_form = ProductEditForm(
-                {**product_data, "category": category.id}, instance=product
-            )
+            # Ensure the category ID is correctly included in product_data
+            product_data['category'] = category.id
+
+            # Bind the form with the updated product data
+            product_form = ProductEditForm(product_data, instance=product)
+
+            # Validate and save the form
             if product_form.is_valid():
-                product_form.save()
+                # Save the form without committing to DB
+                product = product_form.save(commit=False)
+                print(f"Form cleaned data: {product_form.cleaned_data}")  # Debugging form data
+
+                # Assign the correct Category instance
+                product.category = category
+                print(f"Assigned category: {product.category}")  # Debugging assigned category
+
+                # Save the product to the database
+                try:
+                    product.save()
+                    print(f"Product saved successfully with category: {product.category}")
+                except Exception as e:
+                    print(f"Error saving product: {e}")
+                    return JsonResponse({"success": False, "error": str(e)}, status=500)
             else:
+                print(f"Form errors: {product_form.errors}")  # Debugging form errors
                 return JsonResponse({"success": False, "errors": product_form.errors}, status=400)
 
             # Handle Image Upload
             if 'image' in request.FILES:
                 image_file = request.FILES['image']
+                print(f"Image file received: {image_file}")  # Debugging image upload
 
                 # Extract file extension
                 file_extension = os.path.splitext(image_file.name)[1]  # E.g., ".jpg"
@@ -518,6 +545,7 @@ class ProductSaveView(View):
                 # Delete the existing image from Cloudinary if it exists
                 if product.image_path:
                     public_id = product.image_path.public_id
+                    print(f"Deleting existing Cloudinary image: {public_id}")  # Debugging Cloudinary deletion
                     destroy(public_id)
 
                 # Generate a new file name based on the product slug
@@ -530,22 +558,79 @@ class ProductSaveView(View):
                     overwrite=True,           # Ensures the old file is replaced
                     resource_type="image",    # Explicitly set resource type
                 )
+                print(f"Image uploaded successfully: {upload_result}")  # Debugging upload result
 
                 # Store the public_id and version from the upload result
                 product.image_path = upload_result['public_id']       # E.g., "products/ethiopian_coffee_bean"
                 product.cloudinary_version = upload_result.get('version')  # Cloudinary-assigned version
                 product.save()
-                
-            # Update Product Variant
-            variant = ProductVariant.objects.get(id=variant_id)
-            variant_form = ProductVariantForm(json.loads(request.POST.get('variant', '{}')), instance=variant)
-            if variant_form.is_valid():
-                variant_form.save()
-            else:
-                return JsonResponse({"success": False, "errors": variant_form.errors}, status=400)
 
-            return JsonResponse({"success": True, "redirect_url": product.get_absolute_url()})
+            # Update Product Variant
+            try:
+                variant = ProductVariant.objects.get(id=variant_id)
+                print(f"Resolved variant: {variant}")  # Debugging resolved variant
+                variant_form = ProductVariantForm(json.loads(request.POST.get('variant', '{}')), instance=variant)
+                if variant_form.is_valid():
+                    variant_form.save()
+                    print(f"Variant saved successfully: {variant}")  # Debugging variant save
+                else:
+                    print(f"Variant form errors: {variant_form.errors}")  # Debugging variant form errors
+                    return JsonResponse({"success": False, "errors": variant_form.errors}, status=400)
+            except ProductVariant.DoesNotExist:
+                print(f"Variant not found: ID {variant_id}")  # Debugging missing variant
+                return JsonResponse({"success": False, "error": "Variant not found."}, status=404)
+
+            return JsonResponse({
+                "success": True,
+                "redirect_url": product.get_absolute_url(),
+                "updated_category": {
+                    "id": product.category.id,
+                    "name": product.category.name
+                }
+            })
+
         except Product.DoesNotExist:
+            print(f"Product not found: ID {product_id}")  # Debugging missing product
             return JsonResponse({"success": False, "error": "Product not found."}, status=404)
-        except ProductVariant.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Variant not found."}, status=404)
+        except Category.DoesNotExist:
+            print(f"Category not found: ID {category_id}")  # Debugging missing category
+            return JsonResponse({"success": False, "error": "Category not found."}, status=404)
+        except Exception as e:
+            print(f"Unexpected error: {e}")  # Debugging unexpected errors
+            return JsonResponse({"success": False, "error": str(e)}, status=500)
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductEditForm
+    template_name = 'product/product_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Provide default forms and empty variants list
+        context['product_form'] = ProductEditForm()
+        context['category_items'] = Category.objects.values('slug', 'name')  # Populate category selector
+        context['is_admin'] = self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user.is_staff)
+        context['view'] = 'detail'
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if request.content_type == 'application/json':
+            data = json.loads(request.body)
+            product_data = data.get('product', {})
+            form = self.form_class(product_data)
+            if form.is_valid():
+                product = form.save()
+                return JsonResponse({
+                    "success": True,
+                    "product_id": product.id,
+                    "redirect_url": reverse('product_edit', kwargs={"pk": product.id}),
+                })
+            else:
+                return JsonResponse({
+                    "success": False,
+                    "errors": form.errors,
+                }, status=400)
+        else:
+            return super().post(request, *args, **kwargs)
+

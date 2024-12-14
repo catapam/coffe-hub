@@ -34,9 +34,7 @@
             name="{{ type }}">
         {% if type == 'category' %}
             {% for item in items %}
-                <option value="{{ item.name }}"
-                        {% if item.value == selected_value %}selected{% endif %}
-                        {% if item.disabled %}class="text-muted"{% endif %}>
+                <option value="{{ item.id }}" {% if item.id == selected_category %}selected{% endif %}>
                     {{ item.name }}
                 </option>
             {% endfor %}
