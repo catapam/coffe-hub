@@ -13,6 +13,7 @@ import json, os
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from cloudinary.uploader import upload, destroy
+from django.urls import reverse
 
 
 class ProductListView(ListView):
@@ -496,11 +497,13 @@ class ReviewSilenceToggler(View):
 class ProductSaveView(View):
     def post(self, request, *args, **kwargs):
         product_id = request.POST.get('product_id')
+        
         variant_id = request.POST.get('variant_id')
 
         try:
             # Fetch the Product
             product = Product.objects.get(id=product_id)
+            old_slug = product.slug 
             product_data = json.loads(request.POST.get('product', '{}'))
 
             # Resolve the category using the slug passed from the front-end
@@ -576,6 +579,15 @@ class ProductSaveView(View):
                 else:
                     print(f"Variant form errors: {variant_form.errors}")  # Debugging variant form errors
                     return JsonResponse({"success": False, "errors": variant_form.errors}, status=400)
+                
+                # Prepare the redirect if slug changed
+                new_slug = product.slug
+                if old_slug != new_slug:
+                    base_url = reverse('product_detail', kwargs={'slug': new_slug})
+                    query_string = request.META['QUERY_STRING']
+                    redirect_url = f"{base_url}?{query_string}" if query_string else base_url
+                    return JsonResponse({"success": True, "redirect_url": redirect_url})
+            
             except ProductVariant.DoesNotExist:
                 print(f"Variant not found: ID {variant_id}")  # Debugging missing variant
                 return JsonResponse({"success": False, "error": "Variant not found."}, status=404)
@@ -607,30 +619,44 @@ class ProductCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Provide default forms and empty variants list
-        context['product_form'] = ProductEditForm()
-        context['category_items'] = Category.objects.values('slug', 'name')  # Populate category selector
+        # Ensure the form is passed to the template
+        context['product_form'] = self.get_form()
+        category_items = [
+            {"id": category.id, "name": category.name}
+            for category in Category.objects.all().order_by('slug')
+        ]
+        context['category_items'] = category_items
         context['is_admin'] = self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user.is_staff)
         context['view'] = 'detail'
         return context
 
+
     def post(self, request, *args, **kwargs):
         if request.content_type == 'application/json':
-            data = json.loads(request.body)
-            product_data = data.get('product', {})
-            form = self.form_class(product_data)
-            if form.is_valid():
-                product = form.save()
-                return JsonResponse({
-                    "success": True,
-                    "product_id": product.id,
-                    "redirect_url": reverse('product_edit', kwargs={"pk": product.id}),
-                })
-            else:
+            try:
+                data = json.loads(request.body)
+                product_data = data.get('product', {})
+                form = self.form_class(product_data)
+            except json.JSONDecodeError:
                 return JsonResponse({
                     "success": False,
-                    "errors": form.errors,
+                    "error": "Invalid JSON payload."
                 }, status=400)
         else:
-            return super().post(request, *args, **kwargs)
+            # Fallback for non-JSON requests
+            product_data = request.POST.dict()
+            form = self.form_class(product_data)
+        
+        if form.is_valid():
+            product = form.save()
+            return JsonResponse({
+                "success": True,
+                "product_id": product.id,
+                "redirect_url": reverse('product_edit', kwargs={"pk": product.id}),
+            })
+        else:
+            return JsonResponse({
+                "success": False,
+                "errors": form.errors,
+            }, status=400)
 

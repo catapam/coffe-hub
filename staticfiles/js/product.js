@@ -587,9 +587,12 @@ class SelectorHandler {
 class ProductSaveHandler {
     constructor(buttonSelector) {
         const cardElement = document.querySelector(".product-card");
+        const sizeElement = cardElement.querySelector('.size');
+        const dynamicPart = sizeElement ? sizeElement.id.split('-')[2] : '';
+
+        this.previewElement = document.querySelector(`#product-image-${dynamicPart}`);
         this.saveButtons = document.querySelectorAll(buttonSelector);
         this.imageInput = document.querySelector('#id_image_path'); // Assuming image input ID
-        this.previewElement = document.querySelector(`#product-image-${cardElement.querySelector('.size').id.split('-')[2]}`); // Assuming preview element ID
         this.imageFile = null; // Temporary store for the selected image
 
         if (this.saveButtons.length > 0) {
@@ -652,21 +655,40 @@ class ProductSaveHandler {
         const productId = sizeSelector ? sizeSelector.id.split('-')[2] : null;
         const sizeElement = document.querySelector(`#size-select-${productId}`);
 
-        return {
-            size: sizeElement ? sizeElement.value : null,
-            price: document.querySelector('#id_price').value,
-            stock: document.querySelector('#id_stock').value,
-        };
+        if (sizeSelector) {
+            const size = sizeElement ? sizeElement.value : null;
+            const price = document.querySelector('#id_price')?.value || null;
+            const stock = document.querySelector('#id_stock')?.value || null;
+
+            if (!size || !price || !stock) {
+                console.error('Variant data is incomplete:', { size, price, stock });
+                return null;
+            }
+
+            return { size, price, stock };
+        }
+        console.error('Size selector not found.');
+        return null;
     }
 
     saveProductAndVariant(productId, variantId, url) {
         const productData = this.getProductData();
         const variantData = this.getVariantData();
-        const formData = new FormData();
     
-        // Append product and variant data
-        formData.append('product_id', productId);
-        formData.append('variant_id', variantId);
+        // Check product and variant data
+        if (!productData) {
+            alert('Product data is incomplete. Please fill in all fields.');
+            return;
+        }
+
+        if (!variantData) {
+            alert('Variant data is incomplete. Please fill in all fields.');
+            return;
+        }
+
+        const formData = new FormData();
+        if (productId) formData.append('product_id', productId);
+        if (variantId) formData.append('variant_id', variantId);
         formData.append('product', JSON.stringify(productData));
         formData.append('variant', JSON.stringify(variantData));
     
@@ -675,6 +697,8 @@ class ProductSaveHandler {
             formData.append('image', this.imageFile, `${productData.name}.jpg`);
         }
     
+        const isCreateOperation = !productId;
+    
         fetch(url, {
             method: 'POST',
             headers: {
@@ -682,41 +706,51 @@ class ProductSaveHandler {
             },
             body: formData,
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    // If response is not OK, handle error
+                    return response.text().then(text => {
+                        console.error('Server returned an error:', response.status, text);
+                        throw new Error(`Server Error: ${response.status}`);
+                    });
+                }
+    
+                // Attempt to parse the response as JSON
+                return response.text().then(text => {
+                    try {
+                        return JSON.parse(text);
+                    } catch (error) {
+                        console.error('Failed to parse JSON response:', text);
+                        throw new Error('Invalid JSON received from the server.');
+                    }
+                });
+            })
             .then(data => {
                 if (!data.success) {
                     console.error('Save failed:', data.errors || data.error);
+                    alert('Save failed. Check console for details.');
                 } else {
-                    // Dynamically update the category dropdown
-                    const categorySelector = document.querySelector('[id^="category-select-"]');
-                    if (categorySelector && data.updated_category) {
-                        // Find the matching option and update its display
-                        const selectedOption = categorySelector.querySelector(`option[value="${data.updated_category.id}"]`);
-                        if (selectedOption) {
-                            selectedOption.textContent = data.updated_category.name;
-                        } else {
-                            // Add the new option if it doesn't exist
-                            const newOption = document.createElement('option');
-                            newOption.value = data.updated_category.id;
-                            newOption.textContent = data.updated_category.name;
-                            categorySelector.add(newOption);
-                            categorySelector.value = data.updated_category.id; // Select the new category
-                        }
-                    }
-        
-                    // Optionally redirect
                     if (data.redirect_url) {
-                        const currentQueryString = window.location.search;
-                        const redirectUrlWithArgs = `${data.redirect_url}${currentQueryString}`;
-                        window.location.href = redirectUrlWithArgs; // Redirect to the new product detail page
+                        // Redirect if slug changes
+                        window.location.href = data.redirect_url;
+                    } else if (isCreateOperation) {
+                        // Handle product creation response
+                        if (data.product_id) {
+                            alert('Product created successfully! Redirecting to edit page...');
+                            window.location.href = `/products/${data.product_id}/edit/`;
+                        } else {
+                            console.error('Creation failed: No product ID returned.');
+                        }
                     } else {
+                        // Handle existing product updates
                         alert('Product and Variant saved successfully!');
                     }
                 }
             })
+            
             .catch(error => console.error('Request failed:', error));
-           
     }
+    
 }
 
 // Initialize handlers on DOM load
