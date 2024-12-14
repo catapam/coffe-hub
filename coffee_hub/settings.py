@@ -39,7 +39,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'DEVELOPMENT' in os.environ
 
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'coffee-hub-64aa59561310.herokuapp.com', '8080-catapam-coffehub-ifr6kyvjgep.ws-eu117.gitpod.io']
+CSRF_TRUSTED_ORIGINS = [
+    "https://8080-catapam-coffehub-ifr6kyvjgep.ws-eu117.gitpod.io",
+    "https://coffee-hub-64aa59561310.herokuapp.com",
+]
+
 
 # Application definition
 
@@ -112,6 +117,7 @@ TEMPLATES = [
                 # custom global contexts
                 'cart.contexts.cart_contents',
             ],
+            'debug': 'DEVELOPMENT' in os.environ,
             'builtins': [
                 'crispy_forms.templatetags.crispy_forms_tags',
                 'crispy_forms.templatetags.crispy_forms_field'

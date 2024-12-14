@@ -1,5 +1,6 @@
+{% load static %}
 {% include 'store/includes/filter-sort.html' %}
-    
+
 <!-- Products Grid -->
 <div class="row g-4">
     {% for product_data in products_with_context %}
@@ -11,3 +12,6 @@
     <p>No products match the selected filters.</p>
     {% endfor %}
 </div>
+
+<!-- Page specific scripts -->
+<script src="{% static 'js/product.js' %}" defer></script>

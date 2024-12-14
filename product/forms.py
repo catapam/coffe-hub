@@ -8,7 +8,7 @@ class ProductEditForm(forms.ModelForm):
     """
     class Meta:
         model = Product
-        fields = ['name', 'description', 'image_path', 'rating', 'category']
+        fields = ['name', 'description', 'image_path', 'category', 'active']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -22,12 +22,6 @@ class ProductEditForm(forms.ModelForm):
             'image_path': forms.FileInput(attrs={
                 'class': 'form-control',
                 'accept': 'image/*'
-            }),
-            'rating': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'min': 0,
-                'max': 5,
-                'step': 0.1
             }),
             'category': forms.Select(attrs={
                 'class': 'form-select'
@@ -44,7 +38,6 @@ class ProductEditForm(forms.ModelForm):
             self.fields['name'].initial = instance.name
             self.fields['description'].initial = instance.description
             self.fields['image_path'].initial = instance.image_path
-            self.fields['rating'].initial = instance.rating
             self.fields['category'].initial = instance.category
 
 

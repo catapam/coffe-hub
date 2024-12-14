@@ -1,7 +1,11 @@
 {% if is_admin %}
     {% if view == 'detail' %}
     <div class="col mb-2 btn-group">
-        <button type="submit" class="btn btn-success mt-2">Save</button>
+        <button type="button" class="btn btn-success save-product-btn mt-2" 
+                data-url="{% url 'product_save' %}" 
+                data-product-id="{{ product.id }}">
+                Save
+        </button>
         <button type="button" 
                 class="btn mt-2 toggle-variant-btn" 
                 data-url="" 

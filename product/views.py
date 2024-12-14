@@ -73,6 +73,7 @@ class ProductListView(ListView):
                 default_variant_stock=Subquery(available_variant.values('stock')[:1]),
                 default_variant_size=Subquery(available_variant.values('size')[:1]),
                 default_variant_active=Subquery(available_variant.values('active')[:1]),
+                default_variant_id=Subquery(available_variant.values('id')[:1]),
             )
 
             # If not admin: only consider active products that have at least one active variant
@@ -120,6 +121,7 @@ class ProductListView(ListView):
 
                 products_with_context.append({
                     "product": variant.product,
+                    "variant_id": variant.id,
                     "variant_size": variant.size,
                     "variant_price": variant.adjusted_price,
                     "variant_stock": variant.stock,
@@ -142,6 +144,7 @@ class ProductListView(ListView):
 
                 products_with_context.append({
                     "product": product,
+                    "variant_id": product.default_variant_id,
                     "variant_size": product.default_variant_size,
                     "variant_price": product.default_variant_price,
                     "variant_stock": product.default_variant_stock,
@@ -280,6 +283,7 @@ class ProductDetailView(DetailView):
         default_variant = stock_by_size.get(default_size)
         default_stock_status = "In Stock" if default_variant and default_variant.stock > 0 else "Out of Stock"
         default_price = default_variant.price if default_variant else None
+        default_variant_id = default_variant.id
         size_active = default_variant.active
 
         product_form = ProductEditForm(instance=product) if is_admin else None
@@ -321,6 +325,7 @@ class ProductDetailView(DetailView):
             'default_size': default_size,
             'default_stock_status': default_stock_status,
             'default_price': default_price,
+            'default_variant_id': default_variant_id,
             'size_active': size_active,
             'max_review': range(5),
             'view': 'detail',
@@ -475,3 +480,43 @@ class ReviewSilenceToggler(View):
         except ProductReview.DoesNotExist:
             return JsonResponse({"success": False, "error": "Review not found"}, status=404)
 
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ProductSaveView(View):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        product_id = data.get('product_id')
+        variant_id = data.get('variant_id')
+
+        try:
+            # Update Product
+            product = Product.objects.get(id=product_id)
+            product_data = data.get('product', {})
+
+            category_name = product_data.get('category')
+            category = Category.objects.filter(name=category_name).first()
+            if not category:
+                return JsonResponse({"success": False, "error": f"Category '{category_name}' not found."}, status=400)
+
+            product_form = ProductEditForm(
+                {**product_data, "category": category.id}, instance=product
+            )
+            if product_form.is_valid():
+                product_form.save()
+            else:
+                return JsonResponse({"success": False, "errors": product_form.errors}, status=400)
+
+            # Update Product Variant
+            variant = ProductVariant.objects.get(id=variant_id)
+            variant_form = ProductVariantForm(data.get('variant'), instance=variant)
+            if variant_form.is_valid():
+                variant_form.save()
+            else:
+                return JsonResponse({"success": False, "errors": variant_form.errors}, status=400)
+
+            # Redirect to product detail page
+            return JsonResponse({"success": True, "redirect_url": product.get_absolute_url()})
+        except Product.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Product not found."}, status=404)
+        except ProductVariant.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Variant not found."}, status=404)

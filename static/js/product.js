@@ -20,6 +20,7 @@ class ProductCardHandler {
 
     init() {
         const sizeSelectors = document.querySelectorAll(".size");
+
         sizeSelectors.forEach(sizeSelect => {
             this.updateProductCard(sizeSelect);
             this.updateProductUrl(sizeSelect);
@@ -64,6 +65,7 @@ class ProductCardHandler {
     updateVariantState(cardElement, isActive, variantId) {
         const variantButton = cardElement.querySelector(".toggle-variant-btn");
         const variantBadge = cardElement.querySelector(`#badge-size-${cardElement.querySelector('.size').id.split('-')[2]}`);
+        const saveButton = cardElement.querySelector(`.save-product-btn`);
         
         if (variantBadge){
             variantBadge.classList.toggle("badge-active", isActive);
@@ -78,6 +80,9 @@ class ProductCardHandler {
                 variantButton.classList.toggle("btn-danger", isActive);
                 variantButton.classList.toggle("btn-success", !isActive);
                 variantButton.textContent = isActive ? "Deactivate Size" : "Activate Size";
+            }
+            if(saveButton){
+                saveButton.setAttribute("data-variant-id", `${variantId}`)
             }
         } 
     }  
@@ -441,7 +446,6 @@ class ProductActivationHandler {
     }
 }
 
-
 class SelectorHandler {
     constructor(type) {
         this.type = type; // 'category' or 'size'
@@ -580,6 +584,89 @@ class SelectorHandler {
     }
 }
 
+class ProductSaveHandler {
+    constructor(buttonSelector) {
+        this.saveButtons = document.querySelectorAll(buttonSelector);
+        if (this.saveButtons.length > 0) {
+            this.init();
+        }
+    }
+
+    init() {
+        this.saveButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const productId = button.getAttribute('data-product-id');
+                const variantId = button.getAttribute('data-variant-id');
+                const url = button.getAttribute('data-url');
+                this.saveProductAndVariant(productId, variantId, url);
+            });
+        });
+    }
+
+    getCSRFToken() {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+        return csrfToken ? csrfToken.value : '';
+    }
+
+    getProductData() {
+        const productId = document.querySelector('.save-product-btn').getAttribute('data-product-id');
+        const categorySelector = document.querySelector(`#category-select-${productId}`);
+
+        return {
+            name: document.querySelector('#id_name').value,
+            description: document.querySelector('#id_description').value,
+            category: categorySelector ? categorySelector.value : null,
+            image_path: document.querySelector('#id_image_path').value,
+        };
+    }
+
+    getVariantData() {
+        const sizeSelector = document.querySelector('.size');
+        const productId = sizeSelector ? sizeSelector.id.split('-')[2] : null;
+        const sizeElement = document.querySelector(`#size-select-${productId}`);
+
+        return {
+            size: sizeElement ? sizeElement.value : null,
+            price: document.querySelector('#id_price').value,
+            stock: document.querySelector('#id_stock').value,
+        };
+    }
+
+    saveProductAndVariant(productId, variantId, url) {
+        const productData = this.getProductData();
+        const variantData = this.getVariantData();
+    
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': this.getCSRFToken(),
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                variant_id: variantId,
+                product: productData,
+                variant: variantData,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error('Save failed:', data.errors || data.error);
+                } else {
+                    if (data.redirect_url) {
+                        const currentQueryString = window.location.search;
+                        // Redirect to the new product detail page
+                        window.location.href = `${data.redirect_url}${currentQueryString}`;
+                    } else {
+                        alert('Product and Variant saved successfully!');
+                    }
+                }
+            })
+            .catch(error => console.error('Request failed:', error));
+    }    
+}
+
 // Initialize handlers on DOM load
 document.addEventListener('DOMContentLoaded', () => {
     new ProductCardHandler();
@@ -590,5 +677,6 @@ document.addEventListener('DOMContentLoaded', () => {
     new ProductActivationHandler('.toggle-variant-btn');
     new SelectorHandler("category");
     new SelectorHandler("size");
+    new ProductSaveHandler('.save-product-btn');
 });
 

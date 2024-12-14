@@ -77,6 +77,9 @@ class Product(models.Model):
             "default_stock_status": default_stock_status,
         }
 
+    def get_absolute_url(self):
+        return reverse('product_detail', kwargs={'slug': self.slug})
+
     @property
     def average_rating(self):
         avg = self.reviews.aggregate(average=Avg('rating'))['average']

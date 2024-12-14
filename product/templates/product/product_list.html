@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block title %}
     Products
@@ -11,15 +10,13 @@
 {% endblock extra_css %}
 
 {% block content %}
-<div role="main" aria-labelledby="product-list" class="product-list page-container">
-    <h1 class="mb-5">Products</h1>
-    {% include 'product/includes/catalog.html' %}
-</div>
-
+    <div role="main" aria-labelledby="product-list" class="product-list page-container">
+        <h1 class="mb-5">Products</h1>
+        {% include 'product/includes/catalog.html' %}
+    </div>
 {% endblock content %}
 
-<!-- Page specific scripts -->
 {% block extra_js %}
 {{ block.super }}
-    <script src="{% static 'js/product.js' %}" defer></script>
-{% endblock extra_js %}
+
+{% endblock extra_js%}
