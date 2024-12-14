@@ -21,6 +21,8 @@ class ProductCardHandler {
     init() {
         const sizeSelectors = document.querySelectorAll(".size");
 
+        this.handleBuyButton();
+
         sizeSelectors.forEach(sizeSelect => {
             this.updateProductCard(sizeSelect);
             this.updateProductUrl(sizeSelect);
@@ -172,6 +174,48 @@ class ProductCardHandler {
     previewImage(input, imageId) {
         previewImage(input, imageId);
     }
+
+    handleBuyButton() {
+        const buyButtons = document.querySelectorAll('[id^="buy-button-"]');
+
+        buyButtons.forEach(button => {
+            button.addEventListener("click", (event) => {
+                const url = button.getAttribute("data-url");
+                const productId = button.getAttribute("data-product-id");
+                const size = document.querySelector(`#size-select-${productId}`)?.value;
+                const quantity = document.querySelector(`#quantity-select-${productId}`)?.value;
+                
+                if (!url || !productId || !size || !quantity) {
+                    alert("Please select a valid size and quantity.");
+                    return;
+                }
+
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": this.getCSRFToken(),
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ size, quantity }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message || "Item added to cart successfully!");
+                        } else {
+                            console.error("Error adding to cart:", data);
+                            alert(data.error || "Failed to add item to cart.");
+                        }
+                    })
+                    .catch(error => console.error("Request failed:", error));
+            });
+        });
+    }
+    
+    getCSRFToken() {
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
+        return csrfToken ? csrfToken.value : "";
+    }    
 }
 
 class StarRatingHandler {

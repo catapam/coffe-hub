@@ -29,8 +29,10 @@
     </a>
     {% endif %}
 {% else %}
-    <input id="buy-button-{{ product.id }}"
-        type="submit"
+    <input id="buy-button-{{ product.id }}" 
+        type="button" 
         class="btn btn-secondary btn-buy {% if view == 'list' %}btn-sm{% endif %} {% if default_stock_status == 'Out of Stock' %}disabled{% endif %}"
-        value="Buy">
+        value="Buy"
+        data-url="{% url 'add_to_cart' product.id %}" 
+        data-product-id="{{ product.id }}">
 {% endif %}

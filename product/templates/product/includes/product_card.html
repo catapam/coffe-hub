@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 
-<form action="{% if product.id %}{% url 'add_to_cart' product.id %}{% else %}#{% endif %}" method="POST" class="form">
+<form class="form">
     {% csrf_token %}
     <div class="product-card {% if view == 'detail' %}container mt-5 product-page page-container{% else %}card{% endif %}">
         <div class="{% if view == 'detail' %}row{% endif %}">
