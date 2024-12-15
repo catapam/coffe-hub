@@ -63,6 +63,14 @@ class CustomUserAdmin(UserAdmin):
     """
     readonly_fields = ('last_login', 'date_joined')
     inlines = [EmailAddressInline, CartEntryInline]
+    
+    def get_list_display(self, request):
+        """
+        Dynamically determine the list_display fields based on the user's role.
+        """
+        if request.user.is_superuser:
+            return ('username', 'email', 'is_staff', 'is_superuser', 'is_active')  # Superuser view
+        return ('username', 'email', 'is_active')  # Non-superuser view
 
     def get_form(self, request, obj=None, **kwargs):
         """
@@ -83,22 +91,34 @@ class CustomUserAdmin(UserAdmin):
 
     def get_fieldsets(self, request, obj=None):
         """
-        Dynamically customize fieldsets to hide the Permissions section for non-superusers.
+        Dynamically customize fieldsets to hide the "Permissions" section for non-superusers.
         """
         # Retrieve the default fieldsets
-        fieldsets = super().get_fieldsets(request, obj)
+        fieldsets = (
+            (None, {'fields': ('username', 'password')}),
+            ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
+            ('Permissions', {
+                'fields': ('is_active', 'is_staff', 'is_superuser'),
+            }),
+            ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        )
 
-        if not request.user.is_superuser:
-            # Exclude the "Permissions" section dynamically
-            fieldsets = [
-                (name, {
-                    'fields': options['fields'],  # Ensure 'fields' is defined correctly
-                    'classes': options.get('classes', [])
-                }) for name, options in fieldsets
-                if name != 'Permissions'
-            ]
+        # Create a new list for the modified fieldsets
+        modified_fieldsets = []
+        
+        for name, options in fieldsets:
+            # Exclude the "Permissions" section dynamically for non-superusers
+            if not request.user.is_superuser and name == 'Permissions':
+                # Remove specific fields or the entire section for non-superusers
+                fields = options.get('fields', [])
+                fields = tuple(field for field in fields if field == 'is_active')  # Keep only 'is_active'
+                if fields:  # Include only if there are remaining fields
+                    modified_fieldsets.append((name, {'fields': fields}))
+            else:
+                # Add other sections unchanged
+                modified_fieldsets.append((name, options))
 
-        return fieldsets
+        return modified_fieldsets
 
     def has_permission(self, request):
         """
@@ -164,4 +184,3 @@ admin.site.unregister(Group)
 
 # Register the custom User admin
 admin.site.register(User, CustomUserAdmin)
-

@@ -186,7 +186,7 @@ class ProductCardHandler {
                 const quantity = document.querySelector(`#quantity-select-${productId}`)?.value;
                 
                 if (!url || !productId || !size || !quantity) {
-                    alert("Please select a valid size and quantity.");
+                    showToast('error', 'Please select a valid size and quantity.');
                     return;
                 }
 
@@ -201,13 +201,12 @@ class ProductCardHandler {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert(data.message || "Item added to cart successfully!");
+                            showToast('success', `${data.message}`)
                         } else {
-                            console.error("Error adding to cart:", data);
-                            alert(data.error || "Failed to add item to cart.");
+                            showToast('error', `${data.error}`)
                         }
                     })
-                    .catch(error => console.error("Request failed:", error));
+                    .catch(error => showToast('error', `${error.message}`));
             });
         });
     }
@@ -330,57 +329,37 @@ class ReviewSilenceHandler {
 
     init() {
         this.buttons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                event.preventDefault(); // Prevent default anchor behavior
+            button.addEventListener('click', async (event) => {
+                event.preventDefault();
                 const url = button.getAttribute('data-url');
                 const reviewId = button.getAttribute('data-review-id');
 
                 if (!url || !reviewId) return;
 
-                // Make the POST request
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': this.getCSRFToken(),
-                        'Content-Type': 'application/json',
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        this.updateReviewState(button, reviewId, data.silenced);
+                const response = await customFetch(url, { method: 'POST' });
+
+                if (response) {
+                    if (response.success) {
+                        showToast('success', `Review ${response.silenced ? 'silenced' : 'unsilenced'} successfully!`);
+                        this.updateReviewState(button, reviewId, response.silenced);
                     } else {
-                        console.error('Error toggling silence:', data.error);
+                        showToast('error', `Error toggling silence: ${response.error}`);
                     }
-                })
-                .catch(error => console.error('Request failed:', error));
+                }
             });
         });
     }
 
     updateReviewState(button, reviewId, silenced) {
-        // Update button state
         this.toggleButtonState(button, silenced);
-
-        // Find the review container by ID
-        const reviewContainer = document.querySelector(
-            `${this.reviewContainerSelector}[data-review-id="${reviewId}"]`
-        );
-
+        const reviewContainer = document.querySelector(`${this.reviewContainerSelector}[data-review-id="${reviewId}"]`);
         if (reviewContainer) {
-            // Update silenced styles
             const commentElement = reviewContainer.querySelector('.review-comment');
             const silencedIndicator = reviewContainer.querySelector('.silenced-indicator');
             if (commentElement && silencedIndicator) {
-                if (silenced) {
-                    commentElement.classList.add('silenced');
-                    silencedIndicator.classList.add('d-flex');
-                    silencedIndicator.classList.remove('d-none');
-                } else {
-                    commentElement.classList.remove('silenced');
-                    silencedIndicator.classList.add('d-none');
-                    silencedIndicator.classList.remove('d-flex');
-                }
+                commentElement.classList.toggle('silenced', silenced);
+                silencedIndicator.classList.toggle('d-flex', silenced);
+                silencedIndicator.classList.toggle('d-none', !silenced);
             }
         }
     }
@@ -388,19 +367,12 @@ class ReviewSilenceHandler {
     toggleButtonState(button, silenced) {
         button.classList.toggle('btn-primary', !silenced);
         button.classList.toggle('btn-secondary', silenced);
-
         const icon = button.querySelector('i');
         if (icon) {
             icon.classList.toggle('fa-eye-slash', !silenced);
             icon.classList.toggle('fa-eye', silenced);
         }
-
         button.setAttribute('data-silenced', silenced ? 'true' : 'false');
-    }
-
-    getCSRFToken() {
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
-        return csrfToken ? csrfToken.value : '';
     }
 }
 
@@ -419,23 +391,24 @@ class ProductActivationHandler {
                 const url = button.getAttribute("data-url");
                 if (!url) return;
 
-                fetch(url, {
-                    method: "POST",
-                    headers: {
-                        "X-CSRFToken": this.getCSRFToken(),
-                        "Content-Type": "application/json",
-                    },
-                })
+                // Include CSRF token explicitly
+                const headers = {
+                    "X-CSRFToken": this.getCSRFToken(),
+                    "Content-Type": "application/json",
+                };
+
+                fetch(url, { method: "POST", headers })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
                             this.updateButtonState(button, data.active);
                             this.updateBadges(button, data);
+                            showToast('success', `Successfully updated state!`);
                         } else {
-                            console.error("Failed to update state:", data.error);
+                            showToast('error', `Failed to update state: ${data.error}`);
                         }
                     })
-                    .catch(error => console.error("Request failed:", error));
+                    .catch(error => showToast('error', `Request failed: ${error}`));
             });
         });
     }
@@ -455,7 +428,6 @@ class ProductActivationHandler {
         const badgeContainer = cardElement.querySelector(".badge-container");
         if (!badgeContainer) return;
 
-        // Check if the button is for the product or the size
         const isProductButton = button.classList.contains("toggle-product-btn");
         const isSizeButton = button.classList.contains("toggle-variant-btn");
 
@@ -463,10 +435,9 @@ class ProductActivationHandler {
             // Update Product Badge
             const productBadge = badgeContainer.querySelector(`#badge-product-${cardElement.querySelector('.size').id.split('-')[2]}`);
             if (productBadge) {
-                const isActive = data.active; // Product active state from response
-                productBadge.classList.toggle("badge-active", isActive);
-                productBadge.classList.toggle("badge-inactive", !isActive);
-                productBadge.textContent = `Product: ${isActive ? "Active" : "Inactive"}`;
+                productBadge.classList.toggle("badge-active", data.active);
+                productBadge.classList.toggle("badge-inactive", !data.active);
+                productBadge.textContent = `Product: ${data.active ? "Active" : "Inactive"}`;
             }
         }
 
@@ -474,15 +445,12 @@ class ProductActivationHandler {
             // Update Size/Variant Badge
             const variantBadge = badgeContainer.querySelector(`#badge-size-${cardElement.querySelector('.size').id.split('-')[2]}`);
             if (variantBadge) {
-                variantBadge.classList.toggle("badge-active");
-                variantBadge.classList.toggle("badge-inactive");
-
-                const isActive = variantBadge.classList.contains("badge-active"); 
-                variantBadge.textContent = isActive ? "Size: Active" : "Size: Inactive";
+                variantBadge.classList.toggle("badge-active", data.active);
+                variantBadge.classList.toggle("badge-inactive", !data.active);
+                variantBadge.textContent = data.active ? "Size: Active" : "Size: Inactive";
             }
         }
     }
-
 
     getCSRFToken() {
         const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
@@ -493,7 +461,7 @@ class ProductActivationHandler {
 class SelectorHandler {
     constructor(type) {
         this.type = type; // 'category' or 'size'
-        this.lastAction = null; // track whether last action was 'add' or 'edit'
+        this.lastAction = null; // Track whether last action was 'add' or 'edit'
         this.init();
     }
 
@@ -504,8 +472,7 @@ class SelectorHandler {
         this.saveButton = document.querySelector(`#save_${this.type}`);
 
         if (this.addButton && this.editButton && this.cancelButton && this.saveButton) {
-            this.selectElement = document.querySelector(`.${this.type}`);
-            this.inputElement = document.querySelector(`.${this.type}-input`);
+            this.setElements();
 
             this.addButton.addEventListener("click", (event) => {
                 this.lastAction = "add";
@@ -519,18 +486,26 @@ class SelectorHandler {
                 this.lastAction = null;
                 this.toggleInput(event, "cancel");
             });
-            this.saveButton.addEventListener("click", (event) => {
+            this.saveButton.addEventListener("click", async (event) => {
                 this.toggleInput(event, "save");
-                this.handleSave();
+                await this.handleSave();
             });
         }
     }
 
+    setElements() {
+        this.selectElement = document.querySelector(`.${this.type}`);
+        this.inputElement = document.querySelector(`.${this.type}-input`);
+    }
+
     toggleInput(event, action) {
+        this.setElements();
         const clickedButton = event.target;
         const parentSelectorGroup = clickedButton.closest(".selector-group");
 
-        if (!this.selectElement || !this.inputElement) return;
+        if (!this.selectElement || !this.inputElement) {
+            return;
+        }
 
         if (action === "edit") {
             const selectedOption = this.selectElement.options[this.selectElement.selectedIndex];
@@ -540,87 +515,127 @@ class SelectorHandler {
             this.inputElement.placeholder = `New ${this.type}`;
         }
 
-        // Toggle UI elements
-        this.selectElement.classList.toggle("d-none", action !== "cancel" && action !== "save");
+        // Toggle visibility
+        this.selectElement.classList.toggle("d-none", action === "add" || action === "edit");
         this.inputElement.classList.toggle("d-none", action === "cancel" || action === "save");
-        parentSelectorGroup.querySelectorAll("button").forEach((button) => {
-            if (button.id === `edit_${this.type}` || button.id === `add_${this.type}`) {
-                // Show these if we are canceling or after saving
-                button.classList.toggle("d-none", !(action === "cancel" || action === "save"));
-            } else {
-                // Show cancel/save during editing/adding
-                button.classList.toggle("d-none", (action === "cancel" || action === "save"));
-            }
-        });
 
-        // Re-enable all disabled elements if cancel/save
-        if (action === "cancel" || action === "save") {
-            document.querySelectorAll(".product-card input, .product-card button, .product-card select, .product-card textarea").forEach((element) => {
-                element.disabled = false;
-            });
+        this.addButton.classList.toggle("d-none", action !== "cancel");
+        this.editButton.classList.toggle("d-none", action !== "cancel");
+        this.saveButton.classList.toggle("d-none", action === "cancel");
+        this.cancelButton.classList.toggle("d-none", action === "cancel");
+
+        if (action === "add" || action === "edit") {
+            this.disableOtherInputs(parentSelectorGroup);
         } else {
-            // Disable all elements outside current selector-group if editing/adding
-            document.querySelectorAll(".product-card input, .product-card button, .product-card select, .product-card textarea").forEach((element) => {
-                if (!element.closest(".selector-group") || element.closest(".selector-group") !== parentSelectorGroup) {
-                    element.disabled = true;
-                }
-            });
+            this.enableAllInputs();
         }
 
-        // Focus on input if visible
         if (!this.inputElement.classList.contains("d-none") && (action === "add" || action === "edit")) {
             this.inputElement.focus();
         }
+
+        if (action === "save") {
+            this.resetButtons();
+        }
     }
 
-    handleSave() {
+    resetButtons() {
+        this.addButton.classList.remove("d-none");
+        this.editButton.classList.remove("d-none");
+        this.saveButton.classList.add("d-none");
+        this.cancelButton.classList.add("d-none");
+
+        this.selectElement.classList.remove("d-none");
+        this.inputElement.classList.add("d-none");
+
+        this.enableAllInputs();
+    }
+
+    async handleSave() {
+        this.setElements();
         const newName = this.inputElement.value.trim();
-        if (!newName) return; // no empty submissions
-    
+        if (!newName) {
+            return;
+        }
+
         const selectedOption = this.selectElement.options[this.selectElement.selectedIndex];
         const currentValue = selectedOption ? selectedOption.value : null;
-    
-        // Prepare data to send to the server
+
+        const productId = this.selectElement.id.split('-').pop(); // Restore direct product_id extraction
+
         const payload = {
             action: this.lastAction,
             type: this.type,
             name: newName,
             current_value: currentValue,
-            product_id: this.selectElement.id.split('-').pop() // extract product ID from select ID if needed
+            product_id: productId || '',
         };
-    
-        // Send AJAX request to your Django endpoint
-        fetch(`/products/${this.type}/save/`, {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": this.getCSRFToken(),
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update UI: Add or update the option in the dropdown
-                if (this.lastAction === "add") {
-                    const newOption = document.createElement("option");
-                    newOption.value = data.id; // Use ID instead of slug
-                    newOption.textContent = data.name;
-                    this.selectElement.add(newOption);
-                    this.selectElement.value = data.id; // Ensure the new category is selected by default
-                } else if (this.lastAction === "edit") {
-                    if (selectedOption) {
-                        selectedOption.value = data.id; // Use ID instead of slug
-                        selectedOption.textContent = data.name;
-                    }
-                }
-                this.lastAction = null;
+
+        try {
+            const response = await customFetch(`/products/${this.type}/save/`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            if (response && response.success) {
+                this.updateUI(response);
+                showToast('success', `${this.type} saved successfully!`);
+
+                // Use `slug` for size, `id` for category in URL update
+                const identifier = this.type === 'size' ? response.slug : response.id;
+                this.updateURL(identifier);
+            } else if (response.error) {
+                showToast('error', `Error saving ${this.type}: ${response.error}`);
             } else {
-                console.error("Error saving:", data.error);
+                showToast('error', `Unexpected error while saving ${this.type}.`);
             }
-        })
-        .catch(error => console.error("Request failed:", error));
-    }    
+        } catch (error) {
+            const errorMessage = error.message || 'An unexpected error occurred.';
+            showToast('error', `Request failed: ${errorMessage}`);
+        }
+    }
+
+    updateUI(data) {
+        this.setElements();
+
+        if (this.lastAction === "add") {
+            const newOption = document.createElement("option");
+            newOption.value = this.type === 'size' ? data.slug : data.id; // Use slug for size, id for category
+            newOption.textContent = data.name;
+            this.selectElement.add(newOption);
+            this.selectElement.value = this.type === 'size' ? data.slug : data.id; // Automatically select the new option
+        } else if (this.lastAction === "edit") {
+            const selectedOption = this.selectElement.options[this.selectElement.selectedIndex];
+            if (selectedOption) {
+                selectedOption.value = this.type === 'size' ? data.slug : data.id; // Use slug for size, id for category
+                selectedOption.textContent = data.name;
+            }
+        }
+
+        this.resetButtons();
+        this.lastAction = null;
+    }
+
+    updateURL(identifier) {
+        const url = new URL(window.location.href);
+        url.searchParams.set(this.type, identifier); // Use slug for size, id for category
+        window.history.replaceState(null, "", url);
+    }
+
+    disableOtherInputs(parentSelectorGroup) {
+        document.querySelectorAll(".product-card input, .product-card button, .product-card select, .product-card textarea").forEach((element) => {
+            if (!element.closest(".selector-group") || element.closest(".selector-group") !== parentSelectorGroup) {
+                element.disabled = true;
+            }
+        });
+    }
+
+    enableAllInputs() {
+        document.querySelectorAll(".product-card input, .product-card button, .product-card select, .product-card textarea").forEach((element) => {
+            element.disabled = false;
+        });
+    }
 
     getCSRFToken() {
         const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
@@ -644,7 +659,7 @@ class ProductSaveHandler {
         }
         
         if (!this.previewElement) {
-            console.error(`Preview element with ID not found.`);
+            showToast('error', `Preview element with ID ${dynamicPart} not found.`)
         }
     }
 
@@ -653,7 +668,7 @@ class ProductSaveHandler {
         this.saveButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const productId = button.getAttribute('data-product-id');
-                const variantId = button.getAttribute('data-variant-id');
+                const variantId = button.getAttribute('data-variant-id'); // Ensure variantId is retrieved correctly
                 const url = button.getAttribute('data-url');
                 this.saveProductAndVariant(productId, variantId, url);
             });
@@ -667,11 +682,10 @@ class ProductSaveHandler {
             const reader = new FileReader();
     
             reader.onload = (e) => {
-                // Ensure the previewElement exists before setting the src
                 if (this.previewElement) {
                     this.previewElement.src = e.target.result; // Update the image preview
                 } else {
-                    console.error("Preview element not found.");
+                    showToast('error', 'Preview element not found.')
                 }
             };
     
@@ -703,15 +717,16 @@ class ProductSaveHandler {
             const size = sizeElement ? sizeElement.value : null;
             const price = document.querySelector('#id_price')?.value || null;
             const stock = document.querySelector('#id_stock')?.value || null;
+            const variantId = sizeElement ? sizeElement.getAttribute('data-variant-id') : null;
 
             if (!size || !price || !stock) {
-                console.error('Variant data is incomplete:', { size, price, stock });
+                showToast('warning', `Size data is incomplete: { size, price, stock }`)
                 return null;
             }
 
-            return { size, price, stock };
+            return { size, price, stock, variantId }; // Include variantId in the payload
         }
-        console.error('Size selector not found.');
+        showToast('error', 'Size selector not found.')
         return null;
     }
 
@@ -719,82 +734,55 @@ class ProductSaveHandler {
         const productData = this.getProductData();
         const variantData = this.getVariantData();
     
-        // Check product and variant data
         if (!productData) {
-            alert('Product data is incomplete. Please fill in all fields.');
+            showToast('warning', `Product data is incomplete. Please fill in all fields.`);
             return;
         }
-
+    
         if (!variantData) {
-            alert('Variant data is incomplete. Please fill in all fields.');
+            showToast('warning', `Size data is incomplete. Please fill in all fields.`);
             return;
         }
-
+    
         const formData = new FormData();
         if (productId) formData.append('product_id', productId);
-        if (variantId) formData.append('variant_id', variantId);
+        if (variantId || variantData.variantId) {
+            formData.append('variant_id', variantId || variantData.variantId); // Use the variantId for updates
+        }
         formData.append('product', JSON.stringify(productData));
-        formData.append('variant', JSON.stringify(variantData));
+        formData.append('variant', JSON.stringify({
+            size: variantData.size,
+            price: variantData.price,
+            stock: variantData.stock,
+            id: variantData.variantId || null, // Explicitly include the ID for updates
+        }));
     
-        // Append image file if it exists
         if (this.imageFile) {
             formData.append('image', this.imageFile, `${productData.name}.jpg`);
-        }
-    
-        const isCreateOperation = !productId;
-    
-        fetch(url, {
+        }    
+        customFetch(url, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': this.getCSRFToken(),
             },
             body: formData,
         })
-            .then(response => {
-                if (!response.ok) {
-                    // If response is not OK, handle error
-                    return response.text().then(text => {
-                        console.error('Server returned an error:', response.status, text);
-                        throw new Error(`Server Error: ${response.status}`);
-                    });
-                }
-    
-                // Attempt to parse the response as JSON
-                return response.text().then(text => {
-                    try {
-                        return JSON.parse(text);
-                    } catch (error) {
-                        console.error('Failed to parse JSON response:', text);
-                        throw new Error('Invalid JSON received from the server.');
-                    }
-                });
-            })
             .then(data => {
-                if (!data.success) {
-                    console.error('Save failed:', data.errors || data.error);
-                    alert('Save failed. Check console for details.');
-                } else {
+                if (data && data.success) {
+                    showToast('success', `Product and size saved successfully!`);
                     if (data.redirect_url) {
-                        // Redirect if slug changes
-                        window.location.href = data.redirect_url;
-                    } else if (isCreateOperation) {
-                        // Handle product creation response
-                        if (data.product_id) {
-                            alert('Product created successfully! Redirecting to edit page...');
-                            window.location.href = `/products/${data.product_id}/edit/`;
-                        } else {
-                            console.error('Creation failed: No product ID returned.');
-                        }
-                    } else {
-                        // Handle existing product updates
-                        alert('Product and Variant saved successfully!');
+                        setTimeout(() => {
+                            window.location.href = data.redirect_url;
+                        }, 2000); // Delay redirect to allow toast display
                     }
+                } else {
+                    showToast('error', `Save failed: ${data.errors || data.error}`);
                 }
             })
-            
-            .catch(error => console.error('Request failed:', error));
-    }
-    
+            .catch(error => {
+                showToast('error', `Request failed: ${error}`);
+            });
+    }    
 }
 
 // Initialize handlers on DOM load

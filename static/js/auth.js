@@ -8,7 +8,7 @@ function handleSidebarToggle() {
 
     // Guard clause to ensure the elements exist
     if (!sidebar || !toggleBtn || !mainContent) {
-        console.error("Sidebar, toggle button, or main content not found.");
+        showToast('error', "Sidebar, toggle button, or main content not found.")
         return;
     }
 
@@ -35,7 +35,7 @@ function handleScreenResize() {
 
     // Guard clause to ensure the elements exist
     if (!sidebar || !toggleBtn || !mainContent) {
-        console.error("Sidebar, toggle button, or main content not found.");
+        showToast('error', "Sidebar, toggle button, or main content not found.")
         return;
     }
 
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Guard clause to ensure the elements exist
     if (!toggleBtn || !sidebar || !mainContent) {
-        console.error("Sidebar, toggle button, or main content not found.");
+        showToast('error', "Sidebar, toggle button, or main content not found.")
         return;
     }
 

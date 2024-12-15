@@ -147,10 +147,10 @@ function setupCookieConsent() {
                     banner.style.display = 'none';
                     loadDeferredImages(); // Load images after consent
                 } else {
-                    alert('Failed to save cookie preference.');
+                    showToast('warning', `Failed to save cookie preference, please refresh the page and try again`)
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => showToast('error', `${error}`));
     });
 }
 
@@ -166,6 +166,110 @@ function loadDeferredImages() {
     });
 }
 
+async function fetchToastTemplate(message, type) {
+    const url = "/render-toast/";
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({ message, type })
+        });
+        if (!response.ok) {
+            throw new Error("Failed to load toast template.");
+        }
+        return await response.text();
+    } catch (error) {
+        console.error("Error fetching toast template:", error);
+        return null;
+    }
+}
+
+async function showToast(type, message) {
+    const toastContainer = document.querySelector('.toast-container');
+
+    if (!toastContainer) {
+        console.error("Toast container not found.");
+        return;
+    }
+    
+    // Fetch the toast HTML
+    const toastResponse = await fetchToastTemplate(message, type);
+
+    if (!toastResponse) {
+        console.error("Failed to fetch toast response.");
+        return;
+    }
+
+    // Parse the JSON response to extract the HTML
+    let toastHTML;
+    try {
+        const parsedResponse = JSON.parse(toastResponse); // Parse JSON
+        toastHTML = parsedResponse.html; // Extract the HTML content
+    } catch (error) {
+        console.error("Error parsing toast response:", error);
+        return;
+    }
+
+    const toastWrapper = document.createElement('div');
+    toastWrapper.innerHTML = toastHTML.trim();
+
+    const toastElement = toastWrapper.firstElementChild;
+
+    if (!toastElement) {
+        console.error("Failed to create a valid toast element.");
+        return;
+    }
+
+    toastContainer.appendChild(toastElement);
+
+    const toast = new bootstrap.Toast(toastElement);
+
+    toast.show();
+}
+
+async function handleApiResponse(response) {
+    let json;
+    try {
+        // Parse JSON response
+        json = await response.json();
+    } catch (error) {
+        showToast("error", `An unexpected error occurred: ${error}`);
+        return null;
+    }
+
+    if (!response.ok) {
+        // Handle HTTP errors
+        const errorMessage = json.error || "An unexpected error occurred.";
+        showToast(json.type || "error", errorMessage);
+        return null;
+    }
+
+    // If success, return the parsed JSON
+    return json;
+}
+
+async function customFetch(url, options = {}) {
+    try {
+        const response = await fetch(url, options);
+        const data = await handleApiResponse(response);
+        return data;
+    } catch (error) {
+        showToast("error", `Failed to connect to the server: ${error}`);
+        return null;
+    }
+}
+
+function initializeToasts() {
+    const toastElements = document.querySelectorAll('.toast');
+    toastElements.forEach((toastElement) => {
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+    });
+}
+
 // Initialize all event listeners once DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function () {
     setupMobileSearchToggle();
@@ -175,4 +279,5 @@ document.addEventListener('DOMContentLoaded', function () {
     updateCategoryButton();
     setupOutOfStockToggle();
     setupCookieConsent();
+    initializeToasts();
 });

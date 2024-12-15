@@ -370,14 +370,14 @@ class ProductDeactivateView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def post(self, request, pk):
         if not request.user.is_superuser:
-            return JsonResponse({"success": False, "error": "Unauthorized"}, status=403)
+            return JsonResponse({"success": False, "type": "error", "error": "Unauthorized"}, status=403)
         try:
             product = Product.objects.get(pk=pk)
             product.active = not product.active  # Toggle the active state
             product.save()
             return JsonResponse({"success": True, "active": product.active})
         except Product.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Product not found"}, status=404)
+            return JsonResponse({"success": False, "type": "error", "error": "Product not found"}, status=404)
 
 
 class VariantDeactivateView(View):
@@ -386,14 +386,14 @@ class VariantDeactivateView(View):
     
     def post(self, request, pk):
         if not request.user.is_superuser:
-            return JsonResponse({"success": False, "error": "Unauthorized"}, status=403)
+            return JsonResponse({"success": False, "type": "error", "error": "Unauthorized"}, status=403)
         try:
             variant = ProductVariant.objects.get(pk=pk)
             variant.active = not variant.active  # Toggle the active state
             variant.save()
             return JsonResponse({"success": True, "active": variant.active})
         except ProductVariant.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Variant not found"}, status=404)
+            return JsonResponse({"success": False, "type": "error", "error": "Size not found"}, status=404)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -410,7 +410,7 @@ class SaveSelector(View):
         elif selector_type == "size":
             return self.handle_size(action, name, current_value, product_id)
         else:
-            return JsonResponse({"success": False, "error": "Invalid selector type."}, status=400)
+            return JsonResponse({"success": False, "type": "error", "error": "Invalid selector type."}, status=400)
 
     def handle_category(self, action, name, current_value):
         if action == "add":
@@ -435,14 +435,14 @@ class SaveSelector(View):
                     "id": category.id  # Use ID instead of slug
                 })
             except Category.DoesNotExist:
-                return JsonResponse({"success": False, "error": "Category not found."}, status=404)
+                return JsonResponse({"success": False, "type": "error", "error": "Category not found."}, status=404)
 
 
-        return JsonResponse({"success": False, "error": "Invalid action or missing data."}, status=400)
+        return JsonResponse({"success": False, "type": "error", "error": "Invalid action or missing data."}, status=400)
 
     def handle_size(self, action, name, current_value, product_id):
         if not product_id:
-            return JsonResponse({"success": False, "error": "Missing product_id."}, status=400)
+            return JsonResponse({"success": False, "type": "error", "error": "Missing product_id."}, status=400)
         
         product = get_object_or_404(Product, pk=product_id)
 
@@ -458,7 +458,8 @@ class SaveSelector(View):
             return JsonResponse({
                 "success": True,
                 "name": variant.size,
-                "slug": variant.size
+                "slug": variant.size,
+                "id": variant.id
             })
 
         elif action == "edit" and current_value:
@@ -470,19 +471,20 @@ class SaveSelector(View):
                 return JsonResponse({
                     "success": True,
                     "name": variant.size,
-                    "slug": variant.size
+                    "slug": variant.size,
+                    "id": variant.id
                 })
             except ProductVariant.DoesNotExist:
-                return JsonResponse({"success": False, "error": "Variant not found."}, status=404)
+                return JsonResponse({"success": False, "type": "error", "error": "Variant not found."}, status=404)
 
-        return JsonResponse({"success": False, "error": "Invalid action or missing data."}, status=400)
+        return JsonResponse({"success": False, "type": "error", "error": "Invalid action or missing data."}, status=400)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ReviewSilenceToggler(View):
     def post(self, request, review_id):
         if not request.user.is_superuser:
-            return JsonResponse({"success": False, "error": "Unauthorized"}, status=403)
+            return JsonResponse({"success": False, "type": "error", "error": "Unauthorized"}, status=403)
 
         try:
             review = ProductReview.objects.get(id=review_id)
@@ -490,7 +492,7 @@ class ReviewSilenceToggler(View):
             review.save()
             return JsonResponse({"success": True, "silenced": review.silenced})
         except ProductReview.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Review not found"}, status=404)
+            return JsonResponse({"success": False, "type": "error", "error": "Review not found"}, status=404)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -532,10 +534,10 @@ class ProductSaveView(View):
                     print(f"Product saved successfully with category: {product.category}")
                 except Exception as e:
                     print(f"Error saving product: {e}")
-                    return JsonResponse({"success": False, "error": str(e)}, status=500)
+                    return JsonResponse({"success": False, "type": "error", "error": str(e)}, status=500)
             else:
                 print(f"Form errors: {product_form.errors}")  # Debugging form errors
-                return JsonResponse({"success": False, "errors": product_form.errors}, status=400)
+                return JsonResponse({"success": False, "type": "error", "errors": product_form.errors}, status=400)
 
             # Handle Image Upload
             if 'image' in request.FILES:
@@ -578,7 +580,7 @@ class ProductSaveView(View):
                     print(f"Variant saved successfully: {variant}")  # Debugging variant save
                 else:
                     print(f"Variant form errors: {variant_form.errors}")  # Debugging variant form errors
-                    return JsonResponse({"success": False, "errors": variant_form.errors}, status=400)
+                    return JsonResponse({"success": False, "type": "error", "errors": variant_form.errors}, status=400)
                 
                 # Prepare the redirect if slug changed
                 new_slug = product.slug
@@ -590,7 +592,7 @@ class ProductSaveView(View):
             
             except ProductVariant.DoesNotExist:
                 print(f"Variant not found: ID {variant_id}")  # Debugging missing variant
-                return JsonResponse({"success": False, "error": "Variant not found."}, status=404)
+                return JsonResponse({"success": False, "type": "error", "error": "Variant not found."}, status=404)
 
             return JsonResponse({
                 "success": True,
@@ -603,13 +605,13 @@ class ProductSaveView(View):
 
         except Product.DoesNotExist:
             print(f"Product not found: ID {product_id}")  # Debugging missing product
-            return JsonResponse({"success": False, "error": "Product not found."}, status=404)
+            return JsonResponse({"success": False, "type": "error", "error": "Product not found."}, status=404)
         except Category.DoesNotExist:
             print(f"Category not found: ID {category_id}")  # Debugging missing category
-            return JsonResponse({"success": False, "error": "Category not found."}, status=404)
+            return JsonResponse({"success": False, "type": "error", "error": "Category not found."}, status=404)
         except Exception as e:
             print(f"Unexpected error: {e}")  # Debugging unexpected errors
-            return JsonResponse({"success": False, "error": str(e)}, status=500)
+            return JsonResponse({"success": False, "type": "error", "error": str(e)}, status=500)
 
 
 class ProductCreateView(CreateView):
@@ -639,7 +641,8 @@ class ProductCreateView(CreateView):
                 form = self.form_class(product_data)
             except json.JSONDecodeError:
                 return JsonResponse({
-                    "success": False,
+                    "success": False, 
+                    "type": "error",
                     "error": "Invalid JSON payload."
                 }, status=400)
         else:
@@ -656,7 +659,8 @@ class ProductCreateView(CreateView):
             })
         else:
             return JsonResponse({
-                "success": False,
+                "success": False, 
+                "type": "error",
                 "errors": form.errors,
             }, status=400)
 

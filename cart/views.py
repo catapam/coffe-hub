@@ -15,7 +15,7 @@ def add_to_cart(request, item_id):
     """Add a quantity of the specified product to the shopping cart via AJAX."""
     
     if request.method != "POST":
-        return JsonResponse({"success": False, "error": "Invalid request method."}, status=400)
+        return JsonResponse({"success": False, "type": "error", "error": "Invalid request method."}, status=400)
     
     try:
         data = json.loads(request.body)
@@ -24,7 +24,7 @@ def add_to_cart(request, item_id):
         
         # Validate size and quantity
         if not size or quantity <= 0:
-            return JsonResponse({"success": False, "error": "Invalid size or quantity."}, status=400)
+            return JsonResponse({"success": False, "type": "error", "error": "Invalid size or quantity."}, status=400)
         
         # Get cart or initialize if it doesn't exist
         cart = request.session.get('cart', {})
@@ -69,10 +69,10 @@ def add_to_cart(request, item_id):
                 cart_entry.save() 
 
         # Respond with a success message
-        return JsonResponse({"success": True, "message": "Item added to cart successfully!"})
+        return JsonResponse({"success": True, "type": "success", "message": "Item added to cart successfully!"})
     
     except ValueError as e:
-        return JsonResponse({"success": False, "error": "Invalid input: quantity must be a number."}, status=400)
+        return JsonResponse({"success": False, "type": "error", "error": "Invalid input: quantity must be a number."}, status=400)
     except Exception as e:
-        return JsonResponse({"success": False, "error": str(e)}, status=500)
+        return JsonResponse({"success": False, "type": "error", "error": str(e)}, status=500)
 

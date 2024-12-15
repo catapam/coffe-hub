@@ -923,6 +923,21 @@ option[data-stock="0"] {
     background-color: var(--green-accent);
 }
 
+/* Toasts */
+.toast {
+    border-radius: var(--bs-border-radius);
+    background-color: var(--bg-darker);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.toast-container{
+    top: 60px;
+}
+
+.toast-header, .toast-body {
+    margin: 0;
+}
+
 /* Layout shift fix */
 @media (min-width: 768px) {
     #div_id_stock{

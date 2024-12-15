@@ -56,6 +56,19 @@
             <!-- Additional content here -->
             {% endblock content %}
         
+        <!-- Toasts -->
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+          <div class="toast-container position-fixed end-0 p-3">
+            {% if messages %}
+              {% for message in messages %}
+                {% with message.tags|default:"info" as type %}
+                  {% include 'includes/toasts.html' with message=message type=type %}
+                {% endwith %}
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+
         <!-- Cookie consent -->
         {% include 'includes/cookie-consent.html' %}
 
