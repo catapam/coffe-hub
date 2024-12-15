@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
 import json
+from django.http import JsonResponse
+from product.models import Product
+from .models import CartEntry
 
-# Create your views here.
 
 def view_cart(request):
     """ A view that renders the cart contents page """
 
     return render(request, 'cart/cart.html')
 
-
-from django.http import JsonResponse
 
 def add_to_cart(request, item_id): 
     """Add a quantity of the specified product to the shopping cart via AJAX."""
@@ -52,7 +52,21 @@ def add_to_cart(request, item_id):
         request.session.modified = True  # Ensure session is saved
 
         # Log the cart for debugging
-        print(request.session['cart']) 
+        print(request.session['cart'])
+
+        # If the user is logged in, save to database
+        if request.user.is_authenticated:
+            product = Product.objects.get(pk=item_id)
+            cart_entry, created = CartEntry.objects.get_or_create(
+                user=request.user,
+                product=product,
+                size=size,
+                defaults={'quantity': quantity}
+            )
+            if not created:
+                # Update quantity if entry already exists
+                cart_entry.quantity += quantity
+                cart_entry.save() 
 
         # Respond with a success message
         return JsonResponse({"success": True, "message": "Item added to cart successfully!"})

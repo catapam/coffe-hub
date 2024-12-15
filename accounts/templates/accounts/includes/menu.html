@@ -43,10 +43,10 @@
                 </a>
             </li>
 
-            {% if request.user.is_superuser %}
+            {% if request.user.is_superuser or request.user.is_staff %}
             <li>
                 <a href="/admin/" target="_blank" class="menu-item admin-access nav-link" aria-label="Admin">
-                    <span class="menu-text">Admin</span>
+                    <span class="menu-text">{% if request.user.is_superuser %}Admin{% else %}Accounts{% endif %}</span>
                     <i class="fa-solid fa-unlock" aria-hidden="true"></i>
                 </a>
             </li>

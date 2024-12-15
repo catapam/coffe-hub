@@ -1,28 +1,166 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin
 from allauth.account.models import EmailAddress
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.html import format_html
+from django.contrib.auth import get_user_model
+from cart.models import CartEntry
+
+
+User = get_user_model()
 
 
 class EmailAddressInline(admin.TabularInline):
     """
-    Inline for showing email addresses in the User admin page.
+    Inline for showing and managing email addresses in the User admin page.
     """
     model = EmailAddress
     extra = 1  # Number of extra blank fields to display for adding new records
     fields = ('email', 'verified', 'primary')  # Fields to display
-    readonly_fields = ('verified', 'primary')  # Make fields read-only if necessary
+    readonly_fields = ('forgot_password',)  # Add the custom method here
+
+    def forgot_password(self, obj):
+        if obj:
+            # Generate URL for sending the forgot password email
+            reset_url = reverse('account_reset_password') + f'?email={obj.email}'
+            return format_html(
+                '<a class="button" href="{}">Send Forgot Password Email</a>',
+                reset_url
+            )
+        return "Save email to enable"
+    
+    forgot_password.short_description = "Forgot Password"
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_staff or request.user.is_superuser
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_staff or request.user.is_superuser
+
+
+class CartEntryInline(admin.TabularInline):
+    """
+    Inline for displaying CartEntry objects in the User admin page.
+    """
+    model = CartEntry
+    extra = 1  # Number of extra blank fields for adding new entries
+    fields = ('product', 'size', 'quantity')  # Fields to display in the inline
+    readonly_fields = ('product', 'size',)
+    can_delete = True  # Allow deletion of entries
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_staff or request.user.is_superuser
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_staff or request.user.is_superuser
 
 
 class CustomUserAdmin(UserAdmin):
     """
-    Custom User admin to include EmailAddress inline.
+    Custom User admin to include EmailAddress and CartEntry inlines.
     """
-    inlines = [EmailAddressInline]
+    readonly_fields = ('last_login', 'date_joined')
+    inlines = [EmailAddressInline, CartEntryInline]
+
+    def get_form(self, request, obj=None, **kwargs):
+        """
+        Customize the form fields for staff users by hiding sensitive fields.
+        """
+        return super().get_form(request, obj, **kwargs)
+
+    def get_queryset(self, request):
+        """
+        Limit the users displayed in the admin list to non-staff users for staff.
+        Superusers see all users.
+        """
+        qs = super().get_queryset(request)
+        if request.user.is_staff and not request.user.is_superuser:
+            # Restrict staff users to only see non-staff users
+            return qs.filter(is_staff=False)
+        return qs
+
+    def get_fieldsets(self, request, obj=None):
+        """
+        Dynamically customize fieldsets to hide the Permissions section for non-superusers.
+        """
+        # Retrieve the default fieldsets
+        fieldsets = super().get_fieldsets(request, obj)
+
+        if not request.user.is_superuser:
+            # Exclude the "Permissions" section dynamically
+            fieldsets = [
+                (name, {
+                    'fields': options['fields'],  # Ensure 'fields' is defined correctly
+                    'classes': options.get('classes', [])
+                }) for name, options in fieldsets
+                if name != 'Permissions'
+            ]
+
+        return fieldsets
+
+    def has_permission(self, request):
+        """
+        Allow access to superusers and staff users only.
+        """
+        return request.user.is_superuser or request.user.is_staff
+
+    def has_module_permission(self, request):
+        """
+        Restrict admin access for staff users to only the User model and ContactMessage.
+        """
+        if request.user.is_staff and not request.user.is_superuser:
+            # Allow access to User and ContactMessage models for staff
+            return self.model in [User]
+        return super().has_module_permission(request)
+
+    def has_view_permission(self, request, obj=None):
+        """
+        Allow staff users to view Users while restricting access to others.
+        """
+        if request.user.is_staff and not request.user.is_superuser:
+            return True
+        return super().has_view_permission(request, obj)
+
+    def has_change_permission(self, request, obj=None):
+        """
+        Allow staff users to edit Users while restricting access to others.
+        """
+        if request.user.is_staff and not request.user.is_superuser:
+            # Prevent staff from editing other staff users or superusers
+            if obj and obj.is_staff:
+                return False
+            return True
+        return super().has_change_permission(request, obj)
+
+    def has_add_permission(self, request):
+        """
+        Allow staff users to add Users while restricting access to others.
+        """
+        if request.user.is_staff and not request.user.is_superuser:
+            return True
+        return super().has_add_permission(request)
+
+    def get_inlines(self, request, obj=None):
+        """
+        Dynamically include inlines based on user permissions.
+        """
+        if not request.user.is_superuser:
+            # Allow staff users to see both inlines
+            return [EmailAddressInline, CartEntryInline]
+        return super().get_inlines(request, obj)
     
+    def login(self, request, extra_context=None):
+        # Redirect non-superusers to the account user page
+        if not request.user.is_superuser or not request.user.is_staff:
+            return redirect(reverse('account_user'))  # Replace 'account_user' with your actual view name
+        return super().login(request, extra_context)
+
 
 # Unregister the default User admin
 admin.site.unregister(User)
+admin.site.unregister(Group)
 
 # Register the custom User admin
 admin.site.register(User, CustomUserAdmin)

@@ -67,7 +67,7 @@ class LoginRequiredMiddleware(MiddlewareMixin):
                     f'{reverse("account_login")}?{REDIRECT_FIELD_NAME}='
                     f'{request.get_full_path()}'
                 )
-            elif not request.user.is_superuser:
+            elif not (request.user.is_superuser or request.user.is_staff):
                 # Redirect non-superusers to custom 401 page
                 return redirect('custom_401')
 
