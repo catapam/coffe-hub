@@ -15,8 +15,8 @@ class CartEntry(models.Model):
         on_delete=models.CASCADE,
         related_name="cart_entries"
     )
-    size = models.CharField(max_length=50)  # Size field to store product variant size
-    quantity = models.PositiveIntegerField(default=1)
+    size = models.CharField(max_length=10, blank=False, null=False)  # Size field to store product variant size
+    quantity = models.PositiveIntegerField(default=1, blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

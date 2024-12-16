@@ -220,7 +220,7 @@ class ProductCardHandler {
 class StarRatingHandler {
     constructor(starContainerSelector, ratingInputSelector) {
         this.starContainer = document.querySelector(starContainerSelector);
-        this.ratingInput = document.getElementById(ratingInputSelector);
+        this.ratingInput = document.querySelector(ratingInputSelector);
         
         if (this.starContainer && this.ratingInput) {
             this.init();
@@ -238,10 +238,10 @@ class StarRatingHandler {
 
     handleClick(star) {
         const chosenValue = parseInt(star.getAttribute('data-value'), 10);
-        let currentRating = parseInt(this.ratingInput.value || '0', 10);
-
+        let currentRating = parseInt(this.ratingInput?.value || '0', 10);
+ 
         if (currentRating === chosenValue && currentRating > 0) {
-            currentRating -= 1;
+            currentRating -= 1;  // Allow deselecting the star
         } else {
             currentRating = chosenValue;
         }
@@ -275,7 +275,7 @@ class StarRatingHandler {
     }
 }
 
-class ReviewHandler {
+class ReviewFilterHandler {
     constructor(filterSelector, reviewSelector, noResultsMessageSelector) {
         this.filters = document.querySelectorAll(filterSelector);
         this.reviews = document.querySelectorAll(reviewSelector);
@@ -790,8 +790,8 @@ class ProductSaveHandler {
 // Initialize handlers on DOM load
 document.addEventListener('DOMContentLoaded', () => {
     new ProductCardHandler();
-    new StarRatingHandler('#star-rating', 'id_rating');
-    new ReviewHandler('.filter', '.review-container', '#no-reviews-message');
+    new StarRatingHandler('#star-rating', '#id_rating');
+    new ReviewFilterHandler('.filter', '.review-container', '#no-reviews-message');
     new ReviewSilenceHandler('.toggle-silence-btn', '.review-container');
     new ProductActivationHandler('.toggle-product-btn');
     new ProductActivationHandler('.toggle-variant-btn');

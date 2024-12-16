@@ -808,6 +808,12 @@ option[data-stock="0"] {
     max-width: 50px;
 }
 
+.btn-review{
+    margin-top: 26px;
+    height: calc(100% - 60px);
+    width: 100%;
+}
+
 .bg-primary{
     background-color: var(--text-primary-color) !important;
     color: var(--bg-darker) !important;

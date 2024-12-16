@@ -578,6 +578,7 @@ class ProductSaveView(View):
             return JsonResponse({"success": False, "error": str(e)}, status=500)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ProductCreateView(CreateView):
     model = Product
     form_class = ProductEditForm

@@ -12,8 +12,8 @@ from django.core.validators import MinValueValidator
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=20, unique=True, blank=False)
-    slug = models.SlugField(unique=True, blank=False, editable=False)
+    name = models.CharField(max_length=20, unique=True, blank=False, null=False)
+    slug = models.SlugField(unique=True, blank=False, null=False, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -32,13 +32,13 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=35,unique=True, blank=False)
-    slug = models.SlugField(unique=True, blank=False, editable=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', blank=False)
+    name = models.CharField(max_length=35,unique=True, blank=False, null=False)
+    slug = models.SlugField(unique=True, blank=False, null=False, editable=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', blank=False, null=False)
     description = models.TextField(blank=True, null=True, max_length=70)
     rating = models.FloatField(default=0, help_text="Average rating (0-5).")
     image_path = CloudinaryField('image', blank=True, null=True)
-    active = models.BooleanField(default=True, help_text="Set to False to deactivate the product.")
+    active = models.BooleanField(default=True, help_text="Set to False to deactivate the product.", blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     cloudinary_version = models.CharField(max_length=20, blank=True, null=True)  # Stores the version
@@ -128,11 +128,11 @@ class Product(models.Model):
 
 
 class ProductVariant(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants', blank=False)
-    size = models.CharField(max_length=10, blank=False)
-    price = models.DecimalField(max_digits=10, decimal_places=2, blank=False, validators=[MinValueValidator(0)])
-    stock = models.PositiveIntegerField(default=0)
-    active = models.BooleanField(default=True, help_text="Set to False to deactivate the size.")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants', blank=False, null=False)
+    size = models.CharField(max_length=10, blank=False, null=False)
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False, validators=[MinValueValidator(0)])
+    stock = models.PositiveIntegerField(default=0, blank=False, null=False)
+    active = models.BooleanField(default=True, help_text="Set to False to deactivate the size.", blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -144,11 +144,11 @@ class ProductVariant(models.Model):
 
 
 class ProductReview(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews', blank=False)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews', blank=False, null=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
     )
-    rating = models.IntegerField(help_text="Integer rating 0-5", blank=False)
+    rating = models.IntegerField(help_text="Integer rating 0-5", blank=False, null=False)
     comment = models.CharField(max_length=100, blank=True, help_text="Short review (max 100 chars)")
     silenced = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
