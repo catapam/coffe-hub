@@ -47,7 +47,8 @@
                                             type="number" 
                                             class="form-control d-inline-block w-auto cart-quantity" 
                                             value="{{ item.quantity }}" 
-                                            min="1" 
+                                            min="1"
+                                            max="{{ item.stock }}"
                                             data-item-id="{{ item.id }}" 
                                             data-size="{{ item.size }}" 
                                             data-initial-quantity="{{ item.quantity }}">

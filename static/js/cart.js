@@ -25,7 +25,6 @@ class RemoveItemHandler {
         const size = button.getAttribute('data-size');
 
         if (!url || !size) {
-            console.error('Invalid item data:', { url, size });
             showToast('error', 'Invalid item data. Please try again or refresh the page.');
             return;
         }
@@ -45,11 +44,9 @@ class RemoveItemHandler {
                 showToast('success', data.message || 'Item removed successfully.');
                 setTimeout(() => location.reload(), 500);
             } else {
-                console.error('Server error on remove:', data);
                 showToast('error', data.error || 'Failed to remove the item.');
             }
         } catch (error) {
-            console.error('Error during remove request:', error);
             showToast('error', 'An unexpected error occurred.');
         }
     }
@@ -82,7 +79,6 @@ class UpdateItemHandler {
         );
 
         if (!quantityInput) {
-            console.error('Missing quantity input for item:', { itemId, size });
             showToast('error', 'Unable to find the quantity input field. Please try again.');
             return;
         }
@@ -90,7 +86,6 @@ class UpdateItemHandler {
         const quantity = parseInt(quantityInput.value, 10);
 
         if (!url || isNaN(quantity) || quantity <= 0) {
-            console.error('Invalid update data:', { url, itemId, size, quantity });
             showToast('error', 'Invalid item data. Please ensure the quantity is correct.');
             return;
         }
@@ -110,11 +105,9 @@ class UpdateItemHandler {
                 showToast('success', data.message || 'Cart updated successfully.');
                 setTimeout(() => location.reload(), 500);
             } else {
-                console.error('Server error on update:', data);
                 showToast('error', data.error || 'Failed to update the cart.');
             }
         } catch (error) {
-            console.error('Error during update request:', error);
             showToast('error', 'An unexpected error occurred.');
         }
     }
