@@ -580,7 +580,7 @@ class SelectorHandler {
 
             if (response && response.success) {
                 this.updateUI(response);
-                showToast('success', `${this.type} saved successfully!`);
+                showToast('success', `${this.type.charAt(0).toUpperCase() + this.type.slice(1)} saved successfully!`);
 
                 // Use `slug` for size, `id` for category in URL update
                 const identifier = this.type === 'size' ? response.slug : response.id;
@@ -768,20 +768,22 @@ class ProductSaveHandler {
             body: formData,
         })
             .then(data => {
-                if (data && data.success) {
-                    showToast('success', `Product and size saved successfully!`);
+                if (data.success) {
+                    showToast('success', 'Product saved successfully.');
                     if (data.redirect_url) {
-                        setTimeout(() => {
-                            window.location.href = data.redirect_url;
-                        }, 2000); // Delay redirect to allow toast display
+                        setTimeout(() => window.location.href = data.redirect_url, 2000);
                     }
-                } else {
-                    showToast('error', `Save failed: ${data.errors || data.error}`);
+                } else if (data.errors) {
+                    Object.entries(data.errors).forEach(([field, errors]) => {
+                        errors.forEach(error => showToast('error', `${field}: ${error}`));
+                    });
+                } else if (data.error) {
+                    showToast('error', data.error);
                 }
             })
             .catch(error => {
-                showToast('error', `Request failed: ${error}`);
-            });
+                showToast('error', `Request failed: ${error.message}`);
+            });    
     }    
 }
 

@@ -8,6 +8,7 @@ from cloudinary.models import CloudinaryField
 from cloudinary.api import resource
 from cloudinary.exceptions import NotFound
 from cloudinary.utils import cloudinary_url
+from django.core.validators import MinValueValidator
 
 
 class Category(models.Model):
@@ -129,7 +130,7 @@ class Product(models.Model):
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants', blank=False)
     size = models.CharField(max_length=10, blank=False)
-    price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=False, validators=[MinValueValidator(0)])
     stock = models.PositiveIntegerField(default=0)
     active = models.BooleanField(default=True, help_text="Set to False to deactivate the size.")
     created_at = models.DateTimeField(auto_now_add=True)

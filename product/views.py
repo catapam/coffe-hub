@@ -499,119 +499,83 @@ class ReviewSilenceToggler(View):
 class ProductSaveView(View):
     def post(self, request, *args, **kwargs):
         product_id = request.POST.get('product_id')
-        
         variant_id = request.POST.get('variant_id')
 
         try:
-            # Fetch the Product
+            # Fetch the product instance
             product = Product.objects.get(id=product_id)
-            old_slug = product.slug 
             product_data = json.loads(request.POST.get('product', '{}'))
-
-            # Resolve the category using the slug passed from the front-end
             category_id = product_data.get('category')
+
+            # Ensure the category exists
             category = get_object_or_404(Category, id=category_id)
 
-            # Ensure the category ID is correctly included in product_data
-            product_data['category'] = category.id
-
-            # Bind the form with the updated product data
+            # Bind data to the product form
             product_form = ProductEditForm(product_data, instance=product)
 
-            # Validate and save the form
-            if product_form.is_valid():
-                # Save the form without committing to DB
-                product = product_form.save(commit=False)
-                print(f"Form cleaned data: {product_form.cleaned_data}")  # Debugging form data
+            if not product_form.is_valid():
+                # Handle invalid product form
+                return JsonResponse({"success": False, "errors": product_form.errors}, status=400)
 
-                # Assign the correct Category instance
-                product.category = category
-                print(f"Assigned category: {product.category}")  # Debugging assigned category
+            # Save product without committing to DB
+            product = product_form.save(commit=False)
+            product.category = category
 
-                # Save the product to the database
-                try:
-                    product.save()
-                    print(f"Product saved successfully with category: {product.category}")
-                except Exception as e:
-                    print(f"Error saving product: {e}")
-                    return JsonResponse({"success": False, "type": "error", "error": str(e)}, status=500)
-            else:
-                print(f"Form errors: {product_form.errors}")  # Debugging form errors
-                return JsonResponse({"success": False, "type": "error", "errors": product_form.errors}, status=400)
+            # Handle duplicate slugs gracefully
+            try:
+                product.save()
+            except IntegrityError as e:
+                if 'unique constraint' in str(e).lower():
+                    return JsonResponse({"success": False, "error": "Duplicate product name or slug detected."}, status=400)
+                raise e
 
-            # Handle Image Upload
+            # Handle image upload
             if 'image' in request.FILES:
                 image_file = request.FILES['image']
-                print(f"Image file received: {image_file}")  # Debugging image upload
-
-                # Extract file extension
-                file_extension = os.path.splitext(image_file.name)[1]  # E.g., ".jpg"
-
-                # Delete the existing image from Cloudinary if it exists
+                file_extension = os.path.splitext(image_file.name)[1]
                 if product.image_path:
-                    public_id = product.image_path.public_id
-                    print(f"Deleting existing Cloudinary image: {public_id}")  # Debugging Cloudinary deletion
-                    destroy(public_id)
-
-                # Generate a new file name based on the product slug
-                new_file_name = f"products/{product.slug}"  # Folder structure with slug as name
-
-                # Upload the new image to Cloudinary with the correct public_id
+                    destroy(product.image_path.public_id)
+                new_file_name = f"products/{product.slug}"
                 upload_result = upload(
                     image_file,
-                    public_id=new_file_name,  # Full path: "products/ethiopian_coffee_bean"
-                    overwrite=True,           # Ensures the old file is replaced
-                    resource_type="image",    # Explicitly set resource type
+                    public_id=new_file_name,
+                    overwrite=True,
+                    resource_type="image"
                 )
-                print(f"Image uploaded successfully: {upload_result}")  # Debugging upload result
-
-                # Store the public_id and version from the upload result
-                product.image_path = upload_result['public_id']       # E.g., "products/ethiopian_coffee_bean"
-                product.cloudinary_version = upload_result.get('version')  # Cloudinary-assigned version
+                product.image_path = upload_result['public_id']
+                product.cloudinary_version = upload_result.get('version')
                 product.save()
 
-            # Update Product Variant
-            try:
-                variant = ProductVariant.objects.get(id=variant_id)
-                print(f"Resolved variant: {variant}")  # Debugging resolved variant
-                variant_form = ProductVariantForm(json.loads(request.POST.get('variant', '{}')), instance=variant)
-                if variant_form.is_valid():
-                    variant_form.save()
-                    print(f"Variant saved successfully: {variant}")  # Debugging variant save
-                else:
-                    print(f"Variant form errors: {variant_form.errors}")  # Debugging variant form errors
-                    return JsonResponse({"success": False, "type": "error", "errors": variant_form.errors}, status=400)
-                
-                # Prepare the redirect if slug changed
-                new_slug = product.slug
-                if old_slug != new_slug:
-                    base_url = reverse('product_detail', kwargs={'slug': new_slug})
-                    query_string = request.META['QUERY_STRING']
-                    redirect_url = f"{base_url}?{query_string}" if query_string else base_url
-                    return JsonResponse({"success": True, "redirect_url": redirect_url})
-            
-            except ProductVariant.DoesNotExist:
-                print(f"Variant not found: ID {variant_id}")  # Debugging missing variant
-                return JsonResponse({"success": False, "type": "error", "error": "Variant not found."}, status=404)
+            # Fetch and validate the variant data
+            variant_data = json.loads(request.POST.get('variant', '{}'))
+            variant = ProductVariant.objects.get(id=variant_id)
+            variant_form = ProductVariantForm(variant_data, instance=variant)
 
-            return JsonResponse({
-                "success": True,
-                "redirect_url": product.get_absolute_url(),
-                "updated_category": {
-                    "id": product.category.id,
-                    "name": product.category.name
-                }
-            })
+            if not variant_form.is_valid():
+                # Handle invalid variant form
+                return JsonResponse({"success": False, "errors": variant_form.errors}, status=400)
+
+            # Save variant with validation
+            try:
+                variant_form.save()
+            except IntegrityError as e:
+                if 'unique constraint' in str(e).lower():
+                    return JsonResponse({"success": False, "error": "Duplicate variant size detected."}, status=400)
+                raise e
+
+            # Return success response
+            return JsonResponse({"success": True, "redirect_url": product.get_absolute_url()})
 
         except Product.DoesNotExist:
-            print(f"Product not found: ID {product_id}")  # Debugging missing product
-            return JsonResponse({"success": False, "type": "error", "error": "Product not found."}, status=404)
+            return JsonResponse({"success": False, "error": "Product not found."}, status=404)
+        except ProductVariant.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Variant not found."}, status=404)
         except Category.DoesNotExist:
-            print(f"Category not found: ID {category_id}")  # Debugging missing category
-            return JsonResponse({"success": False, "type": "error", "error": "Category not found."}, status=404)
+            return JsonResponse({"success": False, "error": "Category not found."}, status=404)
+        except ValidationError as e:
+            return JsonResponse({"success": False, "error": str(e)}, status=400)
         except Exception as e:
-            print(f"Unexpected error: {e}")  # Debugging unexpected errors
-            return JsonResponse({"success": False, "type": "error", "error": str(e)}, status=500)
+            return JsonResponse({"success": False, "error": str(e)}, status=500)
 
 
 class ProductCreateView(CreateView):

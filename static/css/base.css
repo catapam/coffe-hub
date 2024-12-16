@@ -598,6 +598,10 @@ input{
     margin-bottom: 5px;
 }
 
+.card-text {
+    min-height: 30px;
+}
+
 .card-subtitle {
     text-align: center;
 }
@@ -936,6 +940,33 @@ option[data-stock="0"] {
 
 .toast-header, .toast-body {
     margin: 0;
+}
+
+/* Cart cards */
+.card-cart {
+    display: contents;
+    max-height: 150px;
+}
+
+.card-cart * {
+    font-size: medium;
+}
+
+.card-cart .card-title a {
+    font-size: large;
+}
+
+.card-cart img{
+    max-height: 150px;
+    max-width: 150px;
+}
+
+.cart-image {
+    height: 150px;
+}
+
+.w-150{
+    width: 150px;
 }
 
 /* Layout shift fix */

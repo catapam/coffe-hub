@@ -8,10 +8,10 @@ class CartEntry(models.Model):
         on_delete=models.CASCADE,
         related_name="cart_entries",
         blank=True,
-        null=True  # Allow null for anonymous carts, if needed
+        null=True
     )
     product = models.ForeignKey(
-        Product(),  
+        Product, 
         on_delete=models.CASCADE,
         related_name="cart_entries"
     )
@@ -24,4 +24,4 @@ class CartEntry(models.Model):
         unique_together = ('user', 'product', 'size')  # Prevent duplicate entries for the same user/product/size combo
 
     def __str__(self):
-        return ""
+        return f"{self.user or 'Anonymous'}: {self.product.name} ({self.size}) x {self.quantity}"
