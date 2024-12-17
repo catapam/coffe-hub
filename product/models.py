@@ -57,6 +57,10 @@ class Product(models.Model):
         if not self.pk:
             # If the object is being created for the first time
             self.category = self.category
+
+        # Update the rating field with the average rating
+        avg_rating = self.reviews.aggregate(average=Avg('rating'))['average']
+        self.rating = round(avg_rating, 1) if avg_rating is not None else 0.0
             
         super().save(*args, **kwargs)
 
@@ -124,7 +128,7 @@ class Product(models.Model):
         avg = self.reviews.aggregate(average=Avg('rating'))['average']
         if avg is None:
             return 0.0
-        return round(avg, 1)  # Round to one decimal place
+        return round(avg, 1)
 
 
 class ProductVariant(models.Model):

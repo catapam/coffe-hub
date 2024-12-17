@@ -44,7 +44,8 @@ class LoginRequiredMiddleware(MiddlewareMixin):
                 'account_reset_password_from_key',
                 'account_confirm_email', 'account_verified_email_required',
                 'account_email_verification_sent', 'cart', 'add_to_cart', 
-                'render_toast', 'validate_data', 'delete_cart', 'update_cart'               
+                'render_toast', 'validate_data', 'delete_cart', 'update_cart',
+                'set_cookie_consent', 'reset_cookie_consent'               
             ]
 
             if current_url not in allowed_urls:

@@ -1,17 +1,8 @@
 <div class="review-stars">
-    {% if view == 'detail' %}
-        {% with product.rating as rating %}
-            {% for star in max_review %}
-                <svg class="star icon icon-coffee-bean {% if star < rating %}filled{% endif %}"><use xlink:href="#icon-coffee-bean"></use></svg>
-            {% endfor %}
-        {% endwith %}
-        <p class="text-muted">({{ product.rating }})</p>
-    {% else %}
-        {% with product.rating as rating %}
-            {% for star in max_review %}
-                <svg class="star icon icon-coffee-bean {% if star < rating %}filled{% endif %}"><use xlink:href="#icon-coffee-bean"></use></svg>
-            {% endfor %}
-        {% endwith %}
-        <p class="text-muted">({{ product.rating }})</p>
-    {% endif %}
+    {% with product.rating as rating %}
+        {% for star in max_review %}
+            <svg class="star icon icon-coffee-bean {% if star < rating %}filled{% endif %}"><use xlink:href="#icon-coffee-bean"></use></svg>
+        {% endfor %}
+    {% endwith %}
+    <p class="text-muted">({{ product.rating }})</p>
 </div>

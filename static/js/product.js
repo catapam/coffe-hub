@@ -22,6 +22,7 @@ class ProductCardHandler {
         const sizeSelectors = document.querySelectorAll(".size");
 
         this.handleBuyButton();
+        this.handleReviewSubmission()
 
         sizeSelectors.forEach(sizeSelect => {
             this.updateProductCard(sizeSelect);
@@ -207,6 +208,33 @@ class ProductCardHandler {
                         }
                     })
                     .catch(error => showToast('error', `${error.message}`));
+            });
+        });
+    }
+
+    handleReviewSubmission() {
+        const reviewForm = document.querySelector('.rating-form');
+        if (!reviewForm) return;
+    
+        reviewForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+    
+            const formData = new FormData(reviewForm);
+            const url = reviewForm.action;
+    
+            customFetch(url, {
+                method: 'POST',
+                body: formData,
+            }).then((data) => {
+                if (data.success && data.redirect_url) {
+                    window.location.href = data.redirect_url; // Silent redirect
+                    showToast('success', `Thank you for submitting your product review!`);
+
+                } else if (data.errors) {
+                    Object.entries(data.errors).forEach(([field, messages]) => {
+                        messages.forEach(msg => showToast('error', `${field}: ${msg}`));
+                    });
+                }
             });
         });
     }
@@ -670,6 +698,7 @@ class ProductSaveHandler {
                 const productId = button.getAttribute('data-product-id');
                 const variantId = button.getAttribute('data-variant-id'); // Ensure variantId is retrieved correctly
                 const url = button.getAttribute('data-url');
+                console.log = productId, variantId, url
                 this.saveProductAndVariant(productId, variantId, url);
             });
         });
@@ -731,31 +760,36 @@ class ProductSaveHandler {
     }
 
     saveProductAndVariant(productId, variantId, url) {
+        const formData = new FormData();
         const productData = this.getProductData();
-        const variantData = this.getVariantData();
     
         if (!productData) {
             showToast('warning', `Product data is incomplete. Please fill in all fields.`);
             return;
         }
-    
-        if (!variantData) {
-            showToast('warning', `Size data is incomplete. Please fill in all fields.`);
-            return;
+
+        if (variantId){
+            const variantData = this.getVariantData();
+            if (!variantData) {
+                showToast('warning', `Size data is incomplete. Please fill in all fields.`);
+                return;
+            }
+
+            if (variantId || variantData.variantId) {
+                formData.append('variant_id', variantId || variantData.variantId); // Use the variantId for updates
+            }
+
+            formData.append('variant', JSON.stringify({
+                size: variantData.size,
+                price: variantData.price,
+                stock: variantData.stock,
+                id: variantData.variantId || null, // Explicitly include the ID for updates
+            }));
         }
     
-        const formData = new FormData();
         if (productId) formData.append('product_id', productId);
-        if (variantId || variantData.variantId) {
-            formData.append('variant_id', variantId || variantData.variantId); // Use the variantId for updates
-        }
+
         formData.append('product', JSON.stringify(productData));
-        formData.append('variant', JSON.stringify({
-            size: variantData.size,
-            price: variantData.price,
-            stock: variantData.stock,
-            id: variantData.variantId || null, // Explicitly include the ID for updates
-        }));
     
         if (this.imageFile) {
             formData.append('image', this.imageFile, `${productData.name}.jpg`);

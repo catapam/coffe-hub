@@ -22,7 +22,7 @@
                             All
                         </label>
                     </li>
-                    {% for category in categories %}
+                    {% for category in category_items %}
                     <li>
                         <label class="dropdown-item">
                             <input type="checkbox" name="category[]" value="{{ category.slug }}" 
@@ -55,6 +55,9 @@
                     {{ star }} Star{% if star > 1 %}s{% endif %}
                 </option>
                 {% endfor %}
+                <option value="5" {% if request.GET.rating == 5|stringformat:"d" %}selected{% endif %}>
+                    5 Stars
+                </option>
             </select>
         </div>
     </div>
@@ -95,7 +98,16 @@
             {% for sort_key, sort_label in sorting_options.items %}
             <li>
                 <a class="dropdown-item" 
-                href="?{% with request.GET.copy as params %}{% for key, values in params.lists %}{% for value in values %}{% if key != 'sort_by' %}{{ key }}={{ value|urlencode }}&{% endif %}{% endfor %}{% endfor %}q={{ request.GET.q|urlencode }}&sort_by={{ sort_key }}{% endwith %}">
+                href="?{% with request.GET.copy as params %}
+                        {% for key, values in params.lists %}
+                            {% for value in values %}
+                                {% if value and value != '' and key != 'sort_by' %}
+                                    {{ key }}={{ value|urlencode }}&
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        sort_by={{ sort_key }}
+                        {% endwith %}">
                     {{ sort_label }}
                 </a>
             </li>
