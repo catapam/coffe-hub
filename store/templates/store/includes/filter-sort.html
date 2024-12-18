@@ -1,3 +1,5 @@
+{% load custom_tags %}
+
 <!-- Filter Form -->
 <form method="get" id="filter-form" class="mb-4 d-none">
     <div class="row">
@@ -97,19 +99,9 @@
         <ul class="dropdown-menu" aria-labelledby="sortingDropdown">
             {% for sort_key, sort_label in sorting_options.items %}
             <li>
-                <a class="dropdown-item" 
-                href="?{% with request.GET.copy as params %}
-                        {% for key, values in params.lists %}
-                            {% for value in values %}
-                                {% if value and value != '' and key != 'sort_by' %}
-                                    {{ key }}={{ value|urlencode }}&
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
-                        sort_by={{ sort_key }}
-                        {% endwith %}">
+                <a class="dropdown-item" href="{% update_query_params request sort_by=sort_key %}">
                     {{ sort_label }}
-                </a>
+                 </a>
             </li>
             {% endfor %}
         </ul>

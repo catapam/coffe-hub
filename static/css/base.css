@@ -600,6 +600,7 @@ input{
 
 .card-text {
     min-height: 30px;
+    text-align: center;
 }
 
 .card-subtitle {
@@ -965,6 +966,10 @@ option[data-stock="0"] {
 .card-cart img{
     max-height: 150px;
     max-width: 150px;
+}
+
+.card-cart .card-text {
+    text-align: left;
 }
 
 .cart-image {

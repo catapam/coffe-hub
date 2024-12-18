@@ -4,8 +4,12 @@
         "pk": 1,
         "fields": {
             "product": 1,
-            "size": "250g",
-            "stock": 100
+            "size": "Medium",
+            "price": 33.54,
+            "stock": 26,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
         }
     },
     {
@@ -13,62 +17,90 @@
         "pk": 2,
         "fields": {
             "product": 1,
-            "size": "500g",
-            "stock": 50
+            "size": "Large",
+            "price": 18.42,
+            "stock": 48,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
         }
     },
     {
         "model": "product.productvariant",
         "pk": 3,
         "fields": {
-            "product": 1,
-            "size": "1kg",
-            "stock": 20
+            "product": 2,
+            "size": "Small",
+            "price": 26.48,
+            "stock": 35,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
         }
     },
     {
         "model": "product.productvariant",
         "pk": 4,
         "fields": {
-            "product": 2,
+            "product": 3,
             "size": "250g",
-            "stock": 120
+            "price": 16.91,
+            "stock": 36,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
         }
     },
     {
         "model": "product.productvariant",
         "pk": 5,
         "fields": {
-            "product": 2,
-            "size": "500g",
-            "stock": 60
+            "product": 3,
+            "size": "1kg",
+            "price": 49.28,
+            "stock": 14,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
         }
     },
     {
         "model": "product.productvariant",
         "pk": 6,
         "fields": {
-            "product": 2,
-            "size": "1kg",
-            "stock": 25
+            "product": 4,
+            "size": "Medium",
+            "price": 11.95,
+            "stock": 35,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
         }
     },
     {
         "model": "product.productvariant",
         "pk": 7,
         "fields": {
-            "product": 3,
-            "size": "500ml",
-            "stock": 40
+            "product": 4,
+            "size": "Large",
+            "price": 15.83,
+            "stock": 14,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
         }
     },
     {
         "model": "product.productvariant",
         "pk": 8,
         "fields": {
-            "product": 3,
-            "size": "1L",
-            "stock": 20
+            "product": 5,
+            "size": "500g",
+            "price": 14.74,
+            "stock": 35,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
         }
     },
     {
@@ -76,26 +108,597 @@
         "pk": 9,
         "fields": {
             "product": 5,
-            "size": "250g",
-            "stock": 80
+            "size": "1kg",
+            "price": 12.93,
+            "stock": 19,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
         }
     },
     {
         "model": "product.productvariant",
         "pk": 10,
         "fields": {
-            "product": 5,
-            "size": "500g",
-            "stock": 40
+            "product": 6,
+            "size": "1kg",
+            "price": 13.59,
+            "stock": 20,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
         }
     },
     {
         "model": "product.productvariant",
         "pk": 11,
         "fields": {
-            "product": 5,
+            "product": 6,
+            "size": "250g",
+            "price": 46.89,
+            "stock": 24,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 12,
+        "fields": {
+            "product": 7,
+            "size": "500g",
+            "price": 32.83,
+            "stock": 27,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 13,
+        "fields": {
+            "product": 7,
+            "size": "250g",
+            "price": 33.65,
+            "stock": 31,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 14,
+        "fields": {
+            "product": 8,
+            "size": "250g",
+            "price": 14.05,
+            "stock": 34,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 15,
+        "fields": {
+            "product": 9,
+            "size": "Large",
+            "price": 36.71,
+            "stock": 29,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 16,
+        "fields": {
+            "product": 10,
+            "size": "Deluxe",
+            "price": 33.47,
+            "stock": 27,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 17,
+        "fields": {
+            "product": 10,
+            "size": "Mini",
+            "price": 20.93,
+            "stock": 22,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 18,
+        "fields": {
+            "product": 10,
+            "size": "Standard",
+            "price": 41.77,
+            "stock": 21,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 19,
+        "fields": {
+            "product": 11,
             "size": "1kg",
-            "stock": 15
+            "price": 20.96,
+            "stock": 21,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 20,
+        "fields": {
+            "product": 11,
+            "size": "500g",
+            "price": 39.01,
+            "stock": 34,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 21,
+        "fields": {
+            "product": 11,
+            "size": "250g",
+            "price": 46.57,
+            "stock": 20,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 22,
+        "fields": {
+            "product": 12,
+            "size": "250g",
+            "price": 40.75,
+            "stock": 0,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 23,
+        "fields": {
+            "product": 13,
+            "size": "Standard",
+            "price": 32.78,
+            "stock": 40,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 24,
+        "fields": {
+            "product": 13,
+            "size": "Deluxe",
+            "price": 21.35,
+            "stock": 47,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 25,
+        "fields": {
+            "product": 14,
+            "size": "Large",
+            "price": 39.76,
+            "stock": 30,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 26,
+        "fields": {
+            "product": 14,
+            "size": "Medium",
+            "price": 29.53,
+            "stock": 12,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 27,
+        "fields": {
+            "product": 15,
+            "size": "Small",
+            "price": 24.67,
+            "stock": 18,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 28,
+        "fields": {
+            "product": 15,
+            "size": "Medium",
+            "price": 28.54,
+            "stock": 0,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 29,
+        "fields": {
+            "product": 16,
+            "size": "Standard",
+            "price": 35.65,
+            "stock": 44,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 30,
+        "fields": {
+            "product": 16,
+            "size": "Deluxe",
+            "price": 42.33,
+            "stock": 35,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 31,
+        "fields": {
+            "product": 17,
+            "size": "Small",
+            "price": 19.99,
+            "stock": 22,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 32,
+        "fields": {
+            "product": 17,
+            "size": "Medium",
+            "price": 27.45,
+            "stock": 20,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 33,
+        "fields": {
+            "product": 18,
+            "size": "Single",
+            "price": 13.79,
+            "stock": 50,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 34,
+        "fields": {
+            "product": 18,
+            "size": "Family",
+            "price": 45.99,
+            "stock": 38,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 35,
+        "fields": {
+            "product": 19,
+            "size": "Large",
+            "price": 22.67,
+            "stock": 0,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 36,
+        "fields": {
+            "product": 19,
+            "size": "Medium",
+            "price": 21.58,
+            "stock": 14,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 37,
+        "fields": {
+            "product": 20,
+            "size": "500g",
+            "price": 18.46,
+            "stock": 28,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 38,
+        "fields": {
+            "product": 20,
+            "size": "1kg",
+            "price": 24.56,
+            "stock": 15,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 39,
+        "fields": {
+            "product": 21,
+            "size": "Standard",
+            "price": 30.88,
+            "stock": 45,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 40,
+        "fields": {
+            "product": 21,
+            "size": "Mini",
+            "price": 20.99,
+            "stock": 12,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 41,
+        "fields": {
+            "product": 22,
+            "size": "Double",
+            "price": 25.47,
+            "stock": 41,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 42,
+        "fields": {
+            "product": 22,
+            "size": "Family",
+            "price": 31.78,
+            "stock": 30,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 43,
+        "fields": {
+            "product": 23,
+            "size": "Single",
+            "price": 12.44,
+            "stock": 25,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 44,
+        "fields": {
+            "product": 23,
+            "size": "Family",
+            "price": 33.67,
+            "stock": 20,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 45,
+        "fields": {
+            "product": 24,
+            "size": "Small",
+            "price": 15.76,
+            "stock": 40,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 46,
+        "fields": {
+            "product": 24,
+            "size": "Large",
+            "price": 29.99,
+            "stock": 18,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 47,
+        "fields": {
+            "product": 25,
+            "size": "Medium",
+            "price": 20.23,
+            "stock": 32,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 48,
+        "fields": {
+            "product": 25,
+            "size": "Large",
+            "price": 45.77,
+            "stock": 25,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 49,
+        "fields": {
+            "product": 26,
+            "size": "Small",
+            "price": 21.78,
+            "stock": 40,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 50,
+        "fields": {
+            "product": 26,
+            "size": "Medium",
+            "price": 35.99,
+            "stock": 33,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 51,
+        "fields": {
+            "product": 27,
+            "size": "Standard",
+            "price": 23.87,
+            "stock": 30,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": false
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 52,
+        "fields": {
+            "product": 27,
+            "size": "Deluxe",
+            "price": 40.55,
+            "stock": 21,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 53,
+        "fields": {
+            "product": 28,
+            "size": "Single",
+            "price": 22.34,
+            "stock": 50,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "product.productvariant",
+        "pk": 54,
+        "fields": {
+            "product": 28,
+            "size": "Family",
+            "price": 48.21,
+            "stock": 10,
+            "created_at": "2024-06-17T00:00:00Z",
+            "updated_at": "2024-06-17T00:00:00Z",
+            "active": true
         }
     }
 ]

@@ -26,7 +26,7 @@ class ProductListView(ListView):
 
     def get_queryset(self):
         # Retrieve query parameters, ensuring empty ones are skipped
-        sort_by = self.request.GET.get('sort_by') or None
+        sort_by = self.request.GET.get('sort_by') or 'rating_desc'
         show_out_of_stock = self.request.GET.get('show_out_of_stock') == 'on'
         selected_categories = [c for c in self.request.GET.getlist('category[]') if c]
         price_min = self.request.GET.get('price_min') or None

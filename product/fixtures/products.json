@@ -1,77 +1,32 @@
 [
-    {
-        "model": "product.product",
-        "pk": 1,
-        "fields": {
-            "name": "Ethiopian Coffee Beans",
-            "slug": "ethiopian-coffee-beans",
-            "category": 1,
-            "description": "Premium Ethiopian coffee beans with bright citrus and floral notes.",
-            "price": "25.99",
-            "rating": 4.7,
-            "image": null,
-            "created_at": "2024-11-24T00:00:00Z",
-            "updated_at": "2024-11-24T00:00:00Z"
-        }
-    },
-    {
-        "model": "product.product",
-        "pk": 2,
-        "fields": {
-            "name": "Colombian Coffee Beans",
-            "slug": "colombian-coffee-beans",
-            "category": 1,
-            "description": "Rich and smooth Colombian coffee beans, perfect for a balanced cup.",
-            "price": "22.99",
-            "rating": 4.8,
-            "image": null,
-            "created_at": "2024-11-24T00:00:00Z",
-            "updated_at": "2024-11-24T00:00:00Z"
-        }
-    },
-    {
-        "model": "product.product",
-        "pk": 3,
-        "fields": {
-            "name": "Cold Brew Concentrate",
-            "slug": "cold-brew-concentrate",
-            "category": 3,
-            "description": "Smooth and refreshing cold brew coffee concentrate.",
-            "price": "15.99",
-            "rating": 4.6,
-            "image": null,
-            "created_at": "2024-11-24T00:00:00Z",
-            "updated_at": "2024-11-24T00:00:00Z"
-        }
-    },
-    {
-        "model": "product.product",
-        "pk": 4,
-        "fields": {
-            "name": "French Press",
-            "slug": "french-press",
-            "category": 2,
-            "description": "High-quality French press for brewing aromatic coffee.",
-            "price": "35.99",
-            "rating": 4.5,
-            "image": null,
-            "created_at": "2024-11-24T00:00:00Z",
-            "updated_at": "2024-11-24T00:00:00Z"
-        }
-    },
-    {
-        "model": "product.product",
-        "pk": 5,
-        "fields": {
-            "name": "Espresso Blend Beans",
-            "slug": "espresso-blend-beans",
-            "category": 1,
-            "description": "Bold espresso blend coffee beans with rich crema.",
-            "price": "28.99",
-            "rating": 4.9,
-            "image": null,
-            "created_at": "2024-11-24T00:00:00Z",
-            "updated_at": "2024-11-24T00:00:00Z"
-        }
-    }
+    {"model": "product.product", "pk": 1, "fields": {"name": "Espresso Roast Beans", "slug": "espresso_roast_beans", "category": 1, "description": "Rich and bold espresso beans.", "rating": 4.5, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 2, "fields": {"name": "French Roast Beans", "slug": "french_roast_beans", "category": 1, "description": "Smooth and dark French roast beans.", "rating": 4.6, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 3, "fields": {"name": "Medium Roast Beans", "slug": "medium_roast_beans", "category": 1, "description": "Balanced medium roast beans.", "rating": 4.3, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 4, "fields": {"name": "Light Roast Beans", "slug": "light_roast_beans", "category": 1, "description": "Bright and light roast beans.", "rating": 4.2, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 5, "fields": {"name": "Cold Brew Coffee Beans", "slug": "cold_brew_coffee_beans", "category": 1, "description": "Perfect for cold brew coffee.", "rating": 4.8, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 6, "fields": {"name": "French Press Coffee Maker", "slug": "french_press_coffee_maker", "category": 2, "description": "Classic stainless steel French press.", "rating": 4.5, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 7, "fields": {"name": "Cold Brew Pitcher", "slug": "cold_brew_pitcher", "category": 2, "description": "Glass pitcher for cold brew.", "rating": 4.7, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 8, "fields": {"name": "Pour Over Coffee Kit", "slug": "pour_over_coffee_kit", "category": 2, "description": "Complete pour-over brewing kit.", "rating": 4.6, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 9, "fields": {"name": "Home Espresso Machine", "slug": "home_espresso_machine", "category": 2, "description": "Compact espresso brewing machine.", "rating": 4.9, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 10, "fields": {"name": "Drip Coffee Filters", "slug": "drip_coffee_filters", "category": 2, "description": "Unbleached drip coffee filters.", "rating": 4.4, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 11, "fields": {"name": "Reusable Coffee Cup", "slug": "reusable_coffee_cup", "category": 3, "description": "Eco-friendly reusable cup.", "rating": 4.7, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 12, "fields": {"name": "Insulated Travel Mug", "slug": "insulated_travel_mug", "category": 3, "description": "Keeps drinks hot or cold.", "rating": 4.5, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 13, "fields": {"name": "Stainless Steel Straws", "slug": "stainless_steel_straws", "category": 3, "description": "Reusable and eco-friendly straws.", "rating": 4.3, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 14, "fields": {"name": "Coffee Scoop Set", "slug": "coffee_scoop_set", "category": 3, "description": "Accurate coffee measurement scoops.", "rating": 4.6, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 15, "fields": {"name": "Manual Coffee Grinder", "slug": "manual_coffee_grinder", "category": 3, "description": "Portable manual grinder for beans.", "rating": 4.4, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 16, "fields": {"name": "Matcha Latte Mix", "slug": "matcha_latte_mix", "category": 4, "description": "Premium matcha latte mix.", "rating": 4.8, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 17, "fields": {"name": "Chai Latte Mix", "slug": "chai_latte_mix", "category": 4, "description": "Spiced chai latte mix.", "rating": 4.7, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 18, "fields": {"name": "Hot Chocolate Mix", "slug": "hot_chocolate_mix", "category": 4, "description": "Rich and creamy hot chocolate.", "rating": 4.9, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 19, "fields": {"name": "Vanilla Syrup", "slug": "vanilla_syrup", "category": 4, "description": "Perfect for coffee and lattes.", "rating": 4.7, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 20, "fields": {"name": "Caramel Syrup", "slug": "caramel_syrup", "category": 4, "description": "Delicious caramel flavor.", "rating": 4.6, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 21, "fields": {"name": "Hazelnut Syrup", "slug": "hazelnut_syrup", "category": 4, "description": "Nutty hazelnut syrup.", "rating": 4.5, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 22, "fields": {"name": "Turmeric Latte Mix", "slug": "turmeric_latte_mix", "category": 4, "description": "Golden turmeric latte blend.", "rating": 4.7, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 23, "fields": {"name": "Cinnamon Syrup", "slug": "cinnamon_syrup", "category": 4, "description": "Sweet cinnamon syrup.", "rating": 4.6, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 24, "fields": {"name": "Almond Syrup", "slug": "almond_syrup", "category": 4, "description": "Delicate almond flavor syrup.", "rating": 4.5, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 25, "fields": {"name": "Pumpkin Spice Latte Mix", "slug": "pumpkin_spice_latte_mix", "category": 4, "description": "Classic pumpkin spice flavor.", "rating": 4.8, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": true}},
+    {"model": "product.product", "pk": 26, "fields": {"name": "Mocha Syrup", "slug": "mocha_syrup", "category": 4, "description": "Rich mocha syrup for drinks.", "rating": 4.4, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": false}},
+    {"model": "product.product", "pk": 27, "fields": {"name": "Coconut Syrup", "slug": "coconut_syrup", "category": 4, "description": "Sweet coconut syrup for coffee.", "rating": 4.3, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": false}},
+    {"model": "product.product", "pk": 28, "fields": {"name": "Organic Espresso Beans", "slug": "organic_espresso_beans", "category": 1, "description": "Certified organic espresso beans.", "rating": 4.6, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": false}},
+    {"model": "product.product", "pk": 29, "fields": {"name": "Decaf Medium Roast", "slug": "decaf_medium_roast", "category": 1, "description": "Smooth decaffeinated medium roast.", "rating": 4.5, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": false}},
+    {"model": "product.product", "pk": 30, "fields": {"name": "Light Roast Sampler Pack", "slug": "light_roast_sampler_pack", "category": 1, "description": "Sampler pack of light roast beans.", "rating": 4.2, "created_at": "2024-06-17T00:00:00Z", "updated_at": "2024-06-17T00:00:00Z", "active": false}}
 ]

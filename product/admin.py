@@ -21,13 +21,13 @@ class ProductReviewInline(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     # Exclude slug field from the list display
     list_display = ('name', 'category', 'active', 'rating', 'created_at', 'updated_at', 'image_preview')  # Add image preview to the list
-    list_filter = ('category', 'created_at', 'updated_at')
+    list_filter = ('category', 'rating', 'active', 'created_at', 'updated_at')
     search_fields = ('name', 'description')
     inlines = [ProductVariantInline, ProductReviewInline]
 
     # Use `fields` to explicitly include the slug in the form view
     fields = ('name', 'slug', 'category', 'description', 'rating', 'image_path', 'image_preview', 'active', 'created_at', 'updated_at')
-    readonly_fields = ('slug', 'created_at', 'updated_at', 'image_preview')  # Make non-editable fields read-only
+    readonly_fields = ('slug', 'created_at', 'updated_at', 'image_preview', 'rating')  # Make non-editable fields read-only
 
     def image_preview(self, obj):
         """
