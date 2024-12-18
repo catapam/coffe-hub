@@ -6,7 +6,8 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
 from django.contrib.auth import get_user_model
-from cart.models import CartEntry
+from cart.admin import CartEntryInline
+from checkout.admin import OrderInline, OrderAdmin
 
 
 User = get_user_model()
@@ -17,7 +18,7 @@ class EmailAddressInline(admin.TabularInline):
     Inline for showing and managing email addresses in the User admin page.
     """
     model = EmailAddress
-    extra = 1  # Number of extra blank fields to display for adding new records
+    extra = 0  # Number of extra blank fields to display for adding new records
     fields = ('email', 'verified', 'primary')  # Fields to display
     readonly_fields = ('forgot_password',)  # Add the custom method here
 
@@ -40,29 +41,12 @@ class EmailAddressInline(admin.TabularInline):
         return request.user.is_staff or request.user.is_superuser
 
 
-class CartEntryInline(admin.TabularInline):
-    """
-    Inline for displaying CartEntry objects in the User admin page.
-    """
-    model = CartEntry
-    extra = 1  # Number of extra blank fields for adding new entries
-    fields = ('product', 'size', 'quantity')  # Fields to display in the inline
-    readonly_fields = ('product', 'size',)
-    can_delete = True  # Allow deletion of entries
-
-    def has_view_permission(self, request, obj=None):
-        return request.user.is_staff or request.user.is_superuser
-
-    def has_change_permission(self, request, obj=None):
-        return request.user.is_staff or request.user.is_superuser
-
-
 class CustomUserAdmin(UserAdmin):
     """
     Custom User admin to include EmailAddress and CartEntry inlines.
     """
     readonly_fields = ('last_login', 'date_joined')
-    inlines = [EmailAddressInline, CartEntryInline]
+    inlines = [EmailAddressInline, CartEntryInline, OrderInline]
     
     def get_list_display(self, request):
         """
@@ -95,12 +79,10 @@ class CustomUserAdmin(UserAdmin):
         """
         # Retrieve the default fieldsets
         fieldsets = (
-            (None, {'fields': ('username', 'password')}),
-            ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
+            (None, {'fields': ('username', 'password', 'last_login', 'date_joined')}),
             ('Permissions', {
                 'fields': ('is_active', 'is_staff', 'is_superuser'),
             }),
-            ('Important dates', {'fields': ('last_login', 'date_joined')}),
         )
 
         # Create a new list for the modified fieldsets
@@ -132,7 +114,7 @@ class CustomUserAdmin(UserAdmin):
         """
         if request.user.is_staff and not request.user.is_superuser:
             # Allow access to User and ContactMessage models for staff
-            return self.model in [User]
+            return self.model in [User, OrderAdmin]
         return super().has_module_permission(request)
 
     def has_view_permission(self, request, obj=None):
@@ -168,7 +150,7 @@ class CustomUserAdmin(UserAdmin):
         """
         if not request.user.is_superuser:
             # Allow staff users to see both inlines
-            return [EmailAddressInline, CartEntryInline]
+            return [EmailAddressInline, CartEntryInline, OrderInline]
         return super().get_inlines(request, obj)
     
     def login(self, request, extra_context=None):

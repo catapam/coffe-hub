@@ -324,7 +324,9 @@ To deploy the application on Heroku:
 
 Two youtube videos were of grand relevance as guidance for coding:
 * <a href="https://www.youtube.com/watch?v=sBjbty691eI&list=PLXuTq6OsqZjbCSfiLNb2f1FOs8viArjWy" target="_blank">Initial setup and general settings</a> 
-*  <a href="https://www.youtube.com/watch?v=WbNNESIxJnY&t=9796s" target="_blank">Saas specifics and more advanced development</a> 
+* <a href="https://www.youtube.com/watch?v=WbNNESIxJnY&t=9796s" target="_blank">Saas specifics and more advanced development</a> 
+* <a href="https://github.com/Code-Institute-Solutions/boutique_ado_v1" target="_blank">Code institute Boutique Ado ecomm project</a> - Used as guidance for essential core ecomm functionalities
+* <a href="https://github.com/catapam/investnest" target="_blank"> InvestNest</a> - Re-usage of dashboard and account management functionalities (project of my own)
 
 ## Content
 

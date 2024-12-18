@@ -6,9 +6,19 @@ class ContactMessageAdmin(admin.ModelAdmin):
     """
     Admin configuration for ContactMessage.
     """
-    list_display = ('name', 'email', 'subject', 'created_at')  # Customize the list view
+    list_display = ('status', 'name', 'email', 'subject', 'created_at')  # Customize the list view
     search_fields = ('name', 'email', 'subject')  # Add search functionality
-    readonly_fields = ('created_at',)  # Make certain fields read-only
+    list_filter = ('status', 'name', 'email', 'subject', 'created_at')
+    
+    def get_readonly_fields(self, request, obj=None):
+        """
+        Dynamically set readonly fields based on user role.
+        """
+        if request.user.is_staff and not request.user.is_superuser:
+            return ('name', 'email', 'subject', 'created_at', 'message')  # Staff sees more fields as read-only
+        elif request.user.is_superuser:
+            return ('created_at',)
+        return super().get_readonly_fields(request, obj)
 
     def has_permission(self, request):
         """
@@ -35,7 +45,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
         """
         Allow change permissions for staff and superusers.
         """
-        return request.user.is_superuser  # Only allow superusers to change ContactMessages
+        return request.user.is_staff or request.user.is_superuser
 
     def has_add_permission(self, request):
         """
