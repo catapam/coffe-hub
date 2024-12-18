@@ -1,7 +1,7 @@
 {% load static %}
 <div class="{% if view == 'detail' %}col-md-6 d-flex align-items-center justify-content-center{% else %}background-gradient{% endif %} position-relative">
-    <div class="{% if view == 'detail' %}card{% endif %}">
-        <div class="{% if view == 'detail' %}background-gradient{% endif %}">
+    <div class="{% if view == 'detail' %}card card-image-detail{% endif %}">
+        <div class="{% if view == 'detail' %}background-gradient{% endif %} border-radius">
             <div class="content-gradient">
                 {% if is_admin and product.id %}
                     {% include 'product/includes/badge.html' %}

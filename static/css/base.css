@@ -75,6 +75,10 @@ footer li{
     font-weight: bold;
 }
 
+.border-radius{
+    border-radius: var(--bs-border-radius);
+}
+
 /* Screen-reader only */
 .sr-only {
     position: absolute;
@@ -295,6 +299,10 @@ footer li{
     padding-right: 10px;
     margin: auto;
     margin-right: 0;
+}
+
+.dropdown-item:active{
+    background-color: transparent;
 }
 
 .navbar-nav{
@@ -534,6 +542,10 @@ input{
     max-height: 150px;
     max-width: 100%;
     object-fit: contain; /* Ensures the image maintains aspect ratio */
+}
+
+.card.card-image-detail {
+    max-height: max-content;
 }
 
 .review-stars {
