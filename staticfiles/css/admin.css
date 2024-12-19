@@ -53,3 +53,7 @@
 .submit-row a.deletelink, .historylink, .addlink, .viewsitelink{
     color: var(--text-primary-color) !important;
 }
+
+.submit-row a.deletelink:hover, .historylink:hover, .addlink:hover, .viewsitelink:hover{
+    color: var(--text-secondary-color) !important;
+}

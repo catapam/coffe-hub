@@ -413,7 +413,14 @@ input{
 }
 
 /* Change the border color when the search input is focused */
-* input:focus, * select:focus, .btn-category:focus, * textarea:focus, .accordion-button:not(.collapsed), .accordion-button:focus, .accordion-body {
+* input:focus,
+* select:focus, 
+.btn-category:focus, 
+* textarea:focus, 
+.accordion-button:not(.collapsed), 
+.accordion-button:focus, 
+.accordion-body,
+.StripeElement--focus {
     outline: none !important; /* Removes the default blue outline */
     border-color: var(--text-secondary-color) !important; /* Replace with your desired color */
     box-shadow: 0 0 5px var(--text-primary-color) !important; /* Optional: Add a glow effect */
@@ -1021,6 +1028,11 @@ option[data-stock="0"] {
 
 .card-checkout .btn{
     min-width: 25px;
+}
+
+/* Stripe element */
+.StripeElement{
+    height: 40px;
 }
 
 /* Layout shift fix */

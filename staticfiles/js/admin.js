@@ -12,4 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
             csrfInput.remove(); // Remove the CSRF input element
         }
     }
+
+    // Update the "Change password" link
+    const changePasswordLink = document.querySelector('a[href="/admin/password_change/"]');
+    if (changePasswordLink) {
+        changePasswordLink.href = '/accounts/password/change/'; // Update the href
+    }
 });

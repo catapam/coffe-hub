@@ -22,6 +22,8 @@ class CheckoutView(FormView):
 
         context['cart'] = {"items": cart_items, "total": total}
         context['order_form'] = self.get_form()
+        context['stripe_public_key'] = 'pk_test_0SMREd7Vdweb1MGRi8S0EycR00JVzSAs5O'
+        context['client_secret'] = 'test client secret'
         return context
 
     def form_valid(self, form):
