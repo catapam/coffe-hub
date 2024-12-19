@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
 from django.contrib.auth import get_user_model
+from django.templatetags.static import static
 from cart.admin import CartEntryInline
 from checkout.admin import OrderInline, OrderAdmin
 

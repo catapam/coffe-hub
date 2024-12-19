@@ -1,0 +1,55 @@
+:root {
+    --secondary: var(--bg-dark) !important;
+    --accent: var(--bg-light) !important;
+    --primary-fg: #fff;
+
+    --body-fg: #333;
+    --body-bg: var(--bg-darker) !important;
+    --body-quiet-color: #666;
+    --body-medium-color: #444;
+    --body-loud-color: #000;
+
+    --header-color: var(--text-primary-color) !important;
+    --header-branding-color: var(--accent);
+    --header-bg: var(--secondary);
+    --header-link-color: var(--text-secondary-color) !important;
+
+    --breadcrumbs-fg: #c4dce8;
+    --breadcrumbs-link-fg: var(--body-bg);
+    --breadcrumbs-bg: var(--bg-light) !important;
+
+    --link-fg: var(--text-primary-color) !important;
+    --link-hover-color: var(--text-secondary-color) !important;
+    --link-selected-fg: var(--text-secondary-color) !important;
+
+    --message-success-bg: #dfd;
+    --message-warning-bg: #ffc;
+    --message-error-bg: #ffefef;
+
+    --darkened-bg: #f8f8f8;
+    --selected-bg: #e4e4e4; 
+    --selected-row: var(--bg-light) !important;
+
+    --button-fg: var(--bg-darker) !important;
+    --button-bg: var(--text-secondary-color) !important;
+    --button-hover-bg: var(--bg-lighter) !important;
+    --default-button-bg: var(--text-secondary-color) !important;
+    --default-button-hover-bg: var(--bg-lighter) !important;
+
+    --font-family-primary: "Nunito", Arial, sans-serif;
+    --font-family-monospace: "Lato", Georgia, serif;
+
+    color-scheme: dark;
+}
+
+.theme-toggle {
+    display: none !important;
+}
+
+#recent-actions-module {
+    display: none !important;
+}
+
+.submit-row a.deletelink, .historylink, .addlink, .viewsitelink{
+    color: var(--text-primary-color) !important;
+}
