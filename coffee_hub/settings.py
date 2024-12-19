@@ -114,9 +114,6 @@ TEMPLATES = [
 
                 # `allauth` needs this from django
                 'django.template.context_processors.request',
-
-                # custom global contexts
-                'cart.contexts.cart_contents',
             ],
             'debug': 'DEVELOPMENT' in os.environ,
             'builtins': [

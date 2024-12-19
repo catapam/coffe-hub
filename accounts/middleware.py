@@ -45,12 +45,12 @@ class LoginRequiredMiddleware(MiddlewareMixin):
                 'account_confirm_email', 'account_verified_email_required',
                 'account_email_verification_sent', 'cart', 'add_to_cart', 
                 'render_toast', 'validate_data', 'delete_cart', 'update_cart',
-                'set_cookie_consent', 'reset_cookie_consent'               
+                'set_cookie_consent', 'reset_cookie_consent', 'checkout'              
             ]
 
             if current_url not in allowed_urls:
                 # Redirect due to middleware restriction
-                messages.warning(request, 'Please log in to access this page.')
+                messages.warning(request, 'Please log in to continue.')
                 return redirect(
                     f'{reverse("account_login")}?{REDIRECT_FIELD_NAME}='
                     f'{request.get_full_path()}'

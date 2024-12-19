@@ -45,7 +45,7 @@ class OrderInline(admin.TabularInline):
         return request.user.is_staff or request.user.is_superuser
     
     def has_delete_permission(self, request, obj=None):
-        return request.user.is_staff or request.user.is_superuser
+        return request.user.is_superuser
 
 
 @admin.register(Order)

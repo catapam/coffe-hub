@@ -141,7 +141,7 @@ class CustomUserAdmin(UserAdmin):
         Allow staff users to add Users while restricting access to others.
         """
         if request.user.is_staff and not request.user.is_superuser:
-            return True
+            return False
         return super().has_add_permission(request)
 
     def get_inlines(self, request, obj=None):
@@ -156,9 +156,8 @@ class CustomUserAdmin(UserAdmin):
     def login(self, request, extra_context=None):
         # Redirect non-superusers to the account user page
         if not request.user.is_superuser or not request.user.is_staff:
-            return redirect(reverse('account_user'))  # Replace 'account_user' with your actual view name
+            return redirect(reverse('account_user')) 
         return super().login(request, extra_context)
-
 
 # Unregister the default User admin
 admin.site.unregister(User)

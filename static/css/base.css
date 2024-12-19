@@ -984,12 +984,43 @@ option[data-stock="0"] {
     text-align: left;
 }
 
-.cart-image {
+.card-cart .cart-image {
     height: 150px;
 }
 
 .w-150{
     width: 150px;
+}
+
+/* Checkout page */
+.card-checkout {
+    display: contents;
+    max-height: 100px;
+}
+
+.card-checkout  * {
+    font-size: small;
+}
+
+.card-checkout .card-title a {
+    font-size: medium;
+}
+
+.card-checkout img{
+    max-height: 100px;
+    max-width: 100px;
+}
+
+.card-checkout .card-text {
+    text-align: left;
+}
+
+.card-checkout .cart-image {
+    height: 100px;
+}
+
+.card-checkout .btn{
+    min-width: 25px;
 }
 
 /* Layout shift fix */

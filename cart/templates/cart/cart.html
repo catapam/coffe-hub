@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static i18n custom_filters %}
+{% load static i18n %}
 
 {% block title %}
     Shopping cart
@@ -14,92 +14,23 @@
 <div role="main" aria-labelledby="shopping-cart" class="shopping-cart page-container">
     <h1 class="mb-5">Shopping cart</h1>
     <hr>
-
     {% if cart and cart.items %}
-        <div class="row g-4">
-            {% for item in cart.items %}
-                <div class="col-12">
-                    <div class="card shadow-sm card-cart">
-                        <div class="row g-0">
-                            <!-- Product Image -->
-                            <div class="col-md-3 cart-image">
-                                <img src="{{ item.product.image }}" class="img-fluid rounded-start" alt="{{ item.product.name }}">
-                            </div>
-
-                            <!-- Product Details -->
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                        <a id="detail-link-{{ item.id }}"
-                                            href="{% url 'product_detail' slug=item.slug %}?size={{ item.size }}">
-                                            {{ item.product }}
-                                        </a>
-                                    </h5>
-                                    <p class="card-text">
-                                        <strong>{% translate "Size:" %}</strong> {{ item.size }}
-                                    </p>
-                                    <p class="card-text">
-                                        <strong>{% translate "Price:" %}</strong> ${{ item.price }} 
-                                    </p>
-                                    <p class="card-text">
-                                        <strong>{% translate "Quantity:" %}</strong>
-                                        <input 
-                                            type="number" 
-                                            class="form-control d-inline-block w-auto cart-quantity" 
-                                            value="{{ item.quantity }}" 
-                                            min="1"
-                                            max="{{ item.stock }}"
-                                            data-item-id="{{ item.id }}" 
-                                            data-size="{{ item.size }}" 
-                                            data-initial-quantity="{{ item.quantity }}">
-                                    </p>
-                                    <p class="card-text">
-                                        <strong>{% translate "Subtotal:" %}</strong> ${{ item.quantity|multiply:item.price }}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-1">
-                                <div class="d-flex justify-content-between">
-                                    <!-- Remove Button -->
-                                    <button class="btn btn-sm btn-danger btn-remove" 
-                                            data-url="{% url 'delete_cart' item.id %}" 
-                                            data-item-id="{{ item.id }}" 
-                                            data-size="{{ item.size }}">
-                                            <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                
-                                    <!-- Update Button -->
-                                    <button 
-                                        class="btn btn-sm btn-success btn-update d-none" 
-                                        data-url="{% url 'update_cart' item.id %}" 
-                                        data-item-id="{{ item.id }}" 
-                                        data-size="{{ item.size }}">
-                                        <i class="fa-solid fa-check"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-            {% endfor %}
-        </div>
+        {% include 'cart/includes/cart_items.html' with view='cart' %}
         <div class="text-end">
-            <h3>{% translate "Total:" %} ${{ cart.total }}</h3>
             <a href="{% url 'product' %}" class="btn btn-primary w-150">
                 {% translate "Continue Shopping" %}
             </a>
-            <a href="/" class="btn btn-secondary w-150">
+            <a href="{% url 'checkout' %}" class="btn btn-secondary w-150">
                 {% translate "Proceed to Checkout" %}
             </a>
         </div>
-    {% else %}
+        {% else %}
         <p class="text-center">{% translate "Your cart is empty!" %}</p>
         <a href="{% url 'product' %}" class="text-center btn btn-primary w-150">
             {% translate "Continue Shopping" %}
         </a>
     {% endif %}
+    
 </div>
 {% endblock %}
 

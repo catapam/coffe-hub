@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static custom_filters %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block title %}
+    Checkout
+{% endblock %}
+
+{% block content %}
+<div role="main" aria-labelledby="checkout" class="checkout page-container">
+    <h1 class="mb-5">Checkout</h1>
+    <hr>
+
+    <div class="row">
+        <div class="col-12 col-lg-6 order-lg-last mb-5">
+            <p class="text-muted">Order Summary</p>
+            {% include 'cart/includes/cart_items.html' with view='checkout' %}
+        </div>
+        <div class="col-12 col-lg-6">
+            <p class="text-muted">Please fill out the form below to complete your order</p>
+            <form action="{% url 'checkout' %}" method="POST" id="payment-form">
+                {% csrf_token %}
+                <fieldset class="rounded px-3 mb-5">
+                    <legend class="fieldset-label small px-2 w-auto">Details</legend>
+                    {{ order_form.full_name | as_crispy_field }}
+                    {{ order_form.email | as_crispy_field }}
+                </fieldset>
+                <fieldset class="rounded px-3 mb-5">
+                    <legend class="fieldset-label small px-2 w-auto">Delivery</legend>
+                    {{ order_form.phone_number | as_crispy_field }}
+                    {{ order_form.country | as_crispy_field }}
+                    {{ order_form.postcode | as_crispy_field }}
+                    {{ order_form.town_or_city | as_crispy_field }}
+                    {{ order_form.street_address1 | as_crispy_field }}
+                    {{ order_form.street_address2 | as_crispy_field }}
+                    {{ order_form.county | as_crispy_field }}
+                    <div class="form-check form-check-inline float-right mr-0">
+                        <label class="form-check-label" for="id-save-info">Save this delivery information to my profile</label>
+                        <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-info" name="save-info" checked>
+                    </div>
+                </fieldset>
+                <fieldset class="px-3">
+                    <legend class="fieldset-label small px-2 w-auto">Payment</legend>
+                    <!-- A Stripe card element will go here -->
+                    <div class="mb-3" id="card-element"></div>
+
+                    <!-- Used to display form errors -->
+                    <div class="mb-3 text-danger" id="card-errors" role="alert"></div>
+                </fieldset>
+
+                <div class="submit-button mt-5 mb-2 px-3 text-end">
+                    <a href="{% url 'product' %}" class="btn btn-primary">
+                        <span class="icon">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                        <span class="font-weight-bold">Keep shopping</span>
+                    </a>
+                    <a id="submit-button" href="{% url 'product' %}" class="btn btn-secondary">
+                        <span class="font-weight-bold">Complete Order</span>
+                        <span class="icon">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </a>
+                    <p class="small my-0 mt-2">
+                        <span class="icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </span>
+                        <span>Your card will be charged <strong>${% if cart.total %}{{ cart.total|floatformat:2 }}{% else %}0.00{% endif %}</strong></span>
+                    </p>
+                </div>                
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- Page specific scripts -->
+{% block extra_js %}
+{{ block.super }}
+    <script src="{% static 'js/cart.js' %}" defer></script>
+{% endblock extra_js %}
