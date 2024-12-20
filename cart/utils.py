@@ -44,6 +44,7 @@ def get_cart_data(request):
                     "id": product.id,
                 })
             except ObjectDoesNotExist:
+                message.error(request, "Your cart is empty")
                 continue
     else:
         # Load cart from session for anonymous users

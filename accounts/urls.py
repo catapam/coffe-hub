@@ -12,7 +12,8 @@ urlpatterns = [
     # custom login
     path('login/', CustomLoginView.as_view(), name='account_login'),
 
-    # Temporary placeholders for account management
+    # Account management
     path('address/', RedirectUserView.as_view(), name='account_address'),
     path('orders/', RedirectUserView.as_view(), name='account_orders'),
+    path('orders/<str:order_id>', OrderView.as_view(), name='order_view'),
 ]

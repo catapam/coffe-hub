@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.views.generic.edit import FormView
 from django.views.generic.base import RedirectView
@@ -9,6 +9,10 @@ from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login
 
+from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponseForbidden
+from django.views.generic import View
+from checkout.models import Order
 
 class CustomLoginView(LoginView):
     """
@@ -141,3 +145,17 @@ class RedirectUserView(RedirectView):
         Return the URL to redirect to.
         """
         return super().get_redirect_url(*args, **kwargs)
+
+
+@method_decorator(login_required, name='dispatch')
+class OrderView(View):
+    def get(self, request, *args, **kwargs):
+        # Fetch the order using the order_number from the URL
+        order = get_object_or_404(Order, order_number=kwargs['order_id'])
+
+        # Ensure the order belongs to the currently logged-in user
+        if order.user != request.user:
+            return HttpResponseForbidden("You do not have permission to view this order.")
+
+        # Redirect to the 'account_user' URL for now
+        return redirect(reverse('account_user'))
