@@ -1,15 +1,16 @@
-
+{% spaceless %}
 <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="col">
         <div class="toast-header row d-flex w-100 end-0 text-{% if type == 'error' %}danger{% else %}{{ type }}{% endif %}">
             <strong class="me-auto col-11">{{ type|capfirst }}</strong>
             <button type="button" class="btn-close col-1" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        <div class="toast-body row ml-4">
-            {{ message }}
+        <div class="toast-body row">
+            {{ message|safe }}
         </div>
     </div>
     <div class="col-1">
         <div class="h-100 toast-capper bg-{{ type }}"></div>
     </div>
 </div>
+{% endspaceless %}

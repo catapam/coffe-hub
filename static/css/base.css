@@ -968,6 +968,11 @@ option[data-stock="0"] {
     margin: 0;
 }
 
+.toast-body {
+    display: inline;
+    padding: 0.5rem 1rem; 
+}
+
 /* Cart cards */
 .card-cart {
     display: contents;
@@ -1034,6 +1039,10 @@ option[data-stock="0"] {
 .StripeElement{
     height: 40px;
 }
+
+.StripeElement * {
+    max-height: 25px;
+} 
 
 /* Layout shift fix */
 @media (min-width: 768px) {
