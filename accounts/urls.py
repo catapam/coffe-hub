@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UpdateUsernameView, RedirectUserView, CustomLoginView
+from .views import UpdateUsernameView, RedirectUserView, CustomLoginView, OrderView
 
 # Define the URL patterns for the 'accounts' app
 urlpatterns = [
