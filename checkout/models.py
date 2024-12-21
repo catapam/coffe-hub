@@ -30,6 +30,7 @@ class Order(models.Model):
     county = models.CharField(max_length=80, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     order_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    payment_intent_id = models.CharField(max_length=255, null=True, blank=True)
 
     def _generate_order_number(self):
         """
@@ -41,8 +42,10 @@ class Order(models.Model):
         """
         Update grand total each time a line item is added,
         accounting for delivery costs.
+        If no line items remain, set the order total to 0.
         """
-        self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum']
+        total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum']
+        self.order_total = total if total is not None else 0  # Handle None value
         self.save()
 
     def save(self, *args, **kwargs):

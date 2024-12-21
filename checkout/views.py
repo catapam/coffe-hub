@@ -15,10 +15,10 @@ class CheckoutView(FormView):
     form_class = OrderForm
 
     def dispatch(self, request, *args, **kwargs):
-        cart = request.session.get('cart', {})
+        cart_items, total, adjustments = get_cart_data(self.request)
         stripe_public_key = settings.STRIPE_PUBLIC_KEY
 
-        if not cart:
+        if not cart_items:
             messages.error(request, "There's nothing in your cart at the moment")
             return redirect(reverse('product'))
 
@@ -31,18 +31,45 @@ class CheckoutView(FormView):
     def get_cart_and_stripe_context(self):
         """
         Helper method to get cart items, total, and Stripe context.
+        Reuses an existing PaymentIntent if possible, or creates a new one
+        if the cart total changes.
         """
         cart_items, total, adjustments = get_cart_data(self.request)
 
-        # Stripe
         stripe_total = round(total * 100)
         stripe_public_key = settings.STRIPE_PUBLIC_KEY
         stripe_secret_key = settings.STRIPE_SECRET_KEY
         stripe.api_key = stripe_secret_key
-        intent = stripe.PaymentIntent.create(
-            amount=stripe_total,
-            currency=settings.STRIPE_CURRENCY,
-        )
+
+        # Check if there's already a PaymentIntent in the session
+        intent_id = self.request.session.get('stripe_payment_intent_id')
+        if intent_id:
+            try:
+                # Retrieve the existing PaymentIntent
+                intent = stripe.PaymentIntent.retrieve(intent_id)
+
+                # Check if the existing PaymentIntent amount matches the cart total
+                if intent['amount'] != stripe_total:
+                    # Amount changed, create a new PaymentIntent
+                    intent = stripe.PaymentIntent.create(
+                        amount=stripe_total,
+                        currency=settings.STRIPE_CURRENCY,
+                    )
+                    self.request.session['stripe_payment_intent_id'] = intent['id']
+            except stripe.error.InvalidRequestError:
+                # If the PaymentIntent is invalid, create a new one
+                intent = stripe.PaymentIntent.create(
+                    amount=stripe_total,
+                    currency=settings.STRIPE_CURRENCY,
+                )
+                self.request.session['stripe_payment_intent_id'] = intent['id']
+        else:
+            # Create a new PaymentIntent if not in session
+            intent = stripe.PaymentIntent.create(
+                amount=stripe_total,
+                currency=settings.STRIPE_CURRENCY,
+            )
+            self.request.session['stripe_payment_intent_id'] = intent['id']
 
         return {
             'cart_items': cart_items,
@@ -91,46 +118,46 @@ class CheckoutView(FormView):
         return context
 
     def get_success_url(self):
-        return reverse('product')
+        return reverse('order_view', kwargs={'order_id': self.order.order_number})
 
     def form_valid(self, form):
-        order = OrderForm.save()
+        order = form.save(commit=False)  # Save the form but do not commit yet
+        order.user = self.request.user  # Associate the order with the logged-in user, if applicable
+
+        # Get the PaymentIntent ID from the session
+        payment_intent_id = self.request.session.get('stripe_payment_intent_id')
+        order.payment_intent_id = payment_intent_id  # Save the PaymentIntent ID to the order
+
+        order.save()  # Save the form instance to the database
         cart_and_stripe_context = self.get_cart_and_stripe_context()
 
         for cart_item in cart_and_stripe_context['cart_items']:
             try:
-                product = Product.objects.get(id=cart_item.product)
-                if isinstance(cart_item, int):
-                    order_line_item = OrderLineItem(
-                        order=order,
-                        product=product,
-                        quantity=cart_item.product,
-                    )
-                    order_line_item.save()
-                else:
-                    # Create an OrderLineItem instance
-                    order_line_item = OrderLineItem(
-                        order=order,
-                        product=product,
-                        size=cart_item['size'],  # Assuming OrderLineItem has a 'size' field
-                        quantity=cart_item['quantity'],
-                        price=cart_item['price'],  # Include price if your model has this field
-                        subtotal=cart_item['subtotal'],  # Optional: Include subtotal if relevant
-                    )
-                    
-                    # Save the order line item
-                    order_line_item.save()
+                product = Product.objects.get(id=cart_item['id'])
+
+                # Create an OrderLineItem instance
+                order_line_item = OrderLineItem(
+                    order=order,
+                    product=product,
+                    size=cart_item['size'], 
+                    quantity=cart_item['quantity'],
+                    price=cart_item['price'],
+                    lineitem_total=cart_item['subtotal'],
+                )
+                
+                # Save the order line item
+                order_line_item.save()
 
             except Product.DoesNotExist:
                 messages.error(request, (
-                    "One of the products in your bag wasn't found in our database. "
+                    "One of the products in your cart wasn't found in our database. "
                     "Please get in touch with us for assistance!")
                 )
                 order.delete()
-                return redirect(reverse('view_bag'))
+                return redirect(reverse('cart'))
 
-            request.session['save_info'] = 'save-info' in request.POST
-            return redirect(reverse('account_orders', args=[order.order_number]))
+        # Clear the PaymentIntent ID from the session after successful order creation
+        self.request.session.pop('stripe_payment_intent_id', None)
 
         messages.success(
             self.request,
@@ -139,7 +166,8 @@ class CheckoutView(FormView):
                 reverse('order_view', kwargs={'order_id': order.order_number})
             )
         )
-        return super().form_valid(form)
+
+        return redirect(reverse('order_view', kwargs={'order_id': order.order_number}))
 
     def form_invalid(self, form):
         messages.error(request, 'There was an error with your form. \

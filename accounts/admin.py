@@ -1,3 +1,4 @@
+import json
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin
@@ -9,6 +10,8 @@ from django.contrib.auth import get_user_model
 from django.templatetags.static import static
 from cart.admin import CartEntryInline
 from checkout.admin import OrderInline, OrderAdmin
+from django.contrib.sessions.models import Session
+from django.utils.timezone import localtime
 
 
 User = get_user_model()
@@ -160,9 +163,55 @@ class CustomUserAdmin(UserAdmin):
             return redirect(reverse('account_user')) 
         return super().login(request, extra_context)
 
+
+class CustomSessionAdmin(admin.ModelAdmin):
+    list_display = ('session_key', 'username', 'ip_address', 'expire_date')  # Removed 'created_at'
+    readonly_fields = ('decoded_data',)
+    ordering = ('-expire_date',)
+
+    def username(self, obj):
+        """
+        Extract the username from the session data if available.
+        """
+        try:
+            # Decode the session data
+            session_data = obj.get_decoded()
+            user_id = session_data.get('_auth_user_id')
+            if user_id:
+                user = User.objects.get(pk=user_id)
+                return user.username
+        except Exception as e:
+            return None
+    username.short_description = 'User'
+
+    def ip_address(self, obj):
+        """
+        Optionally include the IP address if stored in session data.
+        """
+        try:
+            session_data = obj.get_decoded()
+            return session_data.get('ip_address', 'Unknown')
+        except Exception as e:
+            return 'Unknown'
+    ip_address.short_description = 'IP Address'
+
+    def decoded_data(self, obj):
+        """
+        Display the decoded session data for debugging.
+        """
+        try:
+            session_data = obj.get_decoded()
+            formatted_data = json.dumps(session_data, indent=4)
+            return format_html('<pre>{}</pre>', formatted_data)
+        except Exception:
+            return 'Error decoding session data'
+    decoded_data.short_description = 'Session Data'
+
+
 # Unregister the default User admin
 admin.site.unregister(User)
 admin.site.unregister(Group)
 
 # Register the custom User admin
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(Session, CustomSessionAdmin) 

@@ -53,9 +53,9 @@ class OrderAdmin(admin.ModelAdmin):
     model = Order
     inlines = (OrderLineItemAdminInline,)
 
-    readonly_fields = ('order_number', 'user', 'date', 'order_total')
+    readonly_fields = ('order_number', 'user', 'date', 'order_total', 'payment_intent_link')
 
-    fields = ('order_number', 'user', 'status', 'date', 'full_name',
+    fields = ('order_number', 'payment_intent_link', 'user', 'status', 'date', 'full_name',
               'email', 'phone_number', 'country',
               'postcode', 'town_or_city', 'street_address1',
               'street_address2', 'county',
@@ -63,9 +63,20 @@ class OrderAdmin(admin.ModelAdmin):
 
     list_display = ('order_number', 'user', 'status', 'date', 'order_total')
     list_filter = ('order_number', 'user', 'status', 'date', 'order_total')
-    search_fields = ('order_number', 'user', 'date', 'order_total')  # Add search functionality
+    search_fields = ('order_number', 'user', 'date', 'order_total', 'payment_intent_id')  # Add search functionality
 
     ordering = ('-date',)
+
+    def payment_intent_link(self, obj):
+        """
+        Returns a clickable link to the Stripe dashboard for the PaymentIntent.
+        """
+        if obj.payment_intent_id:
+            url = f"https://dashboard.stripe.com/test/payments/{obj.payment_intent_id}"
+            return format_html('<a href="{}" target="_blank">{}</a>', url, obj.payment_intent_id)
+        return "No Payment Intent"
+
+    payment_intent_link.short_description = "Stripe Payment"
 
     def has_module_permission(self, request):
         return request.user.is_staff or request.user.is_superuser
