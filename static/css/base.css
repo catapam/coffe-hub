@@ -1043,6 +1043,23 @@ option[data-stock="0"] {
     max-height: 25px;
 } 
 
+/* Tables */
+.table{
+    --bs-table-bg: transparent !important;
+    max-width: 100%;
+}
+
+/* Order view */
+.order-confirmation-wrapper{
+    width: 100%;
+}
+
+.text-truncate {
+    white-space: nowrap;     /* Prevent text wrapping */
+    overflow: hidden;        /* Hide overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis at the end */
+}
+
 /* Layout shift fix */
 @media (min-width: 768px) {
     #div_id_stock{

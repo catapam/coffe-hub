@@ -7,10 +7,14 @@ from .forms import OrderForm
 from product.models import Product
 from cart.utils import get_cart_data  # Import the utility function
 from .models import OrderLineItem
+from django.views.generic import ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Order
 
 import stripe
 
-class CheckoutView(FormView):
+
+class CheckoutView(LoginRequiredMixin, FormView):
     template_name = 'checkout/checkout.html'
     form_class = OrderForm
 
@@ -174,3 +178,37 @@ class CheckoutView(FormView):
                 Please double check your information.')
 
         return super().form_invalid(form)
+
+
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    model = Order
+    template_name = 'checkout/order_detail.html'  # Define the template to use
+    context_object_name = 'order'
+
+    def get_object(self, queryset=None):
+        """
+        Customize object retrieval to use order_number from the URL.
+        """
+        order_number = self.kwargs.get('order_id')  # 'order_id' corresponds to order_number
+        try:
+            # Retrieve the order using the order_number
+            order = Order.objects.get(order_number=order_number)
+            # Ensure the order belongs to the current user
+            if order.user != self.request.user:
+                raise Http404("You do not have permission to view this order.")
+        except Order.DoesNotExist:
+            raise Http404("Order not found.")
+        return order
+
+
+class OrderListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'checkout/order_list.html'  # Define the template to use
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        """
+        Filter orders by the logged-in user.
+        """
+        return Order.objects.filter(user=self.request.user).order_by('-date')
+
