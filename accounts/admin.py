@@ -120,8 +120,19 @@ class CustomUserAdmin(UserAdmin):
         Dynamically determine the list_display fields based on the user's role.
         """
         if request.user.is_superuser:
-            return ('username', 'email', 'is_staff', 'is_superuser', 'is_active')  # Superuser view
-        return ('username', 'email', 'is_active')  # Non-superuser view
+            return ('username', 'get_primary_email', 'is_staff', 'is_superuser', 'is_active')  # Superuser view
+        return ('username', 'get_primary_email', 'is_active')  # Non-superuser view
+
+    def get_primary_email(self, obj):
+        """
+        Retrieves the primary email address for the user.
+        """
+        primary_email = EmailAddress.objects.filter(user=obj, primary=True).first()
+        if primary_email:
+            return primary_email.email
+        return "No primary email"
+
+    get_primary_email.short_description = 'Primary Email'
 
     def get_form(self, request, obj=None, **kwargs):
         """

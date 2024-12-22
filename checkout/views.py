@@ -162,7 +162,7 @@ class CheckoutView(FormView):
         messages.success(
             self.request,
             format_html(
-                "Payment completed successfully! Thank you for your purchase. You can check your order<a href='{}'>here</a>.",
+                "<p>Payment completed successfully! Thank you for your purchase. You can check your order <a href='{}'>here</a>!</p>",
                 reverse('order_view', kwargs={'order_id': order.order_number})
             )
         )

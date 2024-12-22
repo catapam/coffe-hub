@@ -58,6 +58,7 @@
     color: var(--text-secondary-color) !important;
 }
 
-.original p {
+.original p, .help, #id_password p:first-of-type {
     display: none;
 }
+

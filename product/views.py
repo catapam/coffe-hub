@@ -652,7 +652,7 @@ class ProductCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
                     "success": False,
                     "type": "warning",
                     "message": json.loads(form.errors.as_json())
-                }, status=400)
+                }, status=200)
         except json.JSONDecodeError as e:
             return JsonResponse({"success": False, "type": "error", "message": "Invalid JSON payload."}, status=400)
         except Exception as e:
