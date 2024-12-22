@@ -3,9 +3,10 @@ from django.urls import reverse
 from django.utils.html import format_html
 from product.models import Product
 from .models import OrderLineItem, Order
+from django.contrib.admin import TabularInline, ModelAdmin
 
 
-class OrderLineItemAdminInline(admin.TabularInline):
+class OrderLineItemAdminInline(TabularInline):
     model = OrderLineItem
     extra = 0  # Number of extra blank fields for adding new entries
     fields = ('product_name', 'size', 'quantity', 'lineitem_total')
@@ -21,7 +22,7 @@ class OrderLineItemAdminInline(admin.TabularInline):
         return request.user.is_superuser
 
 
-class OrderInline(admin.TabularInline):
+class OrderInline(TabularInline):
     model = Order
     extra = 0
     fields = ('order_link', 'status', 'date', 'order_total')
@@ -49,7 +50,7 @@ class OrderInline(admin.TabularInline):
 
 
 @admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
+class OrderAdmin(ModelAdmin):
     model = Order
     inlines = (OrderLineItemAdminInline,)
 

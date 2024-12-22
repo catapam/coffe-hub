@@ -12,12 +12,14 @@ from cart.admin import CartEntryInline
 from checkout.admin import OrderInline, OrderAdmin
 from django.contrib.sessions.models import Session
 from django.utils.timezone import localtime
+from django.contrib.admin import TabularInline, ModelAdmin
+from store.models import ContactMessage
 
 
 User = get_user_model()
 
 
-class EmailAddressInline(admin.TabularInline):
+class EmailAddressInline(TabularInline):
     """
     Inline for showing and managing email addresses in the User admin page.
     """
@@ -43,6 +45,67 @@ class EmailAddressInline(admin.TabularInline):
 
     def has_change_permission(self, request, obj=None):
         return request.user.is_staff or request.user.is_superuser
+
+
+class CustomSessionAdmin(ModelAdmin):
+    list_display = ('session_key', 'username', 'expire_date') 
+    readonly_fields = ('decoded_data',)
+    ordering = ('-expire_date',)
+
+    def username(self, obj):
+        """
+        Extract the username from the session data if available.
+        """
+        try:
+            # Decode the session data
+            session_data = obj.get_decoded()
+            user_id = session_data.get('_auth_user_id')
+            if user_id:
+                user = User.objects.get(pk=user_id)
+                return user.username
+        except Exception as e:
+            return None
+    username.short_description = 'User'
+
+    def decoded_data(self, obj):
+        """
+        Display the decoded session data for debugging.
+        """
+        try:
+            session_data = obj.get_decoded()
+            formatted_data = json.dumps(session_data, indent=4)
+            return format_html('<pre>{}</pre>', formatted_data)
+        except Exception:
+            return 'Error decoding session data'
+    decoded_data.short_description = 'Session Data'
+
+    def has_view_permission(self, request, obj=None):
+        """
+        Allow staff users to view Users while restricting access to others.
+        """
+        if obj:  # Detailed view
+            return request.user.is_superuser
+        return True  # List view
+    
+    def has_module_permission(self, request):
+        """
+        Restrict admin access for staff users to only the User model and ContactMessage.
+        """
+        if request.user.is_superuser:
+            return True
+        return super().has_module_permission(request)
+
+    def has_add_permission(self, request):
+        """
+        Allow staff users to add Users while restricting access to others.
+        """
+        return False
+    
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return True
 
 
 class CustomUserAdmin(UserAdmin):
@@ -147,65 +210,62 @@ class CustomUserAdmin(UserAdmin):
         if request.user.is_staff and not request.user.is_superuser:
             return False
         return super().has_add_permission(request)
-
-    def get_inlines(self, request, obj=None):
-        """
-        Dynamically include inlines based on user permissions.
-        """
-        if not request.user.is_superuser:
-            # Allow staff users to see both inlines
-            return [EmailAddressInline, CartEntryInline, OrderInline]
-        return super().get_inlines(request, obj)
     
     def login(self, request, extra_context=None):
         # Redirect non-superusers to the account user page
         if not request.user.is_superuser or not request.user.is_staff:
             return redirect(reverse('account_user')) 
         return super().login(request, extra_context)
-
-
-class CustomSessionAdmin(admin.ModelAdmin):
-    list_display = ('session_key', 'username', 'ip_address', 'expire_date')  # Removed 'created_at'
-    readonly_fields = ('decoded_data',)
-    ordering = ('-expire_date',)
-
-    def username(self, obj):
+    
+    def change_view(self, request, object_id, form_url='', extra_context=None):
         """
-        Extract the username from the session data if available.
+        Add session data for the user being viewed to the admin context and handle session deletion.
+        Add contact messages for the user's email addresses to the context.
         """
+        extra_context = extra_context or {}
+        user_sessions = []
+        user_contact_messages = []
+
+        # Handle session deletions
+        if request.method == 'POST':
+            for key, value in request.POST.items():
+                if key.startswith('sessions-') and key.endswith('-DELETE') and value == 'on':
+                    session_key = request.POST.get(f'{key[:-7]}-session_key')  # Get session_key from checkbox prefix
+                    if session_key:
+                        try:
+                            session = Session.objects.get(session_key=session_key)
+                            session.delete()
+                        except Session.DoesNotExist:
+                            pass
+
         try:
-            # Decode the session data
-            session_data = obj.get_decoded()
-            user_id = session_data.get('_auth_user_id')
-            if user_id:
-                user = User.objects.get(pk=user_id)
-                return user.username
-        except Exception as e:
-            return None
-    username.short_description = 'User'
+            # Get all sessions and filter by user ID
+            user_id = int(object_id)
+            sessions = Session.objects.all()
 
-    def ip_address(self, obj):
-        """
-        Optionally include the IP address if stored in session data.
-        """
-        try:
-            session_data = obj.get_decoded()
-            return session_data.get('ip_address', 'Unknown')
-        except Exception as e:
-            return 'Unknown'
-    ip_address.short_description = 'IP Address'
+            for session in sessions:
+                session_data = session.get_decoded()
+                if str(user_id) == session_data.get('_auth_user_id'):
+                    user_sessions.append({
+                        'session_key': session.session_key,
+                        'expire_date': session.expire_date,
+                        'data': session_data,
+                    })
 
-    def decoded_data(self, obj):
-        """
-        Display the decoded session data for debugging.
-        """
-        try:
-            session_data = obj.get_decoded()
-            formatted_data = json.dumps(session_data, indent=4)
-            return format_html('<pre>{}</pre>', formatted_data)
-        except Exception:
-            return 'Error decoding session data'
-    decoded_data.short_description = 'Session Data'
+            # Get user's associated email addresses
+            user = User.objects.get(pk=user_id)
+            email_addresses = EmailAddress.objects.filter(user=user).values_list('email', flat=True)
+
+            # Filter contact messages by user's email addresses
+            user_contact_messages = ContactMessage.objects.filter(email__in=email_addresses)
+
+        except User.DoesNotExist:
+            pass
+
+        # Add session and contact message data to the context
+        extra_context['user_sessions'] = user_sessions
+        extra_context['user_contact_messages'] = user_contact_messages
+        return super().change_view(request, object_id, form_url, extra_context)
 
 
 # Unregister the default User admin

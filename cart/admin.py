@@ -1,7 +1,7 @@
-from django.contrib import admin
+from django.contrib.admin import TabularInline
 from .models import CartEntry
 
-class CartEntryInline(admin.TabularInline):
+class CartEntryInline(TabularInline):
     """
     Inline for displaying CartEntry objects in the User admin page.
     """

@@ -1,0 +1,94 @@
+{% extends "admin/change_form.html" %}
+
+{% block after_related_objects %}
+<div class="js-inline-admin-formset inline-group" id="contacts-group" data-inline-type="tabular">
+    <div class="tabular inline-related last-related">
+        <fieldset class="module" aria-labelledby="contacts-heading">
+            <h2 id="contacts-heading" class="inline-heading">User Contacts</h2>
+            {% if user_contact_messages %}
+            <table>
+                <thead>
+                    <tr>
+                        <th class="column-subject">Subject</th>
+                        <th class="column-status">Status</th>
+                        <th class="column-email">Email</th>
+                        <th class="column-created_at">Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contact in user_contact_messages %}
+                    <tr class="form-row has_original dynamic-contacts" id="contacts-{{ forloop.counter0 }}">
+                        <td class="field-subject">
+                            <p>
+                                <a href="/admin/store/contactmessage/{{ contact.id }}/change/">
+                                    {{ contact.subject }}
+                                </a>
+                            </p>
+                        </td>
+                        <td class="field-status">
+                            <p>{{ contact.status }}</p>
+                        </td>
+                        <td class="field-email">
+                            <p>{{ contact.email }}</p>
+                        </td>
+                        <td class="field-created_at">
+                            <p>{{ contact.created_at }}</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No contact messages found for this user.</p>
+            {% endif %}
+        </fieldset>
+    </div>
+</div>
+
+<div class="js-inline-admin-formset inline-group" id="sessions-group" data-inline-type="tabular">
+    <div class="tabular inline-related last-related">
+        <fieldset class="module" aria-labelledby="sessions-heading">
+            <h2 id="sessions-heading" class="inline-heading">User Sessions</h2>
+            {% if user_sessions %}
+            <table>
+                <thead>
+                    <tr>
+                        <th class="column-session_key">Session Key</th>
+                        <th class="column-expire_date">Expire Date</th>
+                        <th class="column-delete">Delete?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in user_sessions %}
+                    <tr class="form-row has_original dynamic-sessions" id="sessions-{{ forloop.counter0 }}">
+                        <td class="field-session_key">
+                            <p>
+                                {% if request.user.is_superuser %}
+                                    <a href="/admin/sessions/session/{{ session.session_key }}/change/">
+                                        {{ session.session_key }}
+                                    </a>
+                                {% else %}
+                                    {{ session.session_key }}
+                                {% endif %}
+                            </p>
+                        </td>
+                        <td class="field-expire_date">
+                            <p>{{ session.expire_date }}</p>
+                        </td>
+                        <td class="field-delete">
+                            <input type="checkbox" name="sessions-{{ forloop.counter0 }}-DELETE"
+                                id="id_sessions-{{ forloop.counter0 }}-DELETE">
+                            <input type="hidden" name="sessions-{{ forloop.counter0 }}-session_key"
+                                value="{{ session.session_key }}">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No active sessions found for this user.</p>
+            {% endif %}
+        </fieldset>
+    </div>
+</div>
+{% endblock %}

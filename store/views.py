@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from .forms import ContactForm
+from django.contrib import messages
 
 class HomeView(ProductListView):
     """
@@ -77,25 +78,16 @@ class HelpView(TemplateView):
         ]
 
         # Add the Crispy form to the context
-        context['form'] = ContactForm()
+        form = kwargs.get('form') or ContactForm(user=self.request.user)
+        context['form'] = form
 
         return context
-
-class ContactFormView(TemplateView):
-    """
-    Handles the contact form submissions and displays the Help page with FAQs.
-    """
-    template_name = 'store/help.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = ContactForm()
-        return context
-
+    
     def post(self, request, *args, **kwargs):
-        form = ContactForm(request.POST)
+        form = ContactForm(request.POST, user=request.user)
         if form.is_valid():
             # Save the form data to the database
             form.save()
-            return redirect('success_page')  # Redirect to a success page after submission
+            messages.success(request, "Your request has been submitted, we will reach back to you as soon as possible.")
+            return redirect('help')
         return self.render_to_response(self.get_context_data(form=form))

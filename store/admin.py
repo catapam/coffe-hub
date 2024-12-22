@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import ContactMessage
+from allauth.account.models import EmailAddress
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
