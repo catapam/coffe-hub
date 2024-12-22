@@ -50,11 +50,11 @@ class CheckoutView(LoginRequiredMixin, FormView):
         stripe.api_key = stripe_secret_key
 
         # Check if there's already a PaymentIntent in the session
-        intent_id = self.request.session.get('stripe_payment_intent_id')
-        if intent_id:
+        stripe_pid = self.request.session.get('stripe_pid')
+        if stripe_pid:
             try:
                 # Retrieve the existing PaymentIntent
-                intent = stripe.PaymentIntent.retrieve(intent_id)
+                intent = stripe.PaymentIntent.retrieve(stripe_pid)
 
                 # Check if the existing PaymentIntent amount matches the cart total
                 if intent['amount'] != stripe_total:
@@ -63,21 +63,21 @@ class CheckoutView(LoginRequiredMixin, FormView):
                         amount=stripe_total,
                         currency=settings.STRIPE_CURRENCY,
                     )
-                    self.request.session['stripe_payment_intent_id'] = intent['id']
+                    self.request.session['stripe_pid'] = intent['id']
             except stripe.error.InvalidRequestError:
                 # If the PaymentIntent is invalid, create a new one
                 intent = stripe.PaymentIntent.create(
                     amount=stripe_total,
                     currency=settings.STRIPE_CURRENCY,
                 )
-                self.request.session['stripe_payment_intent_id'] = intent['id']
+                self.request.session['stripe_pid'] = intent['id']
         else:
             # Create a new PaymentIntent if not in session
             intent = stripe.PaymentIntent.create(
                 amount=stripe_total,
                 currency=settings.STRIPE_CURRENCY,
             )
-            self.request.session['stripe_payment_intent_id'] = intent['id']
+            self.request.session['stripe_pid'] = intent['id']
 
         return {
             'cart_items': cart_items,
@@ -133,8 +133,8 @@ class CheckoutView(LoginRequiredMixin, FormView):
         order.user = self.request.user  # Associate the order with the logged-in user, if applicable
 
         # Get the PaymentIntent ID from the session
-        payment_intent_id = self.request.session.get('stripe_payment_intent_id')
-        order.payment_intent_id = payment_intent_id  # Save the PaymentIntent ID to the order
+        stripe_pid = self.request.session.get('stripe_pid')
+        order.stripe_pid = stripe_pid  # Save the PaymentIntent ID to the order
 
         order.save()  # Save the form instance to the database
         cart_and_stripe_context = self.get_cart_and_stripe_context()
@@ -165,7 +165,7 @@ class CheckoutView(LoginRequiredMixin, FormView):
                 return redirect(reverse('cart'))
 
         # Clear the PaymentIntent ID from the session after successful order creation
-        self.request.session.pop('stripe_payment_intent_id', None)
+        self.request.session.pop('stripe_pid', None)
 
         messages.success(
             self.request,
@@ -200,12 +200,13 @@ class CacheCheckoutDataView(View):
             # Serialize cart items for JSON
             serialized_cart_items = [
                 {
-                    "id": item["id"],
-                    "size": item["size"],
-                    "price": float(item["price"]),
-                    "quantity": item["quantity"],
+                    "id": cart_item["id"],
+                    "size": cart_item["size"],
+                    "price": float(cart_item["price"]),
+                    "quantity": cart_item["quantity"],
+                    "lineitem_total": float(cart_item["subtotal"]),
                 }
-                for item in cart_items
+                for cart_item in cart_items
             ]
 
             # Update metadata in the PaymentIntent
@@ -213,6 +214,7 @@ class CacheCheckoutDataView(View):
                 'cart': json.dumps(serialized_cart_items),
                 'save_info': request.POST.get('save_info'),
                 'username': request.user.username,
+                'stripe_pid': pid,
             })
             return JsonResponse({'success': True}, status=200)
         except Exception as e:
