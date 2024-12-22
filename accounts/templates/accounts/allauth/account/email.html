@@ -5,13 +5,6 @@
     {% translate "Email Addresses" %}
 {% endblock title %}
 
-<!-- Extra CSS block for dashboard styles -->
-{% block extra_css %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static 'css/account_management.css' %}">
-<link rel="stylesheet" href="{% static 'css/auth.css' %}">
-{% endblock extra_css %}
-
 {% block account-content %}
 <div class="error-page">
     <div class="text-center">

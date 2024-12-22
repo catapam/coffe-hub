@@ -68,6 +68,9 @@ class HelpView(TemplateView):
         """
         context = super().get_context_data(**kwargs)
 
+        # Dynamically set the base template
+        context['base_template'] = 'accounts/account.html' if self.request.user.is_authenticated else 'base.html'
+
         # FAQ items
         context['faq_items'] = [
             {"question": "What is Coffee Hub?", "answer": "Coffee Hub is your one-stop platform for premium coffee, brewing equipment, and accessories."},

@@ -1,18 +1,18 @@
-{% extends 'base.html' %}
+{% extends base_template %}
+
 {% load static %}
 
 {% block title %}
     Help
 {% endblock %}
 
-<!-- Including the CSS for styling -->
-{% block extra_css %}
-
-{% endblock extra_css %}
-
 {% block content %}
-<!-- Main content section with ARIA role for better accessibility -->
+{% if request.user.is_authenticated %}
+{% include 'accounts/includes/menu.html' %}
+<div role="main" aria-labelledby="account-management" class="page-container">
+{% else %}
 <div role="main" aria-labelledby="help" class="page-container">
+{% endif %}
     <div class="container my-5">
 
         <!-- Help Page Header -->

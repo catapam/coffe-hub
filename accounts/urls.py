@@ -13,6 +13,7 @@ urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='account_login'),
 
     # Account management
+    path('details/', RedirectUserView.as_view(), name='account_details'),
     path('address/', RedirectUserView.as_view(), name='account_address'),
     path('orders/', RedirectUserView.as_view(), name='account_orders'),
     path('orders/<str:order_id>', OrderView.as_view(), name='order_view'),

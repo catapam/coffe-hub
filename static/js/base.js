@@ -17,6 +17,7 @@ function setupMenuItemToggle() {
     const menuItems = document.querySelectorAll('.menu-item');
     if (menuItems.length > 0) {
         menuItems.forEach(item => {
+            if (item.id === 'toggle-btn') return;
             item.addEventListener('click', function () {
                 if (this.classList.contains('active')) {
                     this.classList.remove('active'); // Deactivate if already active
