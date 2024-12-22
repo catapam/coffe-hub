@@ -1034,6 +1034,11 @@ option[data-stock="0"] {
     min-width: 25px;
 }
 
+.card-checkout select:invalid,
+.card-checkout option[value=""]{
+    color:rgba(255, 255, 255, 0.6);
+}
+
 /* Stripe element */
 .StripeElement{
     height: 40px;

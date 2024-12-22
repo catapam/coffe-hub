@@ -4,14 +4,13 @@ from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.views.generic.edit import FormView
 from django.views.generic.base import RedirectView
-from .forms import UpdateUsernameForm
+from .forms import UpdateUsernameForm, UserProfileForm
 from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login
 
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseForbidden
-from django.views.generic import View
 from checkout.models import Order
 
 class CustomLoginView(LoginView):
@@ -138,24 +137,41 @@ class RedirectUserView(RedirectView):
     Class-based view to redirect the user to the update username page.
     Ensures that only logged-in users can access this redirect.
     """
-    pattern_name = 'account_user'  # Redirects to the URL pattern
+    pattern_name = 'account_profile'
 
     def get_redirect_url(self, *args, **kwargs):
         """
         Return the URL to redirect to.
         """
         return super().get_redirect_url(*args, **kwargs)
-
+        
 
 @method_decorator(login_required, name='dispatch')
-class OrderView(View):
-    def get(self, request, *args, **kwargs):
-        # Fetch the order using the order_number from the URL
-        order = get_object_or_404(Order, order_number=kwargs['order_id'])
+@method_decorator(login_required, name='dispatch')
+class ProfileView(FormView):
+    template_name = 'accounts/profile.html'
+    form_class = UserProfileForm
+    success_url = reverse_lazy('account_profile')
 
-        # Ensure the order belongs to the currently logged-in user
-        if order.user != request.user:
-            return HttpResponseForbidden("You do not have permission to view this order.")
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        try:
+            user_profile = self.request.user.userprofile
+        except UserProfile.DoesNotExist:
+            user_profile = None
+        return form_class(instance=user_profile, **self.get_form_kwargs())
 
-        # Redirect to the 'account_user' URL for now
-        return redirect(reverse('account_user'))
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile_form'] = self.get_form()
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, "Your profile has been updated.")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Please correct the errors and try again.")
+        return super().form_invalid(form)

@@ -1,0 +1,39 @@
+{% extends "accounts/account.html" %}
+
+{% block title %}
+    My profile
+{% endblock %}
+
+{% block account-content %}
+<div role="main" aria-labelledby="profile" class="profile page-container">
+    <h1 class="mb-5">My profile</h1>
+    <hr>
+
+    <div class="row">
+        <div class="col-12">
+            <form action="{% url 'account_profile' %}" method="POST" id="payment-form">
+                {% csrf_token %}
+                <fieldset class="rounded px-3 mb-5">
+                    <legend class="fieldset-label small px-2 w-auto">Personal</legend>
+                    {{ profile_form.default_full_name | as_crispy_field }}
+                    {{ profile_form.default_phone_number | as_crispy_field }}
+                </fieldset>
+                <fieldset class="rounded px-3 mb-5">
+                    <legend class="fieldset-label small px-2 w-auto">Address</legend>
+                    {{ profile_form.default_street_address1 | as_crispy_field }}
+                    {{ profile_form.default_street_address2 | as_crispy_field }}
+                    {{ profile_form.default_town_or_city | as_crispy_field }}
+                    {{ profile_form.default_county | as_crispy_field }}
+                    {{ profile_form.default_postcode | as_crispy_field }}
+                    {{ profile_form.default_country | as_crispy_field }}
+                </fieldset>
+                <div class="submit-button mt-5 mb-2 px-3 text-end">
+                    <button type="submit" class="btn btn-secondary">
+                        <span class="font-weight-bold">Save</span>
+                    </button>
+                </div>             
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

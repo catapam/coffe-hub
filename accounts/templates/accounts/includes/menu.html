@@ -4,12 +4,22 @@
 <nav class="sidebar" id="sidebar" aria-label="Dashboard Navigation">
     <div class="menu-list">
         <ul class="top-menu-dashboard navbar-nav">
+            {% if not request.user.is_superuser and not request.user.is_staff %}
+            <li>
+                <a href="{% url 'account_profile' %}" 
+                   class="menu-item nav-link {% if request.path == 'account_profile'|get_url_path %}active{% endif %}" 
+                   aria-label="Personal Info">
+                    <span class="menu-text">Profile</span>
+                    <i class="fa-regular fa-user" aria-hidden="true"></i>
+                </a>
+            </li>
+            {% endif %}
             <li>
                 <a href="{% url 'account_user' %}" 
                    class="menu-item nav-link {% if request.path == 'account_user'|get_url_path %}active{% endif %}" 
                    aria-label="User details">
-                    <span class="menu-text">User</span>
-                    <i class="fa-regular fa-user" aria-hidden="true"></i>
+                    <span class="menu-text">Username</span>
+                    <i class="fa-solid fa-at"></i>
                 </a>
             </li>
             <li>
@@ -29,22 +39,6 @@
                 </a>
             </li>
             {% if not request.user.is_superuser and not request.user.is_staff %}
-            <li>
-                <a href="{% url 'account_details' %}" 
-                   class="menu-item nav-link {% if request.path == 'account_details'|get_url_path %}active{% endif %}" 
-                   aria-label="Personal Info">
-                    <span class="menu-text">Personal info</span>
-                    <i class="fa-solid fa-person"></i>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'account_address' %}" 
-                   class="menu-item nav-link {% if request.path == 'account_address'|get_url_path %}active{% endif %}" 
-                   aria-label="Address">
-                    <span class="menu-text">Address</span>
-                    <i class="fas fa-home" aria-hidden="true"></i>
-                </a>
-            </li>
             <li>
                 <a href="{% url 'account_orders' %}" 
                    class="menu-item nav-link {% if request.path == 'account_orders'|get_url_path %}active{% endif %}" 

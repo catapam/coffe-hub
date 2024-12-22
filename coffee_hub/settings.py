@@ -9,10 +9,15 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
 from pathlib import Path
 import os
 import dj_database_url
+
+# Fix for django countries on Django 5x+
+from django_countries.widgets import LazyChoicesMixin
+
+LazyChoicesMixin.get_choices = lambda self: self._choices
+LazyChoicesMixin.choices = property(LazyChoicesMixin.get_choices, LazyChoicesMixin.set_choices)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -69,6 +74,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'cloudinary',
     'cloudinary_storage',
+    'django_countries',
 ]
 
 SITE_ID = 1

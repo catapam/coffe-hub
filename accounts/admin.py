@@ -14,9 +14,21 @@ from django.contrib.sessions.models import Session
 from django.utils.timezone import localtime
 from django.contrib.admin import TabularInline, ModelAdmin
 from store.models import ContactMessage
+from .models import UserProfile
 
 
 User = get_user_model()
+
+
+class UserProfileInline(admin.StackedInline):
+    """
+    Inline class to display and edit UserProfile data
+    within the User admin interface.
+    """
+    model = UserProfile
+    can_delete = False  # Prevent deletion of profiles through the inline
+    verbose_name_plural = "User Profiles"
+    fk_name = 'user'
 
 
 class EmailAddressInline(TabularInline):
@@ -113,7 +125,7 @@ class CustomUserAdmin(UserAdmin):
     Custom User admin to include EmailAddress and CartEntry inlines.
     """
     readonly_fields = ('last_login', 'date_joined')
-    inlines = [EmailAddressInline, CartEntryInline, OrderInline]
+    inlines = [UserProfileInline, EmailAddressInline, CartEntryInline, OrderInline]
     
     def get_list_display(self, request):
         """
