@@ -7,11 +7,15 @@ from .forms import OrderForm
 from product.models import Product
 from cart.utils import get_cart_data  # Import the utility function
 from .models import OrderLineItem
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Order
+from django.views.decorators.http import require_POST
+from django.shortcuts import HttpResponse
+from django.http import JsonResponse
 
 import stripe
+import json
 
 
 class CheckoutView(LoginRequiredMixin, FormView):
@@ -178,6 +182,42 @@ class CheckoutView(LoginRequiredMixin, FormView):
                 Please double check your information.')
 
         return super().form_invalid(form)
+    
+
+class CacheCheckoutDataView(View):
+    """
+    View to handle caching of checkout metadata.
+    """
+
+    def post(self, request, *args, **kwargs):
+        try:
+            pid = request.POST.get('client_secret').split('_secret')[0]
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+
+            # Retrieve dynamic cart data
+            cart_items, _, _ = get_cart_data(request)
+
+            # Serialize cart items for JSON
+            serialized_cart_items = [
+                {
+                    "id": item["id"],
+                    "size": item["size"],
+                    "price": float(item["price"]),
+                    "quantity": item["quantity"],
+                }
+                for item in cart_items
+            ]
+
+            # Update metadata in the PaymentIntent
+            stripe.PaymentIntent.modify(pid, metadata={
+                'cart': json.dumps(serialized_cart_items),
+                'save_info': request.POST.get('save_info'),
+                'username': request.user.username,
+            })
+            return JsonResponse({'success': True}, status=200)
+        except Exception as e:
+            print(str(e))
+            return JsonResponse({'error': str(e)}, status=400)
 
 
 class OrderDetailView(LoginRequiredMixin, DetailView):
