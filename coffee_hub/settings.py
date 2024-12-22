@@ -90,6 +90,7 @@ MIDDLEWARE = [
 
     # custom middleware:
     'accounts.middleware.LoginRequiredMiddleware',
+    'cart.middleware.CartRedirectMiddleware',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'

@@ -1060,10 +1060,19 @@ option[data-stock="0"] {
     text-overflow: ellipsis; /* Add ellipsis at the end */
 }
 
+/* Cart choice page */
+.merge-cart-button{
+    width: 50%;
+}
+
 /* Layout shift fix */
 @media (min-width: 768px) {
     #div_id_stock{
         margin-top: 1rem;
+    }
+
+    .merge-cart-button{
+        width: 25%;
     }
 }
 

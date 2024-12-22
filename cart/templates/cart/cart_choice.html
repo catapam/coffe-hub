@@ -1,0 +1,92 @@
+{% extends 'accounts/account.html' %}
+{% load i18n %}
+
+{% block title %}
+    Cart Choice
+{% endblock %}
+
+{% block account-content %}
+<div class="container">
+    <h2 class="text-center">{% translate "Choose Cart Action" %}</h2>
+    <p class="text-center">{% translate "You have items in your browser's cache cart and/or account's database cart. Please choose how you want to proceed:" %}</p>
+    <p class="text-center small">
+        {% translate "This action cannot be undone, and navigating away will auto-select to keep only the account's database cart." %}
+    </p>
+
+    <div class="row">
+        <!-- Database Cart -->
+        <div class="col-12 col-md-6 mt-4 d-flex flex-column">
+            <h4 class="text-center">{% translate "Account's Cart" %}</h4>
+            <div class="cart-items flex-grow-1">
+                {% if database_cart and database_cart.items %}
+                    {% for item in database_cart.items %}
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="{{ item.product.image }}" alt="{{ item.product.name }}" 
+                                 class="img-thumbnail me-3" style="width: 50px; height: 50px;">
+                            <div>
+                                <p class="mb-1"><strong>{{ item.product.name }}</strong></p>
+                                <p class="mb-0 small">
+                                    {% translate "Size:" %} {{ item.size }} |
+                                    {% translate "Qty:" %} {{ item.quantity }} |
+                                    {% translate "Price:" %} ${{ item.price }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center">{% translate "No items in the account's cart." %}</p>
+                {% endif %}
+            </div>
+            <form method="post" class="mt-auto text-center">
+                {% csrf_token %}
+                <button type="submit" name="cart_choice" value="keep_database" class="btn btn-secondary w-50">
+                    {% translate "Keep Account's Cart" %}
+                </button>
+            </form>
+        </div>
+
+        <!-- Session Cart -->
+        <div class="col-12 col-md-6 mt-4 d-flex flex-column">
+            <h4 class="text-center">{% translate "Browser's Cart" %}</h4>
+            <div class="cart-items flex-grow-1">
+                {% if session_cart and session_cart.items %}
+                    {% for item in session_cart.items %}
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="{{ item.product.image }}" alt="{{ item.product.name }}" 
+                                 class="img-thumbnail me-3" style="width: 50px; height: 50px;">
+                            <div>
+                                <p class="mb-1"><strong>{{ item.product.name }}</strong></p>
+                                <p class="mb-0 small">
+                                    {% translate "Size:" %} {{ item.size }} |
+                                    {% translate "Qty:" %} {{ item.quantity }} |
+                                    {% translate "Price:" %} ${{ item.price }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center">{% translate "No items in the browser's cart." %}</p>
+                {% endif %}
+            </div>
+            <form method="post" class="mt-auto text-center">
+                {% csrf_token %}
+                <button type="submit" name="cart_choice" value="keep_session" class="btn btn-danger w-50">
+                    {% translate "Keep Browser's Cart" %}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Merge Button -->
+    <div class="row mt-4">
+        <div class="col text-center">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="cart_choice" value="merge" class="btn btn-primary merge-cart-button">
+                    {% translate "Merge Carts" %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

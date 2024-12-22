@@ -5,6 +5,29 @@ from product.models import Product, ProductVariant
 from .models import CartEntry
 
 
+def merge_session_cart_to_user(request, user):
+    """
+    Merge the session cart with the database cart for a logged-in user.
+    """
+    session_cart = request.session.get('cart', {})
+
+    if session_cart:
+        for product_id, sizes in session_cart.items():
+            for size, quantity in sizes.items():
+                product = Product.objects.get(pk=product_id)
+                cart_entry, created = CartEntry.objects.get_or_create(
+                    user=user,
+                    product=product,
+                    size=size,
+                    defaults={'quantity': quantity}
+                )
+                if not created:
+                    cart_entry.quantity += quantity
+                    cart_entry.save()
+        del request.session['cart']
+        request.session.modified = True
+
+
 def get_cart_data(request):
     cart_items = []
     total = 0
