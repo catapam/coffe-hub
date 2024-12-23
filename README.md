@@ -1,4 +1,4 @@
-# Codehub
+# Coffeehub
 
 <a href="https://coffee-hub-64aa59561310.herokuapp.com/" target="_blank">Live project can be viewed here</a>
 
@@ -6,16 +6,45 @@ Welcome to Coffee Hub, your one-stop platform for premium coffee and related mer
 
 ![amiresponsive screenshot](documentation/responsive.png)
 
+<div align="center">
+
+![](https://tokei.rs/b1/github/catapam/coffe-hub?category=files)
+![](https://tokei.rs/b1/github/catapam/coffe-hub?category=code)
+![](https://tokei.rs/b1/github/catapam/coffe-hub?category=comments)
+
+</div>
+
 # Table of Contents
 
 
-# Description
+
+# Introduction
 
 Coffee Hub is a luxurious e-commerce platform dedicated to coffee enthusiasts, offering a curated selection of premium coffee beans, brewing equipment, and accessories. The platform is designed to provide a seamless shopping experience, integrating a robust payment gateway, real-time inventory updates, and personalized recommendations based on user preferences. Coffee Hub is the perfect destination for anyone looking to elevate their coffee experience.
 
-# User Experience
+## Objective
+
+## Audience
+
+## Solution
+
+## Scope
+
+# Business and Marketing plan
+
+## User Experience
 
 Coffee Hub is meticulously crafted to deliver an elegant and intuitive user experience. The platform features a sleek dark-mode design with warm, rich colors that reflect the essence of coffee culture. Navigation is effortless, with clear categorization of products, a search functionality, and an easy checkout process. Users can create accounts to save preferences, track orders, and manage their profiles. Accessibility and responsiveness are prioritized, ensuring that Coffee Hub looks and performs beautifully across all devices.
+
+## Market
+
+## Revenue model
+
+## Marketing
+
+## KPIs
+
+## Risks
 
 # Agile Methodology and Planning
 
@@ -25,7 +54,7 @@ Coffee Hub is meticulously crafted to deliver an elegant and intuitive user expe
 
 In this epic, the primary objective is to fully establish the Django front-end website, with comprehensive content management through the admin dashboard. Key deliverables include the creation of branding elements and the development of a functional, polished landing page that reflects the final version of the site. Additionally, this epic covers the initial setup, including the installation of essential Python modules and the configuration of testing parameters to ensure the front-end website operates smoothly.
 
-#### User Stories
+<details><summary><b>User Stories</b></summary>
 
 - [STORY 1.1 - As a developer, I want to set up the Django environment and establish the initial project structure so that the project has a solid foundation for further development.](https://github.com/catapam/coffe-hub/issues/7)
 - [STORY 1.2 - As a developer, I want to select and configure a SQL database (MySQL or PostgreSQL) so that the project has a reliable and scalable data storage solution.](https://github.com/catapam/coffe-hub/issues/8)
@@ -34,22 +63,26 @@ In this epic, the primary objective is to fully establish the Django front-end w
 - [STORY 1.5 - As a developer, I want to establish copyright, branding, and basic project documentation so that the project is legally compliant and easy to understand.](https://github.com/catapam/coffe-hub/issues/11)
 - [STORY 1.6 - As a developer, I want to implement automated testing using Python so that the project's codebase remains stable and errors are caught early in development.](https://github.com/catapam/coffe-hub/issues/12)
 
+</details>
+
 ### Epic 2: User Authentication and Authorization
 
 This epic focuses on implementing a robust user authentication and authorization system. The goal is to enable secure user registration, login, and access management. Core tasks include integrating Django’s authentication framework, setting up user roles and permissions, and ensuring data security through encryption. By the end of this epic, the website will support secure user interactions, with role-based access control fully implemented.
 
-#### User Stories
+<details><summary><b>User Stories</b></summary>
 
 - [STORY 2.1 - As a user, I want to register an account so that I can access the system.](https://github.com/catapam/coffe-hub/issues/13)
 - [STORY 2.2 - As a user, I want to log in to my account so that I can access my portfolio.](https://github.com/catapam/coffe-hub/issues/14)
 - [STORY 2.3 - As a user, I want to reset my password if I forget it so that I can regain access to my account.](https://github.com/catapam/coffe-hub/issues/15)
 - [STORY 2.4 - As an admin, I want to assign roles to users so that I can control access to different functionalities.](https://github.com/catapam/coffe-hub/issues/16)
 
+</details>
+
 ### Epic 3: Store
 
 This epic is dedicated to implementing the product catalog, search, and detailed views for items in the store. It ensures users can browse, filter, and find products with ease. Key features include a responsive product display, search functionality, and categorization to enhance the shopping experience.
 
-#### User Stories
+<details><summary><b>User Stories</b></summary>
 
 - [STORY 3.1 - As a customer, I want to browse a catalog of products with filtering options so that I can easily find products based on my preferences.](https://github.com/catapam/coffe-hub/issues/17)
 - [STORY 3.2 - As a customer, I want to search for products by name or keywords so that I can quickly find what I’m looking for.](https://github.com/catapam/coffe-hub/issues/18)
@@ -57,12 +90,15 @@ This epic is dedicated to implementing the product catalog, search, and detailed
 - [STORY 3.4 - As an admin, I want to categorize products so that customers can easily browse by product type.](https://github.com/catapam/coffe-hub/issues/20)
 - [STORY 3.5 - As an admin, I want to manage product inventory levels so that customers can see product availability before making a purchase.](https://github.com/catapam/coffe-hub/issues/21)
 - [STORY 3.6 - As a customer, I want to leave reviews and ratings for products so that I can share my experience and help others decide.](https://github.com/catapam/coffe-hub/issues/22)
+- [STORY 3.7 - As a customer, I want to add, remove, and edit products in my cart, so I can easily manage my shopping list before checkout.](https://github.com/catapam/coffe-hub/issues/229)
+
+</details>
 
 ### Epic 4: Payment Gateway
 
 This epic focuses on integrating a secure and efficient payment system into the website. Key deliverables include the implementation of Stripe for payment processing, a user-friendly checkout process, and comprehensive payment feedback. By the end of this epic, users will be able to complete transactions smoothly, with secure data handling and clear notifications.
 
-#### User Stories
+<details><summary><b>User Stories</b></summary>
 
 - [STORY 4.1 - As a developer, I want to integrate the Stripe payment gateway so that users can make secure payments for their purchases.](https://github.com/catapam/coffe-hub/issues/23)
 - [STORY 4.2 - As a user, I want to go through a structured checkout process so that I can complete my purchases smoothly.](https://github.com/catapam/coffe-hub/issues/24)
@@ -71,11 +107,13 @@ This epic focuses on integrating a secure and efficient payment system into the 
 - [STORY 4.5 - As a developer, I want to validate orders before processing payment so that I can ensure correct pricing and inventory levels.](https://github.com/catapam/coffe-hub/issues/27)
 - [STORY 4.6 - As an admin, I want to manage refunds and payment reversals so that customers can be refunded for eligible purchases.](https://github.com/catapam/coffe-hub/issues/28)
 
+</details>
+
 ### Epic 5: Account Management
 
 This epic focuses on creating a comprehensive user account management system. Key functionalities include managing user profiles, changing passwords, viewing order history, and managing addresses. Additionally, account deactivation and reactivation processes will be implemented, ensuring users have full control over their accounts.
 
-#### User Stories
+<details><summary><b>User Stories</b></summary>
 
 - [STORY 5.1 - As a user, I want to be able to view and update my profile information so that my account details are accurate and up to date.](https://github.com/catapam/coffe-hub/issues/29)
 - [STORY 5.2 - As a user, I want to be able to change my password securely so that my account remains protected.](https://github.com/catapam/coffe-hub/issues/30)
@@ -83,11 +121,13 @@ This epic focuses on creating a comprehensive user account management system. Ke
 - [STORY 5.4 - As a user, I want to manage multiple shipping addresses so that I can select the correct one during checkout.](https://github.com/catapam/coffe-hub/issues/32)
 - [STORY 5.5 - As a user, I want the option to deactivate my account so that I can manage my privacy and control my account’s availability.](https://github.com/catapam/coffe-hub/issues/33)
 
+</details>
+
 ### Epic 6: SEO and Marketing
 
 This epic aims to optimize the platform for search engines and enhance its online presence through marketing strategies. The focus includes implementing SEO best practices, integrating social sharing features, and setting up analytics to track user behavior. These efforts ensure the site is discoverable and aligned with marketing goals.
 
-#### User Stories
+<details><summary><b>User Stories</b></summary>
 
 - [STORY 6.1 - As a developer, I want to create SEO-friendly URLs and page titles so that the site ranks better in search engine results.](https://github.com/catapam/coffe-hub/issues/34)
 - [STORY 6.2 - As a developer, I want to add meta descriptions and keywords to key pages so that search engines better understand the content.](https://github.com/catapam/coffe-hub/issues/35)
@@ -96,6 +136,8 @@ This epic aims to optimize the platform for search engines and enhance its onlin
 - [STORY 6.5 - As a user, I want to easily share content from the site on social media so that I can spread awareness of the products and engage with others.](https://github.com/catapam/coffe-hub/issues/38)
 - [STORY 6.6 - As a site owner, I want to monitor site traffic with Google Analytics so that I can understand user behavior and improve the site based on data insights.](https://github.com/catapam/coffe-hub/issues/39)
 - [STORY 6.7 - As a site owner, I want to integrate a newsletter signup form so that I can build a mailing list and engage users with updates and promotions.](https://github.com/catapam/coffe-hub/issues/221)
+
+</details>
 
 ## MoSCoW Methodology
 
@@ -140,13 +182,13 @@ The details for each sprint are provided below:
 **Story Point / MoSCoW** | **Must Have** | **Should Have** | **Could Have**
 :-----:|:-----:|:-----:|:-----:
 **1** | 0 | 0 | 4 |
-**2** | 7 | 4 | 3 |
-**4** | 9 | 2 | 2 |
-**Total** | 50 | 10 | 24 |
+**2** | 10 | 5 | 4 |
+**4** | 10 | 3 | 3 |
+**Total** | 60 | 22 | 24 |
 
-- Total story points: 84
-- Total 'Must Have': 50
-- Must Have proportion: 59.52%
+- Total story points: 106
+- Total 'Must Have': 60
+- Must Have proportion: 56.60%
 
 ### Sprint/Epic 4
 
@@ -197,7 +239,7 @@ Tasks and tickets were reviewed every 3 work days. New tickets, such as bug repo
 
 # Data structure
 
-* Data structure was created using <a href="https://drawsql.app/" target="_blank">drawSQL</a> :
+* Data structure was created using <a href="https://drawsql.app/" target="_blank">drawSQL</a>:
 
 # Design
 
@@ -220,12 +262,17 @@ Key design principles include:
 ## Typography
 
 * The fonts were choosen on <a href="https://fonts.google.com/" target="_blank">Google fonts</a>, thinking of keeping the same sentiment as the colors passed.
-* Primary font family for body text: **Playfair Display**
+* Primary font family for body text: **Nunito**
 * Font family for headings: **Lato**
 
 ## Wireframes
 
 * Wireframes were created in Canva during the branding and theme planning, it can be checked here:
+
+<details><summary><b>Mobile</b></summary>
+</details>
+<details><summary><b>Desktop</b></summary>
+</details>
 
 # Features
 
@@ -234,6 +281,14 @@ Key design principles include:
 ## Future Features
 
 # How to Use
+
+## Store
+
+## User Portal
+
+## Staff Access
+
+## Admin access
 
 # Technology Used
 
@@ -253,11 +308,13 @@ Key design principles include:
 * **Bootstrap**: For responsive design and styling.
 * **AllAuth**: For user authentication
 * **Crispy Forms**: For all forms
+* **Django Countries**: List of countries and abreviations for Stripe compatibility
 * **Chart.js**: For data visualizations in the performance dashboard.
 * **Heroku**: For application deployment.
 * **Git**: For version control.
 * **Payment Integration**: Stripe
 * **Email Marketing**: Mailchimp API
+* **Cloudinary**: Dynamic assets hosting (images)
 * **Canva.com**: Branding and logo
 * **Favicon.io**: For manifest and favicon creation
 * **freeprivacypolicy.com**: Privacy privacy generator
@@ -273,7 +330,7 @@ To deploy the application on Heroku:
 5. Navigate to the "Settings" tab and find "Config Vars."
 6. Click "Reveal Config Vars," add "PORT" as a key with the value "8000," and click "Add."
 7. Add other vars like DISABLE_COLLECTSTATIC and SECRET_KEY
-8. For the database and email setups, add the relevant variables to the heroku app too, example: DATABASE_URL, EMAIL_HOST_PASSWORD and EMAIL_HOST_USER
+8. For the database, email, cloud images hosting and payment gateway setups, add the relevant variables to the heroku app too, example: DATABASE_URL, EMAIL_HOST_PASSWORD, EMAIL_HOST_USER, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME, STRIPE_PUBLIC_KEY, STRIPE_SECRET_KEY, STRIPE_WH_SECRET ...
 9. Scroll down to the "Buildpacks" section, click "Add buildpack," and select "Python."
 10. Repeat step 7 to add "Node.js," ensuring "Python" is listed first.
 11. Scroll to the top and select the "Deploy" tab.
@@ -330,7 +387,11 @@ Two youtube videos were of grand relevance as guidance for coding:
 
 ## Content
 
-* ChatGPT: For text reviews, home page images and copywriting assistance.
+* ChatGPT and Claude AI: For text reviews, home page images, troubleshooting errors and copywriting assistance.
+
+## Documentation
+
+* <a href="https://github.com/kpetrauskas92/Mont-Adventures-PP5" target="_blank"> Mont Adventures</a> - Inspiration for README sessions and structure
 
 # Acknowledgements
 
