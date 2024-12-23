@@ -56,7 +56,7 @@ submitButton.addEventListener('click', function(ev) {
     submitButton.classList.add('disabled'); // Add disabled styling
     card.update({ 'disabled': true });
 
-    var saveInfo = Boolean($('#id-save-info').attr('checked'));
+    var saveInfo = $('#id-save-info').prop('checked');
     // From using {% csrf_token %} in the form
     var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
     var postData = {

@@ -58,7 +58,6 @@ class StripeWH_Handler:
                     street_address1__iexact=shipping_details.address.line1,
                     street_address2__iexact=shipping_details.address.line2,
                     county__iexact=shipping_details.address.state,
-                    order_total=order_total,
                     stripe_pid=pid,
                 )
                 order_exists = True

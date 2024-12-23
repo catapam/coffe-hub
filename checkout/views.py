@@ -13,6 +13,10 @@ from .models import Order
 from django.views.decorators.http import require_POST
 from django.shortcuts import HttpResponse
 from django.http import JsonResponse
+from accounts.models import UserProfile
+from allauth.account.models import EmailAddress
+from accounts.forms import UserProfileForm
+from django import forms
 
 import stripe
 import json
@@ -30,9 +34,35 @@ class CheckoutView(LoginRequiredMixin, FormView):
             messages.error(request, "There's nothing in your cart at the moment")
             return redirect(reverse('product'))
 
+        if request.user.is_authenticated:
+            try:
+                profile = UserProfile.objects.get(user=request.user)
+                primary_email = EmailAddress.objects.filter(user=request.user, primary=True).first()
+                emails = EmailAddress.objects.filter(user=request.user).values_list('email', flat=True)
+
+                # Define initial data for the form
+                initial_data = {
+                    'full_name': profile.default_full_name,
+                    'email': primary_email.email if primary_email else None,
+                    'phone_number': profile.default_phone_number,
+                    'country': profile.default_country,
+                    'postcode': profile.default_postcode,
+                    'town_or_city': profile.default_town_or_city,
+                    'street_address1': profile.default_street_address1,
+                    'street_address2': profile.default_street_address2,
+                    'county': profile.default_county,
+                }
+
+                # Initialize the OrderForm with initial data
+                self.order_form = OrderForm(initial=initial_data)
+                self.order_form.fields['email'].widget = forms.Select(choices=[(email, email) for email in emails])
+            except UserProfile.DoesNotExist:
+                self.order_form = OrderForm()
+        else:
+            self.order_form = OrderForm()
+
         if not stripe_public_key:
-            messages.warning(request, 'Stripe public key is missing. \
-                Did you forget to set it in your environment?')
+            messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -119,7 +149,7 @@ class CheckoutView(LoginRequiredMixin, FormView):
                 "items": cart_and_stripe_context['cart_items'],
                 "total": cart_and_stripe_context['total'],
             },
-            'order_form': self.get_form(),
+            'order_form': self.order_form,
             'stripe_public_key': cart_and_stripe_context['stripe_public_key'],
             'client_secret': cart_and_stripe_context['client_secret'],
         })
@@ -130,15 +160,22 @@ class CheckoutView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         order = form.save(commit=False)  # Save the form but do not commit yet
-        order.user = self.request.user  # Associate the order with the logged-in user, if applicable
+        order.user = self.request.user  # Associate the order with the logged-in user
 
         # Get the PaymentIntent ID from the session
         stripe_pid = self.request.session.get('stripe_pid')
         order.stripe_pid = stripe_pid  # Save the PaymentIntent ID to the order
 
-        order.save()  # Save the form instance to the database
+        # Check for existing order with the same PaymentIntent
+        existing_order = Order.objects.filter(stripe_pid=stripe_pid).first()
+        if existing_order:
+            return redirect(reverse('order_view', kwargs={'order_id': existing_order.order_number}))
+
+        # Save the order
+        order.save()
         cart_and_stripe_context = self.get_cart_and_stripe_context()
 
+        # Save line items
         for cart_item in cart_and_stripe_context['cart_items']:
             try:
                 product = Product.objects.get(id=cart_item['id'])
@@ -147,26 +184,46 @@ class CheckoutView(LoginRequiredMixin, FormView):
                 order_line_item = OrderLineItem(
                     order=order,
                     product=product,
-                    size=cart_item['size'], 
+                    size=cart_item['size'],
                     quantity=cart_item['quantity'],
                     price=cart_item['price'],
                     lineitem_total=cart_item['subtotal'],
                 )
-                
                 # Save the order line item
                 order_line_item.save()
-
             except Product.DoesNotExist:
-                messages.error(request, (
+                messages.error(self.request, (
                     "One of the products in your cart wasn't found in our database. "
-                    "Please get in touch with us for assistance!")
-                )
+                    "Please get in touch with us for assistance!"
+                ))
                 order.delete()
                 return redirect(reverse('cart'))
 
         # Clear the PaymentIntent ID from the session after successful order creation
         self.request.session.pop('stripe_pid', None)
 
+        # Update user profile if save_info is checked
+        save_info = self.request.session.get('save_info', False)
+        print(f"Session save_info in form_valid: {save_info}")  # Debug
+
+        if save_info and self.request.user.is_authenticated:
+            try:
+                profile = UserProfile.objects.get(user=self.request.user)
+                profile.default_full_name = order.full_name
+                profile.default_phone_number = order.phone_number
+                profile.default_country = order.country
+                profile.default_postcode = order.postcode
+                profile.default_town_or_city = order.town_or_city
+                profile.default_street_address1 = order.street_address1
+                profile.default_street_address2 = order.street_address2
+                profile.default_county = order.county
+                profile.save()
+            except UserProfile.DoesNotExist:
+                messages.error(self.request, "Could not update your profile. Please contact support.")
+            
+            messages.success(self.request, "Profile details updated during checkout process")
+
+        # Success message and redirect
         messages.success(
             self.request,
             format_html(
@@ -174,7 +231,6 @@ class CheckoutView(LoginRequiredMixin, FormView):
                 reverse('order_view', kwargs={'order_id': order.order_number})
             )
         )
-
         return redirect(reverse('order_view', kwargs={'order_id': order.order_number}))
 
     def form_invalid(self, form):
@@ -198,21 +254,25 @@ class CacheCheckoutDataView(View):
             cart_items, _, _ = get_cart_data(request)
 
             # Serialize cart items for JSON
-            serialized_cart_items = [
-                {
-                    "id": cart_item["id"],
-                    "size": cart_item["size"],
-                    "price": float(cart_item["price"]),
-                    "quantity": cart_item["quantity"],
-                    "lineitem_total": float(cart_item["subtotal"]),
-                }
-                for cart_item in cart_items
-            ]
+            for cart_item in cart_items:
+                serialized_cart_items = [
+                    {
+                        "id": cart_item["id"],
+                        "size": cart_item["size"],
+                        "price": float(cart_item["price"]),
+                        "quantity": cart_item["quantity"],
+                        "lineitem_total": float(cart_item["subtotal"]),
+                    }
+                ]
 
             # Update metadata in the PaymentIntent
+            request.session['save_info'] = request.POST.get('save_info') == "true"
+            print(f"POST save_info: {request.POST.get('save_info')}")  # Debug
+            print(f"Session save_info: {request.session.get('save_info')}")  # Debug
+
             stripe.PaymentIntent.modify(pid, metadata={
                 'cart': json.dumps(serialized_cart_items),
-                'save_info': request.POST.get('save_info'),
+                'save_info': request.session['save_info'],
                 'username': request.user.username,
                 'stripe_pid': pid,
             })
