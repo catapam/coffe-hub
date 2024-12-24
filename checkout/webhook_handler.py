@@ -81,6 +81,7 @@ class StripeWH_Handler:
                     street_address2__iexact=shipping_details.address.line2,
                     county__iexact=shipping_details.address.state,
                     stripe_pid=pid,
+                    order_total=( intent.amount / 100 ),
                 )
                 order_exists = True
                 break
@@ -106,6 +107,7 @@ class StripeWH_Handler:
                     street_address2=shipping_details.address.line2,
                     county=shipping_details.address.state,
                     stripe_pid=pid,
+                    order_total=( intent.amount / 100 ),
                 )
                 for cart_item in json.loads(cart).items():
                     product = Product.objects.get(id=cart_item['id'])
