@@ -204,7 +204,6 @@ class CheckoutView(LoginRequiredMixin, FormView):
 
         # Update user profile if save_info is checked
         save_info = self.request.session.get('save_info', False)
-        print(f"Session save_info in form_valid: {save_info}")  # Debug
 
         if save_info and self.request.user.is_authenticated:
             try:
@@ -267,8 +266,6 @@ class CacheCheckoutDataView(View):
 
             # Update metadata in the PaymentIntent
             request.session['save_info'] = request.POST.get('save_info') == "true"
-            print(f"POST save_info: {request.POST.get('save_info')}")  # Debug
-            print(f"Session save_info: {request.session.get('save_info')}")  # Debug
 
             stripe.PaymentIntent.modify(pid, metadata={
                 'cart': json.dumps(serialized_cart_items),
@@ -278,7 +275,6 @@ class CacheCheckoutDataView(View):
             })
             return JsonResponse({'success': True}, status=200)
         except Exception as e:
-            print(str(e))
             return JsonResponse({'error': str(e)}, status=400)
 
 
