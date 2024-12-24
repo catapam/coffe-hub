@@ -54,6 +54,11 @@ def get_cart_data(request):
                     entry.quantity = stock
                     entry.save()
 
+                # Remove items with quantity <= 0
+                if entry.quantity <= 0:
+                    entry.delete()
+                    continue
+
                 subtotal = price * entry.quantity
                 total += subtotal
                 cart_items.append({
@@ -89,6 +94,11 @@ def get_cart_data(request):
                             "new_quantity": stock,
                         })
                         cart[product_id][size] = stock
+                    
+                    # Remove items with quantity <= 0
+                    if cart[product_id][size] <= 0:
+                        items_to_remove.append((product_id, size))
+                        continue
 
                     subtotal = price * cart[product_id][size]
                     total += subtotal
@@ -104,6 +114,12 @@ def get_cart_data(request):
                     })
             except ObjectDoesNotExist:
                 continue
+        
+        # Remove items with quantity <= 0
+        for product_id, size in items_to_remove:
+            del cart[product_id][size]
+            if not cart[product_id]:  # Remove product if no sizes remain
+                del cart[product_id]
 
         # Save updated session cart
         request.session['cart'] = cart

@@ -105,11 +105,10 @@ class CartView(View):
         }
 
         if adjustments:
-            return JsonResponse({
-                "success": True,
-                "message": "Some items in your cart had quantities exceeding available stock. Adjustments have been made.",
-                "adjustments": adjustments,
-            }, status=200)
+            messages.warning(
+                request,
+                "Some items in your cart had quantities exceeding available stock. Adjustments have been made."
+            )
 
         return render(request, 'cart/cart.html', context)
 
