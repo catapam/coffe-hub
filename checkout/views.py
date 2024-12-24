@@ -252,9 +252,12 @@ class CacheCheckoutDataView(View):
             # Retrieve dynamic cart data
             cart_items, _, _ = get_cart_data(request)
 
+            # Initialize the serialized_cart_items list
+            serialized_cart_items = []  
+
             # Serialize cart items for JSON
             for cart_item in cart_items:
-                serialized_cart_items = [
+                serialized_cart_items.append(
                     {
                         "id": cart_item["id"],
                         "size": cart_item["size"],
@@ -262,7 +265,7 @@ class CacheCheckoutDataView(View):
                         "quantity": cart_item["quantity"],
                         "lineitem_total": float(cart_item["subtotal"]),
                     }
-                ]
+                )
 
             # Update metadata in the PaymentIntent
             request.session['save_info'] = request.POST.get('save_info') == "true"

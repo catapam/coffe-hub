@@ -4,8 +4,10 @@ from django.template.loader import render_to_string
 from django.conf import settings
 
 from .models import Order, OrderLineItem
-from product.models import Product
+from product.models import Product, ProductVariant
 from accounts.models import UserProfile
+from cart.models import CartEntry
+from django.contrib.auth.models import User
 
 import json
 import time
@@ -35,6 +37,32 @@ class StripeWH_Handler:
             [cust_email],
             fail_silently=False,
         ) 
+    
+    def _clear_cart(self, username):
+        """Clear the cart from the database"""
+        # Fetch the user object
+        user = User.objects.get(username=username)
+
+        # Query and delete the cart entries for the user
+        cart_entries = CartEntry.objects.filter(user=user)
+        if cart_entries.exists():
+            cart_entries.delete()
+
+    def _reduce_stock(self, cart):
+        """Reduce stock for the purchased product variants"""
+        cart_items = json.loads(cart)
+        for cart_item in cart_items:
+            # Fetch the corresponding ProductVariant
+            variant = ProductVariant.objects.get(
+                product_id=cart_item['id'],
+                size=cart_item['size'],
+            )
+            # Reduce the stock based on the cart quantity
+            variant.stock -= cart_item['quantity']
+            # Ensure stock doesn't go negative
+            if variant.stock < 0:
+                variant.stock = 0
+            variant.save()
 
     def handle_event(self, event):
         """
@@ -52,6 +80,7 @@ class StripeWH_Handler:
         pid = intent.id
         cart = intent.metadata.cart
         save_info = intent.metadata.save_info
+        username = intent.metadata.username
 
         # Get the Charge object
         stripe_charge = stripe.Charge.retrieve(
@@ -89,6 +118,8 @@ class StripeWH_Handler:
                 attempt += 1
                 time.sleep(1)
         if order_exists:
+            self._reduce_stock(cart)
+            self._clear_cart(username)
             self._send_confirmation_email(order)
             return HttpResponse(
                 content=f'Webhook received: {event["type"]} | SUCCESS: Verified order already in database',
@@ -123,8 +154,7 @@ class StripeWH_Handler:
                     )
                     
                     # Save the order line item
-                    order_line_item.save()
-                    
+                    order_line_item.save()                    
             except Exception as e:
                 if order:
                     order.delete()
@@ -132,6 +162,8 @@ class StripeWH_Handler:
                     content=f'Webhook received: {event["type"]} | ERROR: {e}',
                     status=500)
 
+        self._reduce_stock(cart)
+        self._clear_cart(username)
         self._send_confirmation_email(order)
         return HttpResponse(
             content=f'Webhook received: {event["type"]} | SUCCESS: Created order in webhook',
