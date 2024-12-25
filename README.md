@@ -23,28 +23,48 @@ Welcome to Coffee Hub, your one-stop platform for premium coffee and related mer
 Coffee Hub is a luxurious e-commerce platform dedicated to coffee enthusiasts, offering a curated selection of premium coffee beans, brewing equipment, and accessories. The platform is designed to provide a seamless shopping experience, integrating a robust payment gateway, real-time inventory updates, and personalized recommendations based on user preferences. Coffee Hub is the perfect destination for anyone looking to elevate their coffee experience.
 
 ## Objective
+Our objective is to provide a sophisticated yet user-friendly online store for coffee lovers of all levels. By focusing on high-quality products, convenient ordering, and reliable deliveries, we aim to become the go-to platform for those seeking an elevated coffee experience.
 
 ## Audience
+Our primary audience consists of discerning coffee drinkers who value premium beans, specialty brewing methods, and top-tier equipment. We also cater to newcomers interested in exploring the world of coffee, ensuring a welcoming environment for all.
 
 ## Solution
+Coffee Hub centralizes everything a coffee enthusiast needs—premium products, easy checkout, and personalized suggestions—into one platform. We leverage modern web technologies to ensure consistent performance, user security, and smooth navigation across all devices.
 
 ## Scope
+The scope of Coffee Hub covers product discovery, secure transactions, order management, and user-generated reviews that admins can moderate. By keeping the user interface intuitive and visually appealing, we streamline the shopping journey from browsing to checkout.
 
 # Business and Marketing plan
 
 ## User Experience
-
-Coffee Hub is meticulously crafted to deliver an elegant and intuitive user experience. The platform features a sleek dark-mode design with warm, rich colors that reflect the essence of coffee culture. Navigation is effortless, with clear categorization of products, a search functionality, and an easy checkout process. Users can create accounts to save preferences, track orders, and manage their profiles. Accessibility and responsiveness are prioritized, ensuring that Coffee Hub looks and performs beautifully across all devices.
+We prioritize an elegant, intuitive user interface featuring dark-mode design with warm accents that evoke the ambiance of a coffee shop. Users can effortlessly browse categories, use search filters, add products to their carts, securely pay for their orders and manage the account. All prices include taxes and delivery fees already, the announced pricing is always the final price being paid.
 
 ## Market
+Coffee Hub operates within the booming specialty coffee market, targeting consumers who appreciate ethically sourced beans and premium brewing gear. We distinguish ourselves by offering a curated catalog, focusing on quality and variety rather than mass-market products.
 
 ## Revenue model
+Our platform follows a standard e-commerce approach, generating profit through margins on every product sold — no middle-person or commission-based fees. This model ensures straightforward pricing for customers and a sustainable revenue stream for Coffee Hub.
 
 ## Marketing
+Our marketing strategy combines targeted social media campaigns, search engine optimization, and collaborations with influencers in the coffee community. We share rich, visually appealing content to highlight our products’ unique origins and flavor profiles, while email newsletters keep loyal customers informed about new arrivals and promotions.
 
 ## KPIs
+- **Sales Volume**: Measure growth in weekly and monthly sales.
+- **Conversion Rate**: Track how many site visitors become paying customers.
+- **Average Order Value (AOV)**: Monitor how much each customer spends per order.
+- **Customer Retention**: Evaluate returning customer rates and loyalty program participation.
+- **Review Engagement**: Assess how often customers share feedback and star ratings.
 
 ## Risks
+- **Supplier Reliability**: Inconsistent supply or quality issues could damage our reputation.
+- **Market Competition**: Competing e-commerce sites and coffee subscriptions may attract similar audiences.
+- **Operational Scalability**: Rapid growth could strain fulfillment processes or customer support.
+- **Regulatory Changes**: Shifts in e-commerce or import/export regulations could impact logistics.
+
+## Growth Opportunities
+
+- **Expanded Catalog**: Introduce more exclusive or rare coffee varieties, roasts, and coffee accessories.
+- **Partnerships**: Collaborate with local producers and specialty roasters, featuring unique blends that encourage brand loyalty.
 
 # Agile Methodology and Planning
 
@@ -237,10 +257,6 @@ Based on the total story points, each sprint was assigned 1 week lenght.
 
 Tasks and tickets were reviewed every 3 work days. New tickets, such as bug reports, may have been incorporated into the planning, which sometimes resulted in the removal of tasks from sprints or adjustments to their MoSCoW priorities.
 
-# Data structure
-
-* Data structure was created using <a href="https://drawsql.app/" target="_blank">drawSQL</a>:
-
 # Design
 
 Coffee Hub's design combines elegance with functionality, offering users a visually striking yet highly intuitive experience. The platform leverages a luxurious dark-mode theme with warm, coffee-inspired hues, accented by gold and white details, to create a sophisticated ambiance. This design reflects the essence of premium coffee culture while ensuring usability and accessibility.
@@ -274,21 +290,123 @@ Key design principles include:
 <details><summary><b>Desktop</b></summary>
 </details>
 
+## Data structure
+
+* Data structure was created using <a href="https://drawsql.app/" target="_blank">drawSQL</a>:
+
 # Features
 
-## Existing Features
+## Existing Features and How to Use
 
-## Future Features
+### General Features
 
-# How to Use
+- **Dark Mode**  
+  The site is built entirely in dark mode, providing an elevated user experience, enhanced visual comfort, and a cohesive branding theme.
 
-## Store
+- **Accessibility**  
+  Accessibility was a core consideration during development. The platform is inclusive, ensuring all users can navigate and interact with ease.
 
-## User Portal
+- **Device Optimization**  
+  The platform delivers a rich and seamless experience across all devices, adapting to various screen sizes and input methods (touch, keyboard, mouse, console controllers, etc.). The interface dynamically adjusts to provide an optimized experience based on the device used.
 
-## Staff Access
+- **Messaging System**  
+  A sophisticated toast message system provides real-time feedback for user actions. Toast messages inform users of errors, warnings, successes, and next steps (if applicable), beginning with a warm welcome upon login.
 
-## Admin access
+- **Third-Party Cookies Consent**  
+  Users are prompted to accept third-party cookies (essential for image rendering) upon their first visit. Acceptance is required to enable core site functionality.
+
+- **Privacy Policy**  
+  The privacy policy is readily accessible via the footer, ensuring transparency and compliance.
+
+- **Footer Elements**  
+  The footer includes social media links, shortcuts to key internal pages, a brief description of Coffee Hub, and a newsletter subscription form.
+
+- **Custom Error Pages (401 and 404)**  
+  Custom error pages enhance the user experience when encountering restricted content (401) or invalid paths (404). Unauthenticated users attempting to access protected pages are redirected to the login page with a clear toast notification.
+
+- **Help Center**  
+  The help page provides an FAQ section and a user-friendly form for submitting contact requests, available to all visitors.
+
+- **About Page**  
+  A dedicated about page introduces users to Coffee Hub's mission, values, and objectives.
+
+- **Form Data Validation**  
+  All forms feature robust data validation to prevent invalid submissions, offering clear error messages for necessary corrections.
+
+### Products
+
+- **Filtering and Sorting Products**  
+  Users, staff, and admins can filter products by price, name, average rating, stock status, and category using intuitive UI elements.
+
+- **Search Functionality**  
+  A smart search bar scans product names and descriptions to match user queries, enhancing site navigability.
+
+- **Out-of-Stock Indicators**  
+  Products or sizes that are unavailable are clearly marked as "Out of Stock." Sizes with no stock appear grayed out in dropdown selectors. Users can toggle the option to display out-of-stock items via the filtering menu.
+
+- **Product Details Page**  
+  Each product has a dedicated page featuring detailed information, user ratings, and reviews. The page dynamically updates based on size selection, improving navigation and usability.
+
+- **Size and Quantity Selectors**  
+  Size and quantity selectors ensure smooth interaction without page reloads. Quantity selection respects available stock, and any adjustments due to stock changes are communicated via toast messages.
+
+- **Rating and Reviews**  
+  Users can rate products using an interactive coffee bean-themed selector. Ratings glow dynamically based on user interaction, and comments are optional. Reviews are filterable by rating scores, with visible counts for each category.
+
+- **Product Cards**  
+  Product cards on the list view feature clickable actions for "Buy" (end users) or "Edit" (staff/admins) and a link to the product details page.
+
+### Cart
+
+- **Session and Persistent Carts**  
+  Non-logged users utilize session-based carts, while logged-in users' carts are stored in the database, enabling continuity across sessions.
+
+- **Cart Management**  
+  The cart interface supports full CRUD functionality, displaying product details, images, sizes, quantities, unit prices, subtotals, and totals. Users can edit quantities, delete items, or proceed to checkout with ease.
+
+### Account Management
+
+- **User Portal**  
+  A comprehensive profile management system allows users to navigate and update their accounts through a unified side menu.
+
+- **Login and Registration**  
+  Login includes email verification and password reset functionality, while registration ensures data validation and supports strong password enforcement.
+
+- **Email and Password Management**  
+  Users can manage multiple email addresses, verify their primary email, and update passwords securely from the User Portal.
+
+- **Admin/Staff Custom Login and Permissions**  
+  Admins and staff have customized login workflows and permission levels tailored to their roles, ensuring secure access to administrative features.
+
+### End-User Features
+
+- **Checkout Process**  
+  Logged-in users enjoy a streamlined checkout experience with autofilled account details, editable forms, and secure payment options via Stripe.
+
+- **Order History**  
+  Users can view and manage their past orders from the User Portal, with detailed breakdowns of individual purchases.
+
+- **Profile and Address Management**  
+  Users can update their personal and address information directly from the User Portal.
+
+### Staff and Admin Features
+
+- **Product Management**  
+  Staff and admins can create, edit, deactivate, or reactivate products and sizes. Features include stock and price adjustments, category management, and image uploads.
+
+- **Review Moderation**  
+  Staff and admins can silence reviews while retaining their impact on rating calculations, ensuring respectful and constructive feedback is displayed.
+
+- **Custom Admin Panel**  
+  Admins have access to a fully branded panel with intuitive navigation, enabling efficient management of users, products, and orders.
+
+- **Permissions and Access**  
+  Staff and admin permissions are carefully segmented to ensure secure and appropriate access to features. Staff users have restricted access compared to admins.
+
+### Developer/Tester Features
+
+- **Cookie Consent Reset**  
+  A reset path is available to facilitate testing of cookie consent functionality, accessible to all user levels.
 
 # Technology Used
 
@@ -342,7 +460,6 @@ To deploy the application on Heroku:
 - Testing was mainly made using Google Chrome Developer Tools, including the mobile and responsive views.
 - Lighthouse tab of developer tools was used to score the site regarding Performance, Acessibility and SEO.
 - The site was tested on other devices using Edge, Firefox and Safari. When testing on desktops with OS: Mac iOS and Windows 11. And on mobile OS: Android. More mobile tests were made using the inspector tools on desktop device.
-- The apps Operations, Metrics and Contacts are not being tested at this point as they are just place holders at this point in time.
 
 ## HTML, accessibility and performance
 
