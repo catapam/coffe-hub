@@ -408,6 +408,37 @@ Key design principles include:
 - **Cookie Consent Reset**  
   A reset path is available to facilitate testing of cookie consent functionality, accessible to all user levels.
 
+---
+## Future Features
+
+Coffee Hub is dedicated to enhancing the platform with features that improve usability, streamline operations, and foster customer satisfaction. Upcoming features include:
+
+- **Personalized Product Recommendations**  
+  New users will see curated suggestions based on popular products, while returning customers will receive tailored recommendations driven by their purchase history and preferences.
+
+- **Integrated Chat Support**  
+  A live chat system will provide instant support, the preferred communication method for most users, enhancing the overall customer experience.
+
+- **AI-Powered Assistance**  
+  Chat support will include AI-driven tools to triage customer queries and deliver relevant, accurate responses efficiently.
+
+- **Comprehensive Ticketing System**  
+  A centralized tool will allow staff to manage customer communications and enable users to track the status of their inquiries, fostering transparency and trust.
+
+- **Expanded Payment Methods and Models**  
+  Additional payment options, including PayPal, cryptocurrency, and bank transfers, will reduce barriers during checkout. We also plan to explore subscription-based models to drive recurring revenue.
+
+- **Self-Service Cancellation and Return Tools**  
+  Users will be able to cancel orders before shipping and initiate returns for sealed products without contacting support, enhancing user confidence and convenience.
+
+- **Real-Time Delivery Tracking**  
+  A dashboard and API integration with courier services will enable users to monitor their deliveries in real-time, improving transparency and satisfaction.
+
+- **Dedicated Offers Section**  
+  A new section will showcase discounts and promotions, making the platform more engaging and encouraging repeat purchases.
+
+Each of these features aligns with Coffee Hub's vision of delivering a premium, user-centric e-commerce experience while driving future growth and innovation.
+
 # Technology Used
 
 ## Languages
