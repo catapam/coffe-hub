@@ -290,43 +290,63 @@ Key design principles include:
 * Wireframes were created in Balsamiq during the branding and theme planning, it can be checked here:
 
 <details><summary><b>Home</b></summary>
+
 ![Home wireframe](documentation/wireframes/home.png)
+
 </details>
 
 <details><summary><b>Help</b></summary>
+
 ![Help wireframe](documentation/wireframes/help.png)
+
 </details>
 
 <details><summary><b>About</b></summary>
+
 ![About wireframe](documentation/wireframes/about.png)
+
 </details>
 
 <details><summary><b>Product List</b></summary>
+
 ![Product list wireframe](documentation/wireframes/product_list.png)
+
 </details>
 
 <details><summary><b>Product Details</b></summary>
+
 ![Product Details wireframe](documentation/wireframes/product_details.png)
+
 </details>
 
 <details><summary><b>Cart</b></summary>
+
 ![Cart wireframe](documentation/wireframes/cart.png)
+
 </details>
 
 <details><summary><b>Checkout</b></summary>
+
 ![Checkout wireframe](documentation/wireframes/checkout.png)
+
 </details>
 
 <details><summary><b>User Portal - Profile</b></summary>
+
 ![Profile wireframe](documentation/wireframes/profile.png)
+
 </details>
 
 <details><summary><b>User Portal - Order list</b></summary>
+
 ![Order List wireframe](documentation/wireframes/order_list.png)
+
 </details>
 
 <details><summary><b>User Portal - Order details</b></summary>
+
 ![Order Details wireframe](documentation/wireframes/order_details.png)
+
 </details>
 
 ## Data structure
@@ -334,6 +354,9 @@ Key design principles include:
 * Data structure was created using <a href="https://dbeaver.io/" target="_blank">DBeaver</a>:
 
 ![ERD diagram](documentation/erd.png)
+
+* **Models customization**
+- All models were somehow customized for the specific needs of this project. Example: Products work in parallel with productVariants, where the sizes, stock and price are dealt with; product reviews; cart entries being saved to the user's account, and even contact form submissions being linked to the user's email address.
 
 ---
 # Features
@@ -464,18 +487,18 @@ Key design principles include:
 - **Unique and dynamic page meta tags**  
   The `base.html` template integrates dynamic context with default fallback values. Views supply context to replace defaults where applicable, enabling a more interactive and tailored SEO strategy across various page types, including product detail pages, About, and Help sections.
 
-- <details><summary><b>Facebook business page</b></summary>
+<details><summary><b>Facebook business page</b></summary>
+
 Leverage one of the biggest social medias to deliver content to targetted users using highly engaging visuals through a platform already familiar to most users.
 
 ![Facebook Business Page](documentation/facebook.png)
 
 </details>
 
-- <details><summary><b>Newsletter email subscription</b></summary>
+<details><summary><b>Newsletter email subscription</b></summary>
 
 
 </details>
-
 
 ## Future Features
 
