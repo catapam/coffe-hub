@@ -321,6 +321,10 @@ class ProductDetailView(DetailView):
             for category in Category.objects.all().order_by('slug')
         ]
 
+        # Generate Meta Tags for SEO
+        meta_description = f"Buy {product.name} in {product.category.name} category. Enjoy premium quality with sizes like {', '.join(sizes)}. Perfect for coffee enthusiasts."
+        meta_keywords = f"{product.name}, {product.category.name}, {' '.join(sizes)}, premium coffee, coffee accessories, buy coffee online, specialty coffee"
+
         context.update({
             'selected_category': selected_category,
             'variants': variants,
@@ -343,6 +347,8 @@ class ProductDetailView(DetailView):
             'rating_summary': rating_summary_dict,
             'total_reviews': total_reviews,
             'category_items': category_items,
+            'meta_description': meta_description,
+            'meta_keywords': meta_keywords,
         })
         return context
 

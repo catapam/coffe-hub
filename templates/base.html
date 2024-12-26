@@ -7,9 +7,9 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
       <!-- SEO optimization: Added description and keywords for search engines -->
-      <meta name="description" content="Coffee Hub - Your gourmet coffee spot">
-      <meta name="keywords" content="coffee">
-      
+      <meta name="description" content="{{ meta_description|default:'Discover premium coffee beans, brewing equipment, and accessories at Coffee Hub. Shop online for ethically sourced products, enjoy personalized recommendations, and experience seamless checkout with fast delivery. Elevate your coffee journey today!' }}" />
+      <meta name="keywords" content="{{ meta_keywords|default:'coffee beans, premium coffee, coffee shop online, brewing equipment, coffee accessories, specialty coffee, buy coffee online, coffee hub, ethical coffee, coffee delivery, coffee e-commerce, personalized coffee recommendations' }}" />
+    
       <!-- Page title with dynamic content block -->
       <title>Coffee Hub - {% block title %}{% endblock %}</title>
 

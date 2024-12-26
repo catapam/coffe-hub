@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/about/</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/accounts/signup/</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/accounts/login/</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/help/</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/?sort_by=price_asc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/?sort_by=price_desc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/?sort_by=name_asc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/?sort_by=name_desc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/?sort_by=rating_asc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/?sort_by=rating_desc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/manual_coffee_grinder/?size=Small</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/medium_roast_beans/?size=250g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/cold_brew_coffee_beans/?size=500g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/home_espresso_machine/?size=Unique</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/reusable_coffee_cup/?size=250ml</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/matcha_latte_mix/?size=1kg</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/chai_latte_mix/?size=250g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/hot_chocolate_mix/?size=500g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/coconut_syrup/?size=500ml</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/decaf_medium_roast/?size=150g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/hazelnut_syrup/?size=200ml</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/light_roast_beans/?size=250g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/french_press_coffee_maker/?size=Small</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/drip_coffee_filters/?size=Normal%20pac</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/organic_espresso_beans/?size=250g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/cinnamon_syrup/?size=200ml</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/turmeric_latte_mix/?size=1kg</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/light_roast_sampler_pack/?size=150g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/espresso_roast_beans/?size=250g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/cold_brew_pitcher/?size=500ml</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/stainless_steel_straws/?size=Standard</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/french_roast_beans/?size=500g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/vanilla_syrup/?size=1L</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/caramel_syrup/?size=500ml</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/pour_over_coffee_kit/?size=Unique</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/pumpkin_spice_latte_mix/?size=500g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/mocha_syrup/?size=200ml</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/accounts/login/?next=/accounts/</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/privacy_policy/</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/?sort_by=price_asc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/?sort_by=price_desc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/?sort_by=name_asc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/?sort_by=name_desc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/?sort_by=rating_asc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/?sort_by=rating_desc</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/accounts/password/reset/</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/light_roast_beans/?size=500g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/decaf_medium_roast/?size=250g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/hazelnut_syrup/?size=500ml</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/stainless_steel_straws/?size=Deluxe</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/reusable_coffee_cup/?size=500ml</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/chai_latte_mix/?size=500g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/mocha_syrup/?size=500ml</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/decaf_medium_roast/?size=500g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/drip_coffee_filters/?size=Large%20pack</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/organic_espresso_beans/?size=490g</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/medium_roast_beans/?size=1kg</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/products/cold_brew_pitcher/?size=1L</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/accounts/signup/?next=%2Faccounts%2F</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://coffee-hub-64aa59561310.herokuapp.com/accounts/login/?next=%2Faccounts%2F</loc>
+  <lastmod>2024-12-26T13:41:59+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+
+
+</urlset>

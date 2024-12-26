@@ -46,6 +46,15 @@ class AboutView(TemplateView):
     """
     template_name = 'store/about.html'
 
+    def get_context_data(self, **kwargs):
+        """
+        Adds meta tags to the context for SEO.
+        """
+        context = super().get_context_data(**kwargs)
+        context['meta_description'] = "Learn about Coffee Hub, your trusted platform for premium coffee, brewing equipment, and accessories. Discover our mission, values, and commitment to quality."
+        context['meta_keywords'] = "about Coffee Hub, coffee shop, premium coffee, brewing equipment, coffee accessories"
+        return context
+
     def get(self, request, *args, **kwargs):
         """
         Handles GET requests and returns the 200 status with the
@@ -83,6 +92,10 @@ class HelpView(TemplateView):
         # Add the Crispy form to the context
         form = kwargs.get('form') or ContactForm(user=self.request.user)
         context['form'] = form
+
+        # Custom Metatags
+        context['meta_description'] = "Find answers to common questions and contact us at Coffee Hub. Explore our FAQ section or submit your queries using our contact form."
+        context['meta_keywords'] = "help Coffee Hub, FAQ Coffee Hub, contact Coffee Hub, customer support, coffee shop support"
 
         return context
     

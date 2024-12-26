@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /accounts/
+Disallow: /cart/
+Disallow: /admin/
+Disallow: /set-cookie-consent/
+Disallow: /reset-cookie-consent/
+Disallow: /checkout/
+Disallow: /401/
+Disallow: /404/
+Disallow: /*?q=
+Sitemap: https://coffee-hub-64aa59561310.herokuapp.com/sitemap.xml

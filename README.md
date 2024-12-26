@@ -14,10 +14,11 @@ Welcome to Coffee Hub, your one-stop platform for premium coffee and related mer
 
 </div>
 
+---
 # Table of Contents
 
 
-
+---
 # Introduction
 
 Coffee Hub is a luxurious e-commerce platform dedicated to coffee enthusiasts, offering a curated selection of premium coffee beans, brewing equipment, and accessories. The platform is designed to provide a seamless shopping experience, integrating a robust payment gateway, real-time inventory updates, and personalized recommendations based on user preferences. Coffee Hub is the perfect destination for anyone looking to elevate their coffee experience.
@@ -34,6 +35,7 @@ Coffee Hub centralizes everything a coffee enthusiast needs—premium products, 
 ## Scope
 The scope of Coffee Hub covers product discovery, secure transactions, order management, and user-generated reviews that admins can moderate. By keeping the user interface intuitive and visually appealing, we streamline the shopping journey from browsing to checkout.
 
+---
 # Business and Marketing plan
 
 ## User Experience
@@ -66,6 +68,7 @@ Our marketing strategy combines targeted social media campaigns, search engine o
 - **Expanded Catalog**: Introduce more exclusive or rare coffee varieties, roasts, and coffee accessories.
 - **Partnerships**: Collaborate with local producers and specialty roasters, featuring unique blends that encourage brand loyalty.
 
+---
 # Agile Methodology and Planning
 
 ## Epics
@@ -257,6 +260,7 @@ Based on the total story points, each sprint was assigned 1 week lenght.
 
 Tasks and tickets were reviewed every 3 work days. New tickets, such as bug reports, may have been incorporated into the planning, which sometimes resulted in the removal of tasks from sprints or adjustments to their MoSCoW priorities.
 
+---
 # Design
 
 Coffee Hub's design combines elegance with functionality, offering users a visually striking yet highly intuitive experience. The platform leverages a luxurious dark-mode theme with warm, coffee-inspired hues, accented by gold and white details, to create a sophisticated ambiance. This design reflects the essence of premium coffee culture while ensuring usability and accessibility.
@@ -283,17 +287,55 @@ Key design principles include:
 
 ## Wireframes
 
-* Wireframes were created in Canva during the branding and theme planning, it can be checked here:
+* Wireframes were created in Balsamiq during the branding and theme planning, it can be checked here:
 
-<details><summary><b>Mobile</b></summary>
+<details><summary><b>Home</b></summary>
+![Home wireframe](documentation/wireframes/home.png)
 </details>
-<details><summary><b>Desktop</b></summary>
+
+<details><summary><b>Help</b></summary>
+![Help wireframe](documentation/wireframes/help.png)
+</details>
+
+<details><summary><b>About</b></summary>
+![About wireframe](documentation/wireframes/about.png)
+</details>
+
+<details><summary><b>Product List</b></summary>
+![Product list wireframe](documentation/wireframes/product_list.png)
+</details>
+
+<details><summary><b>Product Details</b></summary>
+![Product Details wireframe](documentation/wireframes/product_details.png)
+</details>
+
+<details><summary><b>Cart</b></summary>
+![Cart wireframe](documentation/wireframes/cart.png)
+</details>
+
+<details><summary><b>Checkout</b></summary>
+![Checkout wireframe](documentation/wireframes/checkout.png)
+</details>
+
+<details><summary><b>User Portal - Profile</b></summary>
+![Profile wireframe](documentation/wireframes/profile.png)
+</details>
+
+<details><summary><b>User Portal - Order list</b></summary>
+![Order List wireframe](documentation/wireframes/order_list.png)
+</details>
+
+<details><summary><b>User Portal - Order details</b></summary>
+![Order Details wireframe](documentation/wireframes/order_details.png)
 </details>
 
 ## Data structure
 
-* Data structure was created using <a href="https://drawsql.app/" target="_blank">drawSQL</a>:
+* Data structure was created using <a href="https://dbeaver.io/" target="_blank">DBeaver</a>:
 
+![ERD diagram](documentation/erd.png)
+
+---
 # Features
 
 ## Existing Features and How to Use
@@ -408,7 +450,33 @@ Key design principles include:
 - **Cookie Consent Reset**  
   A reset path is available to facilitate testing of cookie consent functionality, accessible to all user levels.
 
----
+### SEO and marketing features
+
+- **Sitemap.xml**  
+  The sitemap provides a structured list of pages accessible to search engines, enhancing their ability to index your site efficiently. It works side-by-side with the `robots.txt` file to fine-tune crawler access.
+
+- **Robots.txt**  
+  The `robots.txt` file links to the sitemap and restricts crawlers from accessing certain pages or sections, ensuring an optimized and secure crawling process. Disallowing search queries for example to avoid over-crawling. It's worth keeping in mind this setting is a soft block, the crawlers can choose to follow it or not.
+
+- **Unique and dynamic page titles**  
+  By leveraging Django's block elements, each page dynamically updates its title to reflect its content, improving SEO visibility and enhancing the user experience.
+
+- **Unique and dynamic page meta tags**  
+  The `base.html` template integrates dynamic context with default fallback values. Views supply context to replace defaults where applicable, enabling a more interactive and tailored SEO strategy across various page types, including product detail pages, About, and Help sections.
+
+- <details><summary><b>Facebook business page</b></summary>
+Leverage one of the biggest social medias to deliver content to targetted users using highly engaging visuals through a platform already familiar to most users.
+
+![Facebook Business Page](documentation/facebook.png)
+
+</details>
+
+- <details><summary><b>Newsletter email subscription</b></summary>
+
+
+</details>
+
+
 ## Future Features
 
 Coffee Hub is dedicated to enhancing the platform with features that improve usability, streamline operations, and foster customer satisfaction. Upcoming features include:
@@ -439,6 +507,7 @@ Coffee Hub is dedicated to enhancing the platform with features that improve usa
 
 Each of these features aligns with Coffee Hub's vision of delivering a premium, user-centric e-commerce experience while driving future growth and innovation.
 
+---
 # Technology Used
 
 ## Languages
@@ -458,7 +527,6 @@ Each of these features aligns with Coffee Hub's vision of delivering a premium, 
 * **AllAuth**: For user authentication
 * **Crispy Forms**: For all forms
 * **Django Countries**: List of countries and abreviations for Stripe compatibility
-* **Chart.js**: For data visualizations in the performance dashboard.
 * **Heroku**: For application deployment.
 * **Git**: For version control.
 * **Payment Integration**: Stripe
@@ -467,8 +535,13 @@ Each of these features aligns with Coffee Hub's vision of delivering a premium, 
 * **Canva.com**: Branding and logo
 * **Favicon.io**: For manifest and favicon creation
 * **freeprivacypolicy.com**: Privacy privacy generator
+* **xml-sitemaps.com**: Sitemap template creation
+* **Balsamiq**: Wireframes creation
 
+---
 # Deployment
+
+## Heroku
 
 To deploy the application on Heroku:
 
@@ -486,6 +559,38 @@ To deploy the application on Heroku:
 12. Choose GitHub as the deployment method, then search for your repository and click "Connect."
 13. Scroll down and either "Enable Automatic Deploys" to update the code each time it is pushed to GitHub, or choose "Manual Deploy" for manual updates.
 
+## Forking
+
+By forking the GitHub Repository we make a copy of the original repository on our GitHub account to view and/or make changes without affecting the original repository by using the following steps...
+
+1. Log in to GitHub and locate the <a href="https://github.com/catapam/coffe-hub/tree/main" target="_blank">GitHub Repository</a>
+2. At the top of the Repository (not top of page) just above the "Settings" Button on the menu, locate the "Fork" Button.
+3. You should now have a copy of the original repository in your GitHub account.
+
+## Local clone
+
+1. Log in to GitHub and locate the <a href="https://github.com/catapam/coffe-hub/tree/main" target="_blank">GitHub Repository</a>
+2. Under the repository name, click "Clone or download".
+3. To clone the repository using HTTPS, under "Clone with HTTPS", copy the link.
+4. Open Git Bash
+5. Change the current working directory to the location where you want the cloned directory to be made.
+6. Type git clone, and then paste the URL you copied in Step 3.
+
+```
+$ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+```
+
+7. Press Enter. Your local clone will be created.
+
+```
+$ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+> Cloning into `CI-Clone`...
+> remote: Counting objects: 10, done.
+> remote: Compressing objects: 100% (8/8), done.
+> remove: Total 10 (delta 1), reused 10 (delta 1)
+> Unpacking objects: 100% (10/10), done.
+```
+---
 # Testing
 
 - Testing was mainly made using Google Chrome Developer Tools, including the mobile and responsive views.
@@ -521,8 +626,11 @@ To deploy the application on Heroku:
 
 ## Manual testing
 
+- All pages were reviewed and have unique titles according to SEO strategy
+
 ## Bugs
 
+---
 # Credits
 
 ## Code
@@ -541,6 +649,7 @@ Two youtube videos were of grand relevance as guidance for coding:
 
 * <a href="https://github.com/kpetrauskas92/Mont-Adventures-PP5" target="_blank"> Mont Adventures</a> - Inspiration for README sessions and structure
 
+---
 # Acknowledgements
 
 * Gareth Mc Girr: My mentor, for all the help and advice throughout the project.
