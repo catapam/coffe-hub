@@ -137,7 +137,7 @@ class RedirectUserView(RedirectView):
     Class-based view to redirect the user to the update profile page.
     Ensures that only logged-in users can access this redirect.
     """
-    pattern_name = 'account_profile'
+    pattern_name = 'account_user'
 
     def get_redirect_url(self, *args, **kwargs):
         """
@@ -147,11 +147,11 @@ class RedirectUserView(RedirectView):
         if self.request.user.is_staff or self.request.user.is_superuser:
             self.pattern_name = 'account_user'
             return super().get_redirect_url(*args, **kwargs)
-        
-        # For regular users, redirect to the current path
-        return self.request.path
-        
-@method_decorator(login_required, name='dispatch')
+        else:
+            self.pattern_name = 'account_profile'
+            return super().get_redirect_url(*args, **kwargs)
+
+
 @method_decorator(login_required, name='dispatch')
 class ProfileView(FormView):
     template_name = 'accounts/profile.html'

@@ -1,7 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
 from django.shortcuts import get_object_or_404, redirect
 from .models import Product, ProductVariant, Category, ProductReview
-from django.db.models import F, Case, When, Value, IntegerField, Subquery, OuterRef, Q, Count, Avg
+from django.db.models import F, Case, When, Value, IntegerField, Subquery, OuterRef, Q, Count, Avg, Exists
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import ProductEditForm, ProductVariantForm, ProductReviewForm
 from django.http import JsonResponse, Http404
@@ -48,11 +48,23 @@ class ProductListView(ListView):
             default_variant_size=Subquery(available_variant.values('size')[:1]),
             default_variant_active=Subquery(available_variant.values('active')[:1]),
             default_variant_id=Subquery(available_variant.values('id')[:1]),
+            # Add annotation to check if product has any active variants with stock
+            has_active_stock=Exists(
+                ProductVariant.objects.filter(
+                    product=OuterRef('pk'),
+                    active=True,
+                    stock__gt=0
+                )
+            )
         )
 
         # Apply filters
         if not is_admin:
-            queryset = queryset.filter(active=True, variants__active=True)
+            queryset = queryset.filter(
+                active=True,
+                variants__active=True,
+                has_active_stock=True  # Only show products with at least one active variant with stock
+            )
         if not show_out_of_stock:
             queryset = queryset.filter(default_variant_stock__gt=0)
         if selected_categories:
@@ -112,7 +124,6 @@ class ProductListView(ListView):
             queryset = queryset.order_by('-name')
 
         return queryset.distinct()
-
 
     def get_context_data(self, **kwargs):
         """

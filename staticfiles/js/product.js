@@ -98,6 +98,7 @@ class ProductCardHandler {
             stockInput.value = stock; // Update stock input if found
         } else if (quantityInput) {
             quantityInput.value = 1; // Set default quantity input value if found
+            quantityInput.max = stock;
         } else {
             // Find the stock input element using querySelector
             stockInput = cardElement.querySelector(`#stock-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
