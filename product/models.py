@@ -89,10 +89,10 @@ class Product(models.Model):
                 )
                 return url
         except Exception as e:
-            # Log errors for debugging
-            print(f"Error fetching Cloudinary image: {e}")
+            # return default image if there is any issues with cloudinary rendering
+            return static('images/product-holder.webp')
         
-        # Return the static placeholder if no image or an error occurs
+        # Return the static placeholder if no image
         return static('images/product-holder.webp')
         
     def get_buy_url(self):

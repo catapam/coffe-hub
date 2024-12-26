@@ -355,8 +355,7 @@ Key design principles include:
 
 ![ERD diagram](documentation/erd.png)
 
-* **Models customization**
-- All models were somehow customized for the specific needs of this project. Example: Products work in parallel with productVariants, where the sizes, stock and price are dealt with; product reviews; cart entries being saved to the user's account, and even contact form submissions being linked to the user's email address.
+* **Models customization**: All models were somehow customized for the specific needs of this project. Example: Products work in parallel with productVariants, where the sizes, stock and price are dealt with; product reviews; cart entries being saved to the user's account, and even contact form submissions being linked to the user's email address.
 
 ---
 # Features
@@ -378,7 +377,7 @@ Key design principles include:
   A sophisticated toast message system provides real-time feedback for user actions. Toast messages inform users of errors, warnings, successes, and next steps (if applicable), beginning with a warm welcome upon login.
 
 - **Third-Party Cookies Consent**  
-  Users are prompted to accept third-party cookies (essential for image rendering) upon their first visit. Acceptance is required to enable core site functionality.
+  Users are prompted to accept third-party cookies (essential for image rendering) upon their first visit. Acceptance is required to enable core site functionality. The cookies being used do not collect any type of data, the feature is in place as and implementation showcase, where the act of not consenting will make images not load due to the missing cookies.
 
 - **Privacy Policy**  
   The privacy policy is readily accessible via the footer, ensuring transparency and compliance.
@@ -487,15 +486,19 @@ Key design principles include:
 - **Unique and dynamic page meta tags**  
   The `base.html` template integrates dynamic context with default fallback values. Views supply context to replace defaults where applicable, enabling a more interactive and tailored SEO strategy across various page types, including product detail pages, About, and Help sections.
 
-<details><summary><b>Facebook business page</b></summary>
-
+- **Facebook business page**
 Leverage one of the biggest social medias to deliver content to targetted users using highly engaging visuals through a platform already familiar to most users.
+
+<details><summary><b>Demo</b></summary>
 
 ![Facebook Business Page](documentation/facebook.png)
 
 </details>
 
-<details><summary><b>Newsletter email subscription</b></summary>
+- **Newsletter email subscription**
+The footer integrates a Mailchimp newsletter signup section, making it easy for visitors to stay informed about the latest news and offers. This feature enhances user engagement by keeping them connected with the brand. The subscription was intentionally set for a 2 step confirmation via email, so the setup can be checked as valid in MailChimp. Due to the account with Mailchimp being a free setup, the links to redirect to the site and list name on the REacptcha page cannot be editted, those only serve the purpose of confirming the functionality of the API setup with Mailchimp.
+
+<details><summary><b>Demo</b></summary>
 
 
 </details>
@@ -649,9 +652,12 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 
 ## Manual testing
 
-- All pages were reviewed and have unique titles according to SEO strategy
+| **Location** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|----------|----------|---------------------|--------------------------|---------------------------|
 
 ## Bugs
+
+Bugs were found during tests and they were all documented using the the Project feature in Github by creating individual tickets for each bug. All bugs found and their status (to-do or done) can be seen <a href='https://github.com/users/catapam/projects/4/views/5'>here</a>.
 
 ---
 # Credits

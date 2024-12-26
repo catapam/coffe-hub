@@ -134,18 +134,23 @@ class UpdateUsernameView(FormView):
 @method_decorator(login_required, name='dispatch')
 class RedirectUserView(RedirectView):
     """
-    Class-based view to redirect the user to the update username page.
+    Class-based view to redirect the user to the update profile page.
     Ensures that only logged-in users can access this redirect.
     """
     pattern_name = 'account_profile'
 
     def get_redirect_url(self, *args, **kwargs):
         """
-        Return the URL to redirect to.
+        Return the URL to redirect to based on user permissions.
+        Staff and superusers go to account_user, regular users stay on current path.
         """
-        return super().get_redirect_url(*args, **kwargs)
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            self.pattern_name = 'account_user'
+            return super().get_redirect_url(*args, **kwargs)
         
-
+        # For regular users, redirect to the current path
+        return self.request.path
+        
 @method_decorator(login_required, name='dispatch')
 @method_decorator(login_required, name='dispatch')
 class ProfileView(FormView):

@@ -1075,6 +1075,24 @@ option[data-stock="0"] {
     font-size: medium;
 }
 
+/* Mailchimp newsletter */
+#mc_embed_signup {
+    background: #fff;
+    clear: left;
+    font: 14px Helvetica, Arial, sans-serif;
+    width: 600px;
+}
+
+.mce_inline_error, #mce_inline_error{
+    font-size: small;
+    color: var(--red-accent);
+}
+
+.mce-success-response, #mce-success-response{
+    font-size: small;
+    color: var(--green-accent);
+}
+
 /* Layout shift fix */
 @media (min-width: 768px) {
     #div_id_stock{
