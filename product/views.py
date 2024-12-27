@@ -244,21 +244,12 @@ class ProductDetailView(DetailView):
             if not fallback_variant and variants_qs:
                 fallback_variant = variants_qs.first()
             if not fallback_variant:
-                raise Http404("This product is no longer available.")
+                if request.user.is_staff or request.user.is_superuser:
+                    # here load with no size and allow adding one
+                    return super().get(request, *args, **kwargs)
+                else:
+                    raise Http404("This product is no longer available.")
             return self._redirect_with_size(request, fallback_variant.size)
-
-        # If no size specified, pick a default
-        if 'size' not in request.GET:
-            default_variant = None
-            for v in variants_qs:
-                if v.stock > 0:
-                    default_variant = v
-                    break
-            if not default_variant and variants_qs:
-                default_variant = variants_qs.first()
-            if not default_variant:
-                raise Http404("This product is no longer available.")
-            return self._redirect_with_size(request, default_variant.size)
 
         return super().get(request, *args, **kwargs)
 
@@ -310,7 +301,7 @@ class ProductDetailView(DetailView):
         size_active = default_variant.active if default_variant else False
 
         product_form = ProductEditForm(instance=product) if is_admin else None
-        variant_form = ProductVariantForm(instance=default_variant) if is_admin and default_variant else None
+        variant_form = ProductVariantForm(instance=default_variant) if is_admin else None
 
         # Rating summary
         rating_summary = product.reviews.values('rating').annotate(count=Count('rating')).order_by('rating')
@@ -552,8 +543,19 @@ class ProductSaveView(LoginRequiredMixin, UserPassesTestMixin, View):
         except Product.DoesNotExist:
             return JsonResponse({"success": False, "error": "Product not found."}, status=404)
 
+        # Retrieve previous active value
+        previous_values = {
+            "active": product.active,
+        }
+
         # Load product data
         product_data = json.loads(request.POST.get('product', '{}'))
+        
+        # Merge previous values into product_data if not already provided
+        for field, value in previous_values.items():
+            if field not in product_data:
+                product_data[field] = value
+
         product_form = ProductEditForm(product_data, instance=product)
 
         if not product_form.is_valid():
@@ -660,7 +662,7 @@ class ProductCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
                 return JsonResponse({
                     "success": True,
                     "product_id": product.id,
-                    "redirect_url": reverse('product_edit', kwargs={"pk": product.id}),
+                    "redirect_url": reverse('product_detail', kwargs={"slug": product.slug}),
                 })
 
             else:
@@ -680,7 +682,6 @@ class ProductCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
                 }, status=400)
             return JsonResponse({"success": False, "error": str(e)}, status=400)
         except Exception as e:
-            print(str(e))
             return JsonResponse({"success": False, "error": str(e)}, status=500)
 
     def get_context_data(self, **kwargs):

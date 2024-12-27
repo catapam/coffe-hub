@@ -47,6 +47,12 @@ class Product(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+        # Preserve the existing 'active' value if this is an update
+        if self.pk:
+            original = Product.objects.get(pk=self.pk)
+            if not hasattr(self, 'active'):
+                self.active = original.active
+
         # Generate a slug from the name
         if self.name:
             clean_name = re.sub(r'[^\w\s-]', '', self.name)  # Remove special characters
