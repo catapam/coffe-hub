@@ -2,8 +2,12 @@
 from django.urls import path
 
 # Internal imports
-from .views import UpdateUsernameView, RedirectUserView, CustomLoginView
-from .views import ProfileView
+from .views import (
+    UpdateUsernameView,
+    RedirectUserView,
+    CustomLoginView,
+    ProfileView
+)
 from checkout.views import OrderDetailView, OrderListView
 
 # Define the URL patterns for the 'accounts' app
