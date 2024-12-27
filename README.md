@@ -357,6 +357,12 @@ Key design principles include:
 
 * **Models customization**: All models were somehow customized for the specific needs of this project. Example: Products work in parallel with productVariants, where the sizes, stock and price are dealt with; product reviews; cart entries being saved to the user's account, and even contact form submissions being linked to the user's email address.
 
+* **Frontend CRUD functionalities**: Full CRUD functionality has been added to Cart management, where users can add products to the cart, view, edit and remove from their database cart if they are logged to their account.
+
+* **Soft CRUD for Staff**: Staff and Admins can view, add, and edit products, sizes and categories from the frontend tools. Deactivating products and sizes is available from the product details view when logged either as admin or staff too. Deleting was intetionally restricted to Admins only and can exclusively be done from the custom admin panel.
+
+* **Staff permissions**: Most of deleting permissions are only available to Admins and from Admin panel only. Staff do have access to the admin panel, but view only, with some rare exceptions where they have edit permissions too. That was also built-in as a feature since the beginning of project planning.
+
 ---
 # Features
 
@@ -630,33 +636,227 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 
 | **Page** | **<a href="https://validator.w3.org/nu/#textarea" target="_blank">W3C Markup validator</a>** | **<a href="https://wave.webaim.org/" target="_blank">Wave accessibility</a>** | **Performance** | **Acessibility** | **Best practices** | **SEO** |
 |------------------------------------------|------------|------------|------------|------------|------------|------------|
-
+| / |
+| /about |
+| /help |
+| /401 |
+| /404 |
+| /privacy_policy |
+| /products | 
+| /products/ | 
+| /products/ | 
+| /products/ | 
+| /cart/ | 
+| /checkout/ | 
+| /accounts/login |
+| /accounts/signup |  
+| /accounts/password/reset | 
+| /accounts/logout |  
+| /accounts/profile |
+| /accounts/user |
+| /accounts/password |
+| /accounts/email |
+| /accounts/orders |  
 
 * Passed state means the test was run, and returned no errors or alerts
 * Due to the nature of dashboard pages, Wave was run using the browser extension rather than the site tool.
 * M=mobile, D=desktop.
 * Performance issues caused by initial server response (TTFB) were ignored due to the server were the current site is hosted being a free version of a third party service I don't have much control over. Initial server response may also be result of slow postgress queries, which is not the focus for this project, those can be dealt with once the site is deployed to a permanent server
 * Render blocking issues were avoided whenever possible, and only left when optimizing caused major layout shifts.
+* For product pages, a few random products were selected for testing. As all of them follow the same structure, use the same templates and deliver the contents from same locations the sampling represents an aproximation of what should be expected in all other similar pages.
 
 ## CSS
 | **File** | **<a href="https://jigsaw.w3.org/css-validator/" target="_blank">WC3 CSS validator</a>** |
-|----------|----------------------------|
-
+|----------|------------------------------------------------------------------------------------------|
+| account_management.css |  |
+| admin.css |  |
+| auth.css |  |
+| base.css |  |
+| brand.css |  |
 
 ## Java Script
 | **File** | **<a href="https://jshint.com/" target="_blank">JS hint ES6</a>** |
-|----------|----------------------------|
+|----------|-------------------------------------------------------------------|
+| admin.js |  |
+| auth.js |  |
+| base.js |  |
+| cart.js |  |
+| product.js |  |
+| stripe_elements.js |  |
 
+* JS files follow different approaches depending on the complexity and need for deeper organization. Files like admin, auth and stripe_elements are very specifiy for certain pages and just change a little bit the default behaviors for those setups, so those are not Class based. Base.js is intended to create general functions that may have been used across other files. The more complex JS setups (cart and product) are well organized and use OOP techniches, strong use of classes and interconnection between internal functions.
 
 ## Python
 | **File** | **<a href="https://pep8ci.herokuapp.com/" target="_blank">PEP8 validator</a>** |
-|----------|-------------------------|
+|----------|--------------------------------------------------------------------------------|
+| accounts/templatetags/url_path.py |  |
+| accounts/admin.py |  |
+| accounts/apps.py |  |
+| accounts/forms.py |  |
+| accounts/middleware.py |  |
+| accounts/models.py |  |
+| accounts/urls.py |  |
+| accounts/views.py |  |
+| cart/admin.py |  |
+| cart/apps.py |  |
+| cart/middleware.py |  |
+| cart/models.py |  |
+| cart/urls.py |  |
+| cart/utils.py |  |
+| cart/views.py |  |
+| checkout/admin.py |  |
+| checkout/apps.py |  |
+| checkout/forms.py |  |
+| checkout/models.py |  |
+| checkout/signals.py |  |
+| checkout/urls.py |  |
+| checkout/views.py |  |
+| checkout/webhook_handler.py |  |
+| checkout/webhooks.py |  |
+| coffee_hub/asgi.py |  |
+| coffee_hub/settings.py |  |
+| coffee_hub/urls.py |  |
+| coffee_hub/views.py |  |
+| coffee_hub/wsgi.py |  |
+| product/templatetags/custom_filters.py |  |
+| product/admin.py |  |
+| product/apps.py |  |
+| product/forms.py |  |
+| product/models.py |  |
+| product/urls.py |  |
+| product/views.py |  |
+| store/templatetags/custom_tags.py |  |
+| store/admin.py |  |
+| store/apps.py |  |
+| store/forms.py |  |
+| store/models.py |  |
+| store/urls.py |  |
+| store/views.py |  |
 
+* It was opted to use Class based structure for most files like models, views, forms, middleware and admin.
+* Minor files like signals, utils, templatetags, weebhooks are using direct methods instead of Classes. The reason for that is because they are either based on structures from third party configurations (eg Stripe) and converting to classes could be troubling due to unknown factors, or they have very simple functions which do not justify a class based approach.
 
 ## Manual testing
 
-| **Location** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|----------|----------|---------------------|--------------------------|---------------------------|
+### Home
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### About
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Privacy policy
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Custom 401
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Custom 404
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Shop/product list (end user)
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Product detail (end user)
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Login
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Register
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Reset password
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Verify email
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Newsletter subscription
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Filtering and sorting
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Search bar
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Help
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Cart
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Checkout
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Payment Processing(Stripe)
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### User Portal - general
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### User Portal - Profile management
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### User Portal - Username management
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### User Portal - Password management
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### User Portal - Emails management
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### User Portal - Orders management
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### User Portal - Logout
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### User Portal - Intranet (staff only)
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### User Portal - Custom admin panel (admin only)
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Product List (staf and admin access)
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Product Create (staf and admin access)
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Product Edit/Detail (staf and admin access)
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
 ## Bugs
 
@@ -684,6 +884,7 @@ Two youtube videos were of grand relevance as guidance for coding:
 ---
 # Acknowledgements
 
+* My wife for the support and patience.
 * Gareth Mc Girr: My mentor, for all the help and advice throughout the project.
 * Code Institute: For all the training and guidance.
 * WP Engine: My current employer, for providing all the support necessary and allowing great networking.
