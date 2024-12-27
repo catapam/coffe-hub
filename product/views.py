@@ -364,34 +364,6 @@ class ProductDetailView(DetailView):
         return context
 
 
-class ProductEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    """
-    Allows staff or superusers to edit an existing product.
-    POST requests return JSON responses for success or errors.
-    """
-    model = Product
-    fields = ['name', 'description', 'category', 'active']
-    template_name = 'product/product_detail.html'
-
-    def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
-
-    def form_invalid(self, form):
-        return JsonResponse({"success": False, "errors": form.errors}, status=400)
-
-    def form_valid(self, form):
-        product = form.save()
-        return JsonResponse({"success": True, "redirect_url": product.get_absolute_url()})
-
-    def post(self, request, *args, **kwargs):
-        # Overridden to ensure JSON response on POST
-        self.object = self.get_object()
-        return super().post(request, *args, **kwargs)
-
-    def get_success_url(self):
-        return self.object.get_absolute_url()
-
-
 class ProductDeactivateView(LoginRequiredMixin, UserPassesTestMixin, View):
     """
     Toggles a product's active state. Admin-only.
@@ -457,13 +429,19 @@ class SaveSelector(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def handle_category(self, action, name, current_value):
         if action == "add":
-            new_category = Category.objects.create(name=name)
-            return JsonResponse({
-                "success": True,
-                "name": new_category.name,
-                "slug": new_category.slug,
-                "id": new_category.id
-            })
+            try:
+                new_category = Category.objects.create(name=name)
+                return JsonResponse({
+                    "success": True,
+                    "name": new_category.name,
+                    "slug": new_category.slug,
+                    "id": new_category.id
+                })
+            except IntegrityError:
+                return JsonResponse({
+                    "success": False,
+                    "error": f"A category with the name '{name}' already exists."
+                }, status=400)
 
         elif action == "edit" and current_value:
             try:
@@ -475,6 +453,11 @@ class SaveSelector(LoginRequiredMixin, UserPassesTestMixin, View):
                     "name": category.name,
                     "id": category.id
                 })
+            except IntegrityError:
+                return JsonResponse({
+                    "success": False,
+                    "error": f"A category with the name '{name}' already exists."
+                }, status=400)
             except Category.DoesNotExist:
                 return JsonResponse({"success": False, "error": "Category not found."}, status=404)
 
@@ -482,23 +465,29 @@ class SaveSelector(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def handle_size(self, action, name, current_value, product_id):
         if not product_id:
-            return JsonResponse({"success": False, "error": "Missing product_id."}, status=400)
+            return JsonResponse({"success": False, "error": "Missing product."}, status=404)
 
         product = get_object_or_404(Product, pk=product_id)
 
         if action == "add":
-            variant = ProductVariant.objects.create(
-                product=product,
-                size=name,
-                price=0,
-                stock=0
-            )
-            return JsonResponse({
-                "success": True,
-                "name": variant.size,
-                "slug": variant.size,
-                "id": variant.id
-            })
+            try:
+                variant = ProductVariant.objects.create(
+                    product=product,
+                    size=name,
+                    price=0,
+                    stock=0
+                )
+                return JsonResponse({
+                    "success": True,
+                    "name": variant.size,
+                    "slug": variant.size,
+                    "id": variant.id
+                })
+            except IntegrityError:
+                return JsonResponse({
+                    "success": False,
+                    "error": f"A size with the name '{name}' already exists."
+                }, status=200)
 
         elif action == "edit" and current_value:
             try:
@@ -511,6 +500,11 @@ class SaveSelector(LoginRequiredMixin, UserPassesTestMixin, View):
                     "slug": variant.size,
                     "id": variant.id
                 })
+            except IntegrityError:
+                return JsonResponse({
+                    "success": False,
+                    "error": f"A size with the name '{name}' already exists."
+                }, status=400)
             except ProductVariant.DoesNotExist:
                 return JsonResponse({"success": False, "error": "Variant not found."}, status=404)
 
@@ -550,47 +544,35 @@ class ProductSaveView(LoginRequiredMixin, UserPassesTestMixin, View):
         product_id = request.POST.get('product_id')
         variant_id = request.POST.get('variant_id')
 
-        # Validate required fields
-        if not product_id or not variant_id:
-            return JsonResponse({"success": False, "error": "Missing product_id or variant_id."}, status=400)
+        if not product_id:
+            return JsonResponse({"success": False, "error": "Product is required."}, status=400)
 
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
             return JsonResponse({"success": False, "error": "Product not found."}, status=404)
 
-        try:
-            variant = ProductVariant.objects.get(id=variant_id)
-        except ProductVariant.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Variant not found."}, status=404)
-
-        # Load product and variant data
+        # Load product data
         product_data = json.loads(request.POST.get('product', '{}'))
-        variant_data = json.loads(request.POST.get('variant', '{}'))
-
-        category_id = product_data.get('category')
-        if not category_id:
-            return JsonResponse({"success": False, "error": "Category not specified."}, status=400)
-
-        category = get_object_or_404(Category, id=category_id)
-
         product_form = ProductEditForm(product_data, instance=product)
+
         if not product_form.is_valid():
-            return JsonResponse({"success": False, "errors": product_form.errors}, status=400)
+            return JsonResponse({
+                "success": False,
+                "errors": product_form.errors.get_json_data()  # Detailed field-specific errors
+            }, status=400)
 
         # Save product
-        product = product_form.save(commit=False)
-        product.category = category
-
-        # Handle potential slug uniqueness issues
         try:
-            product.save()
+            product_form.save()
         except IntegrityError as e:
             if 'unique constraint' in str(e).lower():
-                return JsonResponse({"success": False, "error": "Duplicate product name or slug detected."}, status=400)
-            raise e
+                return JsonResponse({
+                    "success": False,
+                    "error": "Duplicate product name or slug detected."
+                }, status=400)
 
-        # Handle image upload if provided
+        # Handle optional image upload
         if 'image' in request.FILES:
             image_file = request.FILES['image']
             if product.image_path:
@@ -606,17 +588,30 @@ class ProductSaveView(LoginRequiredMixin, UserPassesTestMixin, View):
             product.cloudinary_version = upload_result.get('version')
             product.save()
 
-        # Validate and save variant
-        variant_form = ProductVariantForm(variant_data, instance=variant)
-        if not variant_form.is_valid():
-            return JsonResponse({"success": False, "errors": variant_form.errors}, status=400)
+        # Load and validate variant data if present
+        if variant_id:
+            try:
+                variant = ProductVariant.objects.get(id=variant_id)
+            except ProductVariant.DoesNotExist:
+                return JsonResponse({"success": False, "error": "Size not found."}, status=404)
 
-        try:
-            variant_form.save()
-        except IntegrityError as e:
-            if 'unique constraint' in str(e).lower():
-                return JsonResponse({"success": False, "error": "Duplicate variant size detected."}, status=400)
-            raise e
+            variant_data = json.loads(request.POST.get('variant', '{}'))
+            variant_form = ProductVariantForm(variant_data, instance=variant)
+
+            if not variant_form.is_valid():
+                return JsonResponse({
+                    "success": False,
+                    "errors": variant_form.errors.get_json_data()  # Detailed field-specific errors
+                }, status=400)
+
+            try:
+                variant_form.save()
+            except IntegrityError as e:
+                if 'unique constraint' in str(e).lower():
+                    return JsonResponse({
+                        "success": False,
+                        "error": "Duplicate size name detected."
+                    }, status=400)
 
         return JsonResponse({"success": True, "redirect_url": product.get_absolute_url()})
 
@@ -637,52 +632,66 @@ class ProductCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         try:
+            # Parse incoming data
             if request.content_type == 'application/json':
                 data = json.loads(request.body)
                 product_data = data.get('product', {})
-                variant_data = data.get('variant')  # Handle optional variant data
             else:
                 product_data = request.POST.dict()
-                if 'product' in product_data:  # Extract JSON from 'product' key
+                if 'product' in product_data:
                     product_data = json.loads(product_data['product'])
-                variant_data = None
 
+            # Initialize the form with product data
             form = self.form_class(product_data)
 
             if form.is_valid():
-                product = form.save()
-                if variant_data:  # Handle size/variant creation only if provided
-                    ProductVariant.objects.create(
-                        product=product,
-                        size=variant_data.get('size'),
-                        price=variant_data.get('price', 0),
-                        stock=variant_data.get('stock', 0),
-                    )
+                try:
+                    # Save the product instance
+                    product = form.save()  # Only save the product once
+                except IntegrityError as e:
+                    if 'unique constraint' in str(e).lower():
+                        return JsonResponse({
+                            "success": False,
+                            "error": "Duplicate product name or slug detected."
+                        }, status=400)
+                    raise e
+
+                # Return success response with the product ID and redirect URL
                 return JsonResponse({
                     "success": True,
                     "product_id": product.id,
                     "redirect_url": reverse('product_edit', kwargs={"pk": product.id}),
                 })
+
             else:
-                print("Form Errors:", form.errors)
+                # Handle validation errors
                 return JsonResponse({
                     "success": False,
-                    "type": "warning",
-                    "message": json.loads(form.errors.as_json())
-                }, status=200)
-        except json.JSONDecodeError as e:
-            return JsonResponse({"success": False, "type": "error", "message": "Invalid JSON payload."}, status=400)
+                    "errors": form.errors.get_json_data()
+                }, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"success": False, "error": "Invalid JSON payload."}, status=400)
+        except IntegrityError as e:
+            if 'unique constraint' in str(e).lower():
+                return JsonResponse({
+                    "success": False,
+                    "error": "Duplicate product name detected."
+                }, status=400)
+            return JsonResponse({"success": False, "error": str(e)}, status=400)
         except Exception as e:
-            return JsonResponse({"success": False, "type": "error", "message": str(e)}, status=500)
+            print(str(e))
+            return JsonResponse({"success": False, "error": str(e)}, status=500)
 
     def get_context_data(self, **kwargs):
+        # Add contextual data for the template
         context = super().get_context_data(**kwargs)
         context['product_form'] = self.get_form()
-        category_items = [
+        context['category_items'] = [
             {"id": category.id, "name": category.name}
             for category in Category.objects.all().order_by('slug')
         ]
-        context['category_items'] = category_items
-        context['is_admin'] = self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user.is_staff)
+        context['is_admin'] = self.request.user.is_authenticated and (
+            self.request.user.is_superuser or self.request.user.is_staff)
         context['view'] = 'detail'
         return context

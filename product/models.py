@@ -48,21 +48,21 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         # Generate a slug from the name
-        clean_name = re.sub(r'[^\w\s-]', '', self.name)  # Remove special characters
-        clean_name = clean_name.replace('-', '_')
-        clean_name = clean_name.replace(' ', '_')
-        self.slug = clean_name.lower()
+        if self.name:
+            clean_name = re.sub(r'[^\w\s-]', '', self.name)  # Remove special characters
+            clean_name = clean_name.replace('-', '_').replace(' ', '_')
+            self.slug = clean_name.lower()
 
         # Ensure the category is not reset
-        if not self.pk:
-            # If the object is being created for the first time
+        if not self.pk and hasattr(self, 'category') and self.category:
             self.category = self.category
 
-        # Update the rating field with the average rating
-        avg_rating = self.reviews.aggregate(average=Avg('rating'))['average']
-        self.rating = round(avg_rating, 1) if avg_rating is not None else 0.0
-            
         super().save(*args, **kwargs)
+
+        # Update the rating field with the average rating
+        if self.pk:
+            self.rating = self.average_rating
+            super().save(update_fields=['rating'])
 
     def image(self):
         """

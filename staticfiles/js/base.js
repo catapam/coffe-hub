@@ -231,36 +231,39 @@ async function showToast(type, message) {
     toast.show();
 }
 
-async function handleApiResponse(response) {
-    let json;
-    try {
-        // Parse JSON response
-        json = await response.json();
-    } catch (error) {
-        showToast("error", `An unexpected error occurred: ${error}`);
-        return null;
-    }
-
-    if (!response.ok) {
-        // Handle HTTP errors
-        const errorMessage = json.error || "An unexpected error occurred.";
-        showToast(json.type || "error", errorMessage);
-        return null;
-    }
-
-    // If success, return the parsed JSON
-    return json;
-}
-
 async function customFetch(url, options = {}) {
     try {
         const response = await fetch(url, options);
-        const data = await handleApiResponse(response);
-        return data;
+        const contentType = response.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+            const data = await response.json();
+            return handleApiResponse(response, data);
+        } else {
+            throw new Error("Invalid response format. Expected JSON.");
+        }
     } catch (error) {
-        showToast("error", `Failed to connect to the server: ${error}`);
+        showToast("error", `Request failed: ${error.message}`);
         return null;
     }
+}
+
+async function handleApiResponse(response, data) {
+    if (!response.ok) {
+        if (data.errors) {
+            // Display detailed field-specific errors
+            Object.entries(data.errors).forEach(([field, messages]) => {
+                const capitalizedField = capitalizeField(field);
+                messages.forEach(msg => showToast('error', `${capitalizedField}: ${msg.message || msg}`));
+            });
+        } else if (data.error) {
+            showToast("error", data.error);
+        } else {
+            showToast("error", "An unexpected error occurred.");
+        }
+        return null;
+    }
+    return data;
 }
 
 function initializeToasts() {
@@ -270,6 +273,13 @@ function initializeToasts() {
         toast.show();
     });
 }
+
+function capitalizeField(field) {
+    // Handle cases like "variant[0].price" by splitting on "." and "[" or other delimiters
+    const cleanField = field.split(/[.\[]/)[0]; // Extract only the first segment
+    return cleanField.charAt(0).toUpperCase() + cleanField.slice(1);
+}
+
 
 // Initialize all event listeners once DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function () {

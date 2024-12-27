@@ -45,55 +45,55 @@ class ProductCardHandler {
 
     updateProductCard(sizeSelect) {
         if (!sizeSelect) return;
-    
+
         const cardElement = sizeSelect.closest(".product-card");
         if (!cardElement) {
             return;
         }
-    
+
         const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
         if (!selectedOption) return;
-    
+
         const price = selectedOption.dataset.price;
         const stock = parseInt(selectedOption.dataset.stock || 0, 10);
         const variantActive = selectedOption.dataset.active === "true";
         const variantId = selectedOption.dataset.variantId;
-    
+
         this.updatePriceDisplay(cardElement, price, stock);
         this.updateBuyButton(cardElement, stock);
         this.updateStockInput(cardElement, stock);
         this.updateVariantState(cardElement, variantActive, variantId);
     }
-    
+
     updateVariantState(cardElement, isActive, variantId) {
         const variantButton = cardElement.querySelector(".toggle-variant-btn");
         const variantBadge = cardElement.querySelector(`#badge-size-${cardElement.querySelector('.size').id.split('-')[2]}`);
         const saveButton = cardElement.querySelector(`.save-product-btn`);
-        
-        if (variantBadge){
+
+        if (variantBadge) {
             variantBadge.classList.toggle("badge-active", isActive);
             variantBadge.classList.toggle("badge-inactive", !isActive);
             variantBadge.textContent = isActive ? "Size: Active" : "Size: Inactive";
-        } 
+        }
 
-        if (variantId){
-            if (variantButton){
+        if (variantId) {
+            if (variantButton) {
                 variantButton.setAttribute("data-url", `/products/variant/${variantId}/deactivate/`);
                 variantButton.setAttribute("data-active", isActive ? "true" : "false");
                 variantButton.classList.toggle("btn-danger", isActive);
                 variantButton.classList.toggle("btn-success", !isActive);
                 variantButton.textContent = isActive ? "Deactivate Size" : "Activate Size";
             }
-            if(saveButton){
+            if (saveButton) {
                 saveButton.setAttribute("data-variant-id", `${variantId}`)
             }
-        } 
-    }  
+        }
+    }
 
     updateStockInput(cardElement, stock) {
         let stockInput = cardElement.querySelector(`#id_stock`);
         const quantityInput = cardElement.querySelector(`#quantity-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
-    
+
         if (stockInput) {
             stockInput.value = stock; // Update stock input if found
         } else if (quantityInput) {
@@ -104,20 +104,20 @@ class ProductCardHandler {
             stockInput = cardElement.querySelector(`#stock-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
             if (stockInput) {
                 stockInput.value = `${stock}`; // Update the value of the stock input
-            } 
+            }
         }
     }
-    
+
     updatePriceDisplay(cardElement, price, stock) {
         const sizeInput = cardElement.querySelector('.size');
         let slug = '';
         if (sizeInput) {
             slug = sizeInput.id.split('-')[2];
         }
-    
+
         const priceDisplay = cardElement.querySelector(`#price-${slug}`);
         const priceEdit = cardElement.querySelector(`#id_price`);
-    
+
         if (priceDisplay) {
             if (stock > 0) {
                 priceDisplay.innerHTML = `<strong>$${price} <span>each</span></strong>`;
@@ -186,7 +186,7 @@ class ProductCardHandler {
                 const productId = button.getAttribute("data-product-id");
                 const size = document.querySelector(`#size-select-${productId}`)?.value;
                 const quantity = document.querySelector(`#quantity-select-${productId}`)?.value;
-                
+
                 if (!url || !productId || !size || !quantity) {
                     showToast('error', 'Please select a valid size and quantity.');
                     return;
@@ -216,13 +216,13 @@ class ProductCardHandler {
     handleReviewSubmission() {
         const reviewForm = document.querySelector('.rating-form');
         if (!reviewForm) return;
-    
+
         reviewForm.addEventListener('submit', (event) => {
             event.preventDefault();
-    
+
             const formData = new FormData(reviewForm);
             const url = reviewForm.action;
-    
+
             customFetch(url, {
                 method: 'POST',
                 body: formData,
@@ -239,18 +239,18 @@ class ProductCardHandler {
             });
         });
     }
-    
+
     getCSRFToken() {
         const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
         return csrfToken ? csrfToken.value : "";
-    }    
+    }
 }
 
 class StarRatingHandler {
     constructor(starContainerSelector, ratingInputSelector) {
         this.starContainer = document.querySelector(starContainerSelector);
         this.ratingInput = document.querySelector(ratingInputSelector);
-        
+
         if (this.starContainer && this.ratingInput) {
             this.init();
         }
@@ -268,7 +268,7 @@ class StarRatingHandler {
     handleClick(star) {
         const chosenValue = parseInt(star.getAttribute('data-value'), 10);
         let currentRating = parseInt(this.ratingInput?.value || '0', 10);
- 
+
         if (currentRating === chosenValue && currentRating > 0) {
             currentRating -= 1;  // Allow deselecting the star
         } else {
@@ -318,8 +318,8 @@ class ReviewFilterHandler {
     init() {
         this.filters.forEach(filter => {
             filter.addEventListener('click', () => {
-                const filterValue = filter.dataset.filter 
-                    ? parseInt(filter.dataset.filter, 10) 
+                const filterValue = filter.dataset.filter
+                    ? parseInt(filter.dataset.filter, 10)
                     : "all";
                 this.filterReviews(filterValue);
             });
@@ -583,12 +583,21 @@ class SelectorHandler {
     async handleSave() {
         this.setElements();
         const newName = this.inputElement.value.trim();
+
+        // Validate empty name
         if (!newName) {
-            return;
+            showToast('warning', 'Empty name is not valid.');
+            return; // Prevent further processing
         }
 
         const selectedOption = this.selectElement.options[this.selectElement.selectedIndex];
         const currentValue = selectedOption ? selectedOption.value : null;
+
+        // If no actual changes were made
+        if (currentValue && selectedOption.textContent.trim() === newName) {
+            showToast('info', 'No changes made.');
+            return; // Skip saving, as there's nothing to save
+        }
 
         const productId = this.selectElement.id.split('-').pop(); // Restore direct product_id extraction
 
@@ -614,8 +623,6 @@ class SelectorHandler {
                 // Use `slug` for size, `id` for category in URL update
                 const identifier = this.type === 'size' ? response.slug : response.id;
                 this.updateURL(identifier);
-            } else if (response.error) {
-                showToast('error', `Error saving ${this.type}: ${response.error}`);
             } else {
                 showToast('error', `Unexpected error while saving ${this.type}.`);
             }
@@ -686,7 +693,7 @@ class ProductSaveHandler {
         if (this.saveButtons.length > 0) {
             this.init();
         }
-        
+
         if (!this.previewElement) {
             showToast('error', `Preview element with ID ${dynamicPart} not found.`)
         }
@@ -710,7 +717,7 @@ class ProductSaveHandler {
         if (file) {
             this.imageFile = file; // Store the selected image file
             const reader = new FileReader();
-    
+
             reader.onload = (e) => {
                 if (this.previewElement) {
                     this.previewElement.src = e.target.result; // Update the image preview
@@ -718,7 +725,7 @@ class ProductSaveHandler {
                     showToast('error', 'Preview element not found.')
                 }
             };
-    
+
             reader.readAsDataURL(file);
         }
     }
@@ -745,12 +752,20 @@ class ProductSaveHandler {
 
         if (sizeSelector) {
             const size = sizeElement ? sizeElement.value : null;
-            const price = document.querySelector('#id_price')?.value || null;
-            const stock = document.querySelector('#id_stock')?.value || null;
+            let price = document.querySelector('#id_price')?.value || null;
+            let stock = document.querySelector('#id_stock')?.value || null;
             const variantId = sizeElement ? sizeElement.getAttribute('data-variant-id') : null;
 
-            if (!size || !price || !stock) {
-                showToast('warning', `Size data is incomplete: { size, price, stock }`)
+            if (!price) {
+                price = 0;
+            }
+
+            if (!stock) {
+                stock = 0;
+            }
+
+            if (!size) {
+                showToast('warning', `Size data is incomplete, select a valid size`)
                 return null;
             }
 
@@ -763,23 +778,27 @@ class ProductSaveHandler {
     saveProductAndVariant(productId, variantId, url) {
         const formData = new FormData();
         const productData = this.getProductData();
-    
+
         if (!productData) {
-            showToast('warning', `Product data is incomplete. Please fill in all fields.`);
+            showToast('warning', 'Product data is incomplete. Please fill in all fields: name and category.');
             return;
         }
 
-        if (variantId){
+        // Add product data to form
+        formData.append('product', JSON.stringify(productData));
+
+        if (productId) {
+            formData.append('product_id', productId);
+        }
+
+        // Handle variant data if provided
+        if (variantId) {
             const variantData = this.getVariantData();
             if (!variantData) {
-                showToast('warning', `Size data is incomplete. Please fill in all fields.`);
                 return;
             }
 
-            if (variantId || variantData.variantId) {
-                formData.append('variant_id', variantId || variantData.variantId); // Use the variantId for updates
-            }
-
+            formData.append('variant_id', variantId || variantData.variantId);
             formData.append('variant', JSON.stringify({
                 size: variantData.size,
                 price: variantData.price,
@@ -787,14 +806,14 @@ class ProductSaveHandler {
                 id: variantData.variantId || null, // Explicitly include the ID for updates
             }));
         }
-    
-        if (productId) formData.append('product_id', productId);
 
-        formData.append('product', JSON.stringify(productData));
-    
+        // Handle image upload if provided
         if (this.imageFile) {
             formData.append('image', this.imageFile, `${productData.name}.jpg`);
-        }    
+        }
+
+        let errorToastShown = false; // Track if an error toast is already shown
+
         customFetch(url, {
             method: 'POST',
             headers: {
@@ -803,23 +822,19 @@ class ProductSaveHandler {
             body: formData,
         })
             .then(data => {
-                if (data.success) {
+                if (data && data.success) {
                     showToast('success', 'Product saved successfully.');
                     if (data.redirect_url) {
                         setTimeout(() => window.location.href = data.redirect_url, 2000);
                     }
-                } else if (data.errors) {
-                    Object.entries(data.errors).forEach(([field, errors]) => {
-                        errors.forEach(error => showToast('error', `${field}: ${error}`));
-                    });
-                } else if (data.error) {
-                    showToast('error', data.error);
                 }
             })
             .catch(error => {
-                showToast('error', `Request failed: ${error.message}`);
-            });    
-    }    
+                if (!errorToastShown) {
+                    showToast('error', `Request failed: ${error.message}`);
+                }
+            });
+    }
 }
 
 // Initialize handlers on DOM load

@@ -420,6 +420,9 @@ Key design principles include:
 - **Product Cards**  
   Product cards on the list view feature clickable actions for "Buy" (end users) or "Edit" (staff/admins) and a link to the product details page.
 
+- **AJAX requests on product editting**
+  As a showcase of technologies being used, for the Edit and Create Product features, the Post requests are processed as AJAX requests to the backend, working similarly to a custom API gateway. The JSON responses are then processed in JS in order to provide users with error handling messages.
+
 ### Cart
 
 - **Session and Persistent Carts**  
