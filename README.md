@@ -4,7 +4,7 @@
 
 Welcome to Coffee Hub, your one-stop platform for premium coffee and related merchandise. This e-commerce application showcases advanced functionalities, delivering a seamless and enjoyable shopping experience.
 
-![amiresponsive screenshot](documentation/responsive.png)
+![amiresponsive screenshot](documentation/amiresponsive.png)
 
 <div align="center">
 
@@ -668,23 +668,29 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ## CSS
 | **File** | **<a href="https://jigsaw.w3.org/css-validator/" target="_blank">WC3 CSS validator</a>** |
 |----------|------------------------------------------------------------------------------------------|
-| account_management.css |  |
-| admin.css |  |
-| auth.css |  |
-| base.css |  |
-| brand.css |  |
+| account_management.css | Passed |
+| admin.css | Passed |
+| auth.css | Passed |
+| base.css | Passed |
+| brand.css | Passed |
 
 ## Java Script
 | **File** | **<a href="https://jshint.com/" target="_blank">JS hint ES6</a>** |
 |----------|-------------------------------------------------------------------|
-| admin.js |  |
-| auth.js |  |
-| base.js |  |
-| cart.js |  |
-| product.js |  |
-| stripe_elements.js |  |
+| admin.js | Passed |
+| auth.js | Passed |
+| base.js | Passed - ES8 |
+| cart.js | Passed |
+| product.js | Passed |
+| stripe_elements.js | Passed |
 
 * JS files follow different approaches depending on the complexity and need for deeper organization. Files like admin, auth and stripe_elements are very specifiy for certain pages and just change a little bit the default behaviors for those setups, so those are not Class based. Base.js is intended to create general functions that may have been used across other files. The more complex JS setups (cart and product) are well organized and use OOP techniches, strong use of classes and interconnection between internal functions.
+
+* JS files may call other file's functions which would return an undefined warning on the JS validation. Those are correctly defined on the base.js file which is loaded on all contexts. Due to that setup variables/functions set on base.js may be flagged as not in use, while they are only being used on other files but are in better fit if set globally on that main file.
+
+* Async functions were used for the AJAX setup, those are correctly set and validated against ES8+.
+
+* Optional chaining is used for some specific classes and functions on the products.js which is also part of the functionalities related to AJAX. Those only validate against ES11, but they are valid and working as intended.
 
 ## Python
 | **File** | **<a href="https://pep8ci.herokuapp.com/" target="_blank">PEP8 validator</a>** |

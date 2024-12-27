@@ -1,26 +1,25 @@
-
 :root {
     /* Background colors */
-    --bg-lighter: #3b2a1a;
-    --bg-light: #2d1e12;
-    --bg-dark: #1d130b;
-    --bg-darker: #181818;
-    --highlight-rgb: 255, 255, 255;
+    --bg-lighter: #3b2a1a; /* Lightest background color */
+    --bg-light: #2d1e12; /* Light background color */
+    --bg-dark: #1d130b; /* Dark background color */
+    --bg-darker: #181818; /* Darkest background color */
+    --highlight-rgb: 255, 255, 255; /* Highlight color in RGB */
 
     /* Text colors */
-    --text-primary-color: #FFFFFF;
-    --text-secondary-color: #d4af37;
+    --text-primary-color: #FFFFFF; /* Primary text color */
+    --text-secondary-color: #d4af37; /* Secondary text color (golden hue) */
 
     /* Border */
-    --bs-border-radius: 0.5rem;
-    --border-color: var(--bg-darker);
-    --border: 2px solid var(--border-color);
+    --bs-border-radius: 0.5rem; /* Rounded border radius */
+    --border-color: var(--bg-darker); /* Border color tied to the darkest background */
+    --border: 2px solid var(--border-color); /* Standard border style */
 
     /* Font Variables */
-    --font-primary: "Nunito", Arial, sans-serif;
-    --font-heading: "Lato", Georgia, serif;
+    --font-primary: "Nunito", Arial, sans-serif; /* Primary font stack */
+    --font-heading: "Lato", Georgia, serif; /* Font stack for headings */
 
     /* Other */
-    --green-accent: #198754;
-    --red-accent: #dc3545;
+    --green-accent: #198754; /* Accent color for success (green) */
+    --red-accent: #dc3545; /* Accent color for danger (red) */
 }

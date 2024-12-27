@@ -1,11 +1,25 @@
+/**
+ * Utility class to handle CSRF tokens.
+ */
 class CSRFTokenHandler {
+    /**
+     * Retrieves the CSRF token from the DOM.
+     * @returns {string} The CSRF token value, or an empty string if not found.
+     */
     static getCSRFToken() {
         const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
         return csrfToken ? csrfToken.value : '';
     }
 }
 
+/**
+ * Class to handle removing items via button clicks.
+ */
 class RemoveItemHandler {
+    /**
+     * Initializes the RemoveItemHandler instance.
+     * @param {string} buttonSelector - CSS selector for the buttons.
+     */
     constructor(buttonSelector) {
         this.buttons = document.querySelectorAll(buttonSelector);
         if (this.buttons.length > 0) {
@@ -13,12 +27,19 @@ class RemoveItemHandler {
         }
     }
 
+    /**
+     * Adds click event listeners to the buttons.
+     */
     init() {
         this.buttons.forEach((button) => {
             button.addEventListener('click', (event) => this.handleRemove(event));
         });
     }
 
+    /**
+     * Handles the removal of an item when a button is clicked.
+     * @param {Event} event - The click event.
+     */
     async handleRemove(event) {
         const button = event.target.closest('button');
         const url = button.getAttribute('data-url');
@@ -52,7 +73,15 @@ class RemoveItemHandler {
     }
 }
 
+/**
+ * Class to handle updating items via button clicks.
+ */
 class UpdateItemHandler {
+    /**
+     * Initializes the UpdateItemHandler instance.
+     * @param {string} buttonSelector - CSS selector for the update buttons.
+     * @param {string} quantitySelector - CSS selector for the quantity inputs.
+     */
     constructor(buttonSelector, quantitySelector) {
         this.buttons = document.querySelectorAll(buttonSelector);
         this.quantitySelector = quantitySelector;
@@ -62,12 +91,19 @@ class UpdateItemHandler {
         }
     }
 
+    /**
+     * Adds click event listeners to the update buttons.
+     */
     init() {
         this.buttons.forEach((button) => {
             button.addEventListener('click', (event) => this.handleUpdate(event));
         });
     }
 
+    /**
+     * Handles updating an item's quantity when a button is clicked.
+     * @param {Event} event - The click event.
+     */
     async handleUpdate(event) {
         const button = event.target.closest('button');
         const url = button.getAttribute('data-url');
@@ -113,7 +149,16 @@ class UpdateItemHandler {
     }
 }
 
+/**
+ * Class to manage the cart, handling quantity changes and button visibility.
+ */
 class CartHandler {
+    /**
+     * Initializes the CartHandler instance.
+     * @param {string} quantitySelector - CSS selector for quantity inputs.
+     * @param {string} updateButtonSelector - CSS selector for update buttons.
+     * @param {string} deleteButtonSelector - CSS selector for delete buttons.
+     */
     constructor(quantitySelector, updateButtonSelector, deleteButtonSelector) {
         this.quantitySelector = quantitySelector;
         this.updateButtonSelector = updateButtonSelector;
@@ -121,6 +166,9 @@ class CartHandler {
         this.init();
     }
 
+    /**
+     * Adds input event listeners to quantity fields.
+     */
     init() {
         const quantityInputs = document.querySelectorAll(this.quantitySelector);
         quantityInputs.forEach(input => {
@@ -128,6 +176,10 @@ class CartHandler {
         });
     }
 
+    /**
+     * Handles changes to the quantity input fields.
+     * @param {Event} event - The input event.
+     */
     handleQuantityChange(event) {
         const inputField = event.target;
         const initialQuantity = parseInt(inputField.getAttribute('data-initial-quantity'), 10);
@@ -147,8 +199,16 @@ class CartHandler {
     }
 }
 
+/**
+ * Initializes all event listeners and handlers once the DOM is fully loaded.
+ */
 document.addEventListener('DOMContentLoaded', () => {
-    new CartHandler('.cart-quantity', '.btn-update', '.btn-remove');
-    new RemoveItemHandler('.btn-remove');
-    new UpdateItemHandler('.btn-update', 'input[type="number"]');
+    const cartHandler = new CartHandler('.cart-quantity', '.btn-update', '.btn-remove');
+    const removeItemHandler = new RemoveItemHandler('.btn-remove');
+    const updateItemHandler = new UpdateItemHandler('.btn-update', 'input[type="number"]');
+
+    window.cartHandler = cartHandler;
+    window.removeItemHandler = removeItemHandler;
+    window.updateItemHandler = updateItemHandler;
 });
+

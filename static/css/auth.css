@@ -1,56 +1,56 @@
 /* Division Margin */
 #divison_x {
-    margin-top: 30px;
+    margin-top: 30px; /* Add spacing above the division */
 }
 
 /* Form Check Input Styling */
 .form-check .form-check-input {
-    float: none;
-    margin-right: 10px;
+    float: none; /* Ensure input doesn't float */
+    margin-right: 10px; /* Add spacing to the right of the input */
 }
 
 /* Email Verification Status Styling */
 .verified {
-    color: var(--green-accent);
+    color: var(--green-accent); /* Green color indicates verified status */
 }
 
 .unverified {
-    color: var(--red-accent);
+    color: var(--red-accent); /* Red color indicates unverified status */
 }
 
 /* Email List Styling */
 .list-emails {
-    max-height: 100px;
-    overflow-y: auto;
-    text-align: left;
-    background-color: var(--bg-darker);
-    border: var(--border);
-    border-color: var(--bg-lighter);
-    box-shadow: 0 0 2px var(--text-primary-color);
-    margin-bottom: 15px;
-    border-radius: var(--bs-border-radius);
-    padding: 10px;
+    max-height: 100px; /* Constrain the height of the list */
+    overflow-y: auto; /* Add vertical scroll for overflowing content */
+    text-align: left; /* Align text to the left */
+    background-color: var(--bg-darker); /* Dark background for contrast */
+    border: var(--border); /* Standard border style */
+    border-color: var(--bg-lighter); /* Lighter border color for differentiation */
+    box-shadow: 0 0 2px var(--text-primary-color); /* Subtle shadow effect */
+    margin-bottom: 15px; /* Add spacing below the list */
+    border-radius: var(--bs-border-radius); /* Rounded corners */
+    padding: 10px; /* Add inner spacing */
 }
 
-.list-emails input{
-    border-radius: var(--bs-border-radius);
+.list-emails input {
+    border-radius: var(--bs-border-radius); /* Rounded corners for input elements */
 }
 
 /* Form Text Styling */
 .form-text {
-    font-size: small;
-    color: var(--text-secondary-color);
+    font-size: small; /* Smaller font size for form text */
+    color: var(--text-secondary-color); /* Use secondary text color */
 }
 
 /* Badges */
-.bg-warning{
-    color: var(--bg-darker);
+.bg-warning {
+    color: var(--bg-darker); /* Darker color for warning badges */
 }
 
-.bg-primary, .bg-success{
-    color: var(--text-primary-color);
+.bg-primary, .bg-success {
+    color: var(--text-primary-color); /* Primary text color for primary and success badges */
 }
 
-.bg-success i{
-    color: var(--text-primary-color);
+.bg-success i {
+    color: var(--text-primary-color); /* Primary text color for icons within success badges */
 }

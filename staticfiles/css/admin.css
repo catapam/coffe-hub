@@ -1,64 +1,77 @@
 :root {
-    --secondary: var(--bg-dark) !important;
-    --accent: var(--bg-light) !important;
-    --primary-fg: #fff;
+    /* Secondary and Accent Colors */
+    --secondary: var(--bg-dark) !important; /* Secondary background color */
+    --accent: var(--bg-light) !important; /* Accent background color */
+    --primary-fg: #fff; /* Primary foreground color (white) */
 
-    --body-fg: #333;
-    --body-bg: var(--bg-darker) !important;
-    --body-quiet-color: #666;
-    --body-medium-color: #444;
-    --body-loud-color: #000;
+    /* Body Colors */
+    --body-fg: #333; /* Main text color */
+    --body-bg: var(--bg-darker) !important; /* Dark background color for body */
+    --body-quiet-color: #666; /* Subtle text color */
+    --body-medium-color: #444; /* Medium emphasis text color */
+    --body-loud-color: #000; /* High emphasis text color */
 
-    --header-color: var(--text-primary-color) !important;
-    --header-branding-color: var(--accent);
-    --header-bg: var(--secondary);
-    --header-link-color: var(--text-secondary-color) !important;
+    /* Header Styling */
+    --header-color: var(--text-primary-color) !important; /* Header text color */
+    --header-branding-color: var(--accent); /* Branding color for header */
+    --header-bg: var(--secondary); /* Header background color */
+    --header-link-color: var(--text-secondary-color) !important; /* Header link color */
 
-    --breadcrumbs-fg: #c4dce8;
-    --breadcrumbs-link-fg: var(--body-bg);
-    --breadcrumbs-bg: var(--bg-light) !important;
+    /* Breadcrumbs */
+    --breadcrumbs-fg: #c4dce8; /* Breadcrumb text color */
+    --breadcrumbs-link-fg: var(--body-bg); /* Breadcrumb link color */
+    --breadcrumbs-bg: var(--bg-light) !important; /* Breadcrumb background color */
 
-    --link-fg: var(--text-primary-color) !important;
-    --link-hover-color: var(--text-secondary-color) !important;
-    --link-selected-fg: var(--text-secondary-color) !important;
+    /* Link Colors */
+    --link-fg: var(--text-primary-color) !important; /* Link text color */
+    --link-hover-color: var(--text-secondary-color) !important; /* Link hover color */
+    --link-selected-fg: var(--text-secondary-color) !important; /* Selected link color */
 
-    --message-success-bg: #dfd;
-    --message-warning-bg: #ffc;
-    --message-error-bg: #ffefef;
+    /* Message Background Colors */
+    --message-success-bg: #dfd; /* Success message background */
+    --message-warning-bg: #ffc; /* Warning message background */
+    --message-error-bg: #ffefef; /* Error message background */
 
-    --darkened-bg: #f8f8f8;
-    --selected-bg: #e4e4e4; 
-    --selected-row: var(--bg-light) !important;
+    /* Other Backgrounds */
+    --darkened-bg: #f8f8f8; /* Slightly darkened background */
+    --selected-bg: #e4e4e4; /* Selected item background */
+    --selected-row: var(--bg-light) !important; /* Background for selected rows */
 
-    --button-fg: var(--bg-darker) !important;
-    --button-bg: var(--text-secondary-color) !important;
-    --button-hover-bg: var(--bg-lighter) !important;
-    --default-button-bg: var(--text-secondary-color) !important;
-    --default-button-hover-bg: var(--bg-lighter) !important;
+    /* Button Styling */
+    --button-fg: var(--bg-darker) !important; /* Button foreground color */
+    --button-bg: var(--text-secondary-color) !important; /* Button background color */
+    --button-hover-bg: var(--bg-lighter) !important; /* Button hover background color */
+    --default-button-bg: var(--text-secondary-color) !important; /* Default button background */
+    --default-button-hover-bg: var(--bg-lighter) !important; /* Default button hover background */
 
-    --font-family-primary: "Nunito", Arial, sans-serif;
-    --font-family-monospace: "Lato", Georgia, serif;
+    /* Font Families */
+    --font-family-primary: "Nunito", Arial, sans-serif; /* Primary font */
+    --font-family-monospace: "Lato", Georgia, serif; /* Monospace font */
 
-    color-scheme: dark;
+    /* Color Scheme */
+    color-scheme: dark; /* Enable dark mode */
 }
 
+/* Theme Toggle */
 .theme-toggle {
-    display: none !important;
+    display: none !important; /* Hide theme toggle */
 }
 
+/* Recent Actions Module */
 #recent-actions-module {
-    display: none !important;
+    display: none !important; /* Hide recent actions module */
 }
 
-.submit-row a.deletelink, .historylink, .addlink, .viewsitelink{
-    color: var(--text-primary-color) !important;
+/* Submit Row Links */
+.submit-row a.deletelink, .historylink, .addlink, .viewsitelink {
+    color: var(--text-primary-color) !important; /* Primary color for links */
 }
 
-.submit-row a.deletelink:hover, .historylink:hover, .addlink:hover, .viewsitelink:hover{
-    color: var(--text-secondary-color) !important;
+.submit-row a.deletelink:hover, .historylink:hover, .addlink:hover, .viewsitelink:hover {
+    color: var(--text-secondary-color) !important; /* Secondary color on hover */
 }
 
+/* Original Password Help Text */
 .original p, .help, #id_password p:first-of-type {
-    display: none;
+    display: none; /* Hide help text and original password message */
 }
-

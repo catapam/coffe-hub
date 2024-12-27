@@ -1,4 +1,8 @@
 // Mobile Search Bar Toggle
+/**
+ * Sets up the toggle functionality for the mobile search bar.
+ * Toggles visibility and active states of the search bar when the button is clicked.
+ */
 function setupMobileSearchToggle() {
     const mobileSearchButton = document.getElementById('mobileSearchButton');
     if (mobileSearchButton) {
@@ -13,6 +17,10 @@ function setupMobileSearchToggle() {
 }
 
 // Menu Item Toggle
+/**
+ * Sets up toggle functionality for menu items.
+ * Ensures only one menu item is active at a time.
+ */
 function setupMenuItemToggle() {
     const menuItems = document.querySelectorAll('.menu-item');
     if (menuItems.length > 0) {
@@ -31,6 +39,10 @@ function setupMenuItemToggle() {
 }
 
 // Filter Form Toggle
+/**
+ * Sets up toggle functionality for the filter form.
+ * Toggles visibility between "d-none" and "d-block" classes.
+ */
 function setupFilterToggle() {
     const toggleButton = document.getElementById('toggle-filters');
     const filterForm = document.getElementById('filter-form');
@@ -47,6 +59,10 @@ function setupFilterToggle() {
 }
 
 // Category Dropdown Multi-Select
+/**
+ * Sets up multi-select functionality for category checkboxes.
+ * Handles "All" checkbox behavior and updates the dropdown button label.
+ */
 function setupCategorySelection() {
     const allCheckbox = document.querySelector('input[name="category[]"][value=""]');
     const categoryCheckboxes = document.querySelectorAll('input[name="category[]"]:not([value=""])');
@@ -78,7 +94,9 @@ function setupCategorySelection() {
     }
 }
 
-// Function to update the button label
+/**
+ * Updates the category dropdown button label based on selected categories.
+ */
 function updateCategoryButton() {
     const allCheckbox = document.querySelector('input[name="category[]"][value=""]');
     const categoryCheckboxes = document.querySelectorAll('input[name="category[]"]:not([value=""])');
@@ -96,13 +114,18 @@ function updateCategoryButton() {
             .filter(checkbox => checkbox.checked)
             .map(checkbox => checkbox.closest('label').textContent.trim());
 
-        categoryDropdownButton.textContent = selectedCategories.length > 0
-            ? selectedCategories.join(', ')
-            : 'All';
+        if (selectedCategories.length > 0) {
+            categoryDropdownButton.textContent = selectedCategories.join(', ');
+        } else {
+            categoryDropdownButton.textContent = 'All';
+        }
     }
 }
 
 // Refresh page on "Show Out of Stock" toggle
+/**
+ * Sets up functionality to refresh the page based on the "Show Out of Stock" checkbox state.
+ */
 function setupOutOfStockToggle() {
     const outOfStockCheckbox = document.getElementById('show-out-of-stock');
     if (outOfStockCheckbox) {
@@ -119,6 +142,11 @@ function setupOutOfStockToggle() {
     }
 }
 
+// Cookie Consent Banner
+/**
+ * Sets up the cookie consent banner functionality.
+ * Hides the banner and loads deferred images upon acceptance.
+ */
 function setupCookieConsent() {
     const banner = document.getElementById('cookie-banner');
     const acceptButton = document.getElementById('accept-cookies');
@@ -148,14 +176,16 @@ function setupCookieConsent() {
                     banner.style.display = 'none';
                     loadDeferredImages(); // Load images after consent
                 } else {
-                    showToast('warning', `Failed to save cookie preference, please refresh the page and try again`)
+                    showToast('warning', `Failed to save cookie preference, please refresh the page and try again`);
                 }
             })
             .catch(error => showToast('error', `${error}`));
     });
 }
 
-// Function to load deferred images
+/**
+ * Loads deferred images by setting their "src" attribute from "data-src".
+ */
 function loadDeferredImages() {
     const deferredImages = document.querySelectorAll('.deferred-image[data-src]');
     deferredImages.forEach(img => {
@@ -167,6 +197,13 @@ function loadDeferredImages() {
     });
 }
 
+// Toast Functionality
+/**
+ * Fetches a toast template from the server.
+ * @param {string} message - The message to display in the toast.
+ * @param {string} type - The type of toast (e.g., "success", "error").
+ * @returns {Promise<string|null>} The toast HTML as a string or null on failure.
+ */
 async function fetchToastTemplate(message, type) {
     const url = "/render-toast/";
     try {
@@ -188,6 +225,11 @@ async function fetchToastTemplate(message, type) {
     }
 }
 
+/**
+ * Displays a toast notification using the fetched template.
+ * @param {string} type - The type of toast (e.g., "success", "error").
+ * @param {string} message - The message to display in the toast.
+ */
 async function showToast(type, message) {
     const toastContainer = document.querySelector('.toast-container');
 
@@ -195,7 +237,7 @@ async function showToast(type, message) {
         console.error("Toast container not found.");
         return;
     }
-    
+
     // Fetch the toast HTML
     const toastResponse = await fetchToastTemplate(message, type);
 
@@ -231,6 +273,12 @@ async function showToast(type, message) {
     toast.show();
 }
 
+/**
+ * Fetch wrapper with error handling and toast notifications.
+ * @param {string} url - The URL to fetch.
+ * @param {Object} options - Fetch options (headers, method, etc.).
+ * @returns {Promise<Object|null>} The parsed JSON response or null on failure.
+ */
 async function customFetch(url, options = {}) {
     try {
         const response = await fetch(url, options);
@@ -248,6 +296,12 @@ async function customFetch(url, options = {}) {
     }
 }
 
+/**
+ * Handles API responses, including error reporting.
+ * @param {Response} response - The fetch response.
+ * @param {Object} data - The parsed JSON data.
+ * @returns {Object|null} The data if valid, or null on error.
+ */
 async function handleApiResponse(response, data) {
     if (!response.ok) {
         if (data.errors) {
@@ -266,6 +320,9 @@ async function handleApiResponse(response, data) {
     return data;
 }
 
+/**
+ * Initializes all toasts present on the page.
+ */
 function initializeToasts() {
     const toastElements = document.querySelectorAll('.toast');
     toastElements.forEach((toastElement) => {
@@ -274,14 +331,20 @@ function initializeToasts() {
     });
 }
 
+/**
+ * Capitalizes a field name, cleaning it of special characters.
+ * @param {string} field - The field name to capitalize.
+ * @returns {string} The cleaned and capitalized field name.
+ */
 function capitalizeField(field) {
     // Handle cases like "variant[0].price" by splitting on "." and "[" or other delimiters
     const cleanField = field.split(/[.\[]/)[0]; // Extract only the first segment
     return cleanField.charAt(0).toUpperCase() + cleanField.slice(1);
 }
 
-
-// Initialize all event listeners once DOM is fully loaded
+/**
+ * Initializes all event listeners once DOM is fully loaded.
+ */
 document.addEventListener('DOMContentLoaded', function () {
     setupMobileSearchToggle();
     setupMenuItemToggle();

@@ -1,135 +1,135 @@
 /* Dashboard Layout */
-.content-container{
-    max-width: calc( 100% - 150px);
-    right: 0;
+.content-container {
+    max-width: calc(100% - 150px); /* Adjust content container width based on sidebar size */
+    right: 0; /* Align container to the right */
 }
 
 /* Sidebar */
 .sidebar {
-    display: flex;
-    flex-direction: column;
-    z-index: 2;
-    width: 150px;
-    background-color: var(--bg-dark);
-    color: var(--text-primary-color);
-    height: calc( 100vh - 60px );
-    position: fixed;
-    top: 60px;
-    left: 0;
-    transition: width 0.3s ease;
-    border: var(--border);
-    border-color: var(--bg-lighter);
-    box-shadow: 0 0 2px var(--text-primary-color);
-    border-left: none;
-    border-bottom-right-radius: var(--bs-border-radius);
-    border-top-right-radius: var(--bs-border-radius);
+    display: flex; /* Use flexbox layout for sidebar */
+    flex-direction: column; /* Stack items vertically */
+    z-index: 2; /* Place above other elements */
+    width: 150px; /* Default width of sidebar */
+    background-color: var(--bg-dark); /* Dark background color */
+    color: var(--text-primary-color); /* Primary text color */
+    height: calc(100vh - 60px); /* Full height minus navbar */
+    position: fixed; /* Fix position on the screen */
+    top: 60px; /* Align below the navbar */
+    left: 0; /* Align to the left edge */
+    transition: width 0.3s ease; /* Smooth width transition */
+    border: var(--border); /* Add border */
+    border-color: var(--bg-lighter); /* Lighter border color */
+    box-shadow: 0 0 2px var(--text-primary-color); /* Subtle shadow effect */
+    border-left: none; /* Remove left border */
+    border-bottom-right-radius: var(--bs-border-radius); /* Rounded bottom-right corner */
+    border-top-right-radius: var(--bs-border-radius); /* Rounded top-right corner */
 }
 
 .sidebar.collapsed {
-    width: 50px;
+    width: 50px; /* Reduced width when collapsed */
 }
 
-.collapsed.content-container{
-    max-width: calc( 100% - 50px);
+.collapsed.content-container {
+    max-width: calc(100% - 50px); /* Adjust content container width when sidebar is collapsed */
 }
 
 .sidebar.collapsed .menu-text {
-    display: none;
+    display: none; /* Hide menu text in collapsed state */
 }
 
 /* Toggle Button */
 .toggle-btn {
-    position: absolute;
-    top: -50px;
-    right: -45px;
-    background-color: transparent;
-    color: var(--border);
-    cursor: pointer;
-    padding: 5px;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    margin-top: 60px;
+    position: absolute; /* Position relative to sidebar */
+    top: -50px; /* Place above the sidebar */
+    right: -45px; /* Position to the right */
+    background-color: transparent; /* Transparent background */
+    color: var(--border); /* Match border color */
+    cursor: pointer; /* Indicate interactivity */
+    padding: 5px; /* Add padding */
+    width: 35px; /* Set button width */
+    height: 35px; /* Set button height */
+    border-radius: 50%; /* Circular shape */
+    margin-top: 60px; /* Add margin from the top */
 }
 
 /* Access and Logout Buttons */
 .admin-access {
-    background-color: var(--text-secondary-color);
-    color: var(--bg-darker);
+    background-color: var(--text-secondary-color); /* Secondary color for access button */
+    color: var(--bg-darker); /* Darker background for text contrast */
 }
 
 .logout-dashboard {
-    background-color: var(--red-accent);
+    background-color: var(--red-accent); /* Red accent for logout button */
 }
 
 .admin-access:hover, .admin-access.active {
-    background-color: var(--bg-darker);
-    color: var(--text-secondary-color);
+    background-color: var(--bg-darker); /* Darker background on hover or active state */
+    color: var(--text-secondary-color); /* Secondary color for text */
 }
 
 .logout-dashboard:hover, .logout-dashboard.active {
-    color: var(--bg-darker);
+    color: var(--bg-darker); /* Darker color for text on hover or active state */
 }
 
 .bottom-menu-dashboard {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    margin-top: auto;
+    margin: 0; /* Remove margins */
+    padding: 0; /* Remove padding */
+    width: 100%; /* Full width */
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack items vertically */
+    margin-top: auto; /* Push to the bottom */
 }
 
 .bottom-menu-dashboard .li {
-    width: 100%;
+    width: 100%; /* Full width for list items */
 }
 
 .top-menu-dashboard {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    border-bottom: var(--border);
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    overflow-x: hidden;
-    margin-bottom: auto;
-}
-
-.top-menu-dashboard i, .bottom-menu-dashboard i{
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.top-menu-dashboard li, .bottom-menu-dashboard li{
-    margin: auto;
-    width: 100%;
-    text-align: right;
-}
-
-.top-menu-dashboard li a, .bottom-menu-dashboard li a{
-    padding-right: 10px;
-}
-
-.top-menu-dashboard, .bottom-menu-dashboard{
-    background-color: transparent;
-    opacity: 1;
-    border: none;
-    max-width: 100%;
-    max-height: 100%;
-    box-shadow: none;
-}
-
-.sidebar .menu-list{
-    display: flex;
+    display: flex; /* Use flexbox */
     flex-direction: column; /* Stack items vertically */
-    flex-grow: 1; /* Allows the top menu to grow naturally */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border-bottom: var(--border); /* Bottom border */
+    margin: 0; /* Remove margins */
+    padding: 0; /* Remove padding */
+    width: 100%; /* Full width */
+    overflow-x: hidden; /* Hide horizontal overflow */
+    margin-bottom: auto; /* Push bottom menu to the bottom */
+}
+
+.top-menu-dashboard i, .bottom-menu-dashboard i {
+    padding-left: 5px; /* Add left padding */
+    padding-right: 5px; /* Add right padding */
+}
+
+.top-menu-dashboard li, .bottom-menu-dashboard li {
+    margin: auto; /* Center items */
+    width: 100%; /* Full width */
+    text-align: right; /* Align text to the right */
+}
+
+.top-menu-dashboard li a, .bottom-menu-dashboard li a {
+    padding-right: 10px; /* Add right padding for links */
+}
+
+.top-menu-dashboard, .bottom-menu-dashboard {
+    background-color: transparent; /* Transparent background */
+    opacity: 1; /* Fully visible */
+    border: none; /* Remove borders */
+    max-width: 100%; /* Full width */
+    max-height: 100%; /* Full height */
+    box-shadow: none; /* Remove shadow */
+}
+
+.sidebar .menu-list {
+    display: flex; /* Use flexbox layout */
+    flex-direction: column; /* Stack items vertically */
+    flex-grow: 1; /* Allow top menu to grow */
     justify-content: space-between; /* Push bottom menu to the bottom */
 }
 
 /* Responsive Adjustments */
 @media (min-width: 768px) {
     .sidebar {
-        width: 150px;
+        width: 150px; /* Default sidebar width for larger screens */
     }
 }

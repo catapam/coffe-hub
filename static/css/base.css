@@ -1,117 +1,129 @@
 /* base.css */
-
 /* Main elements */
 html, body {
     margin: 0;
     padding: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    background-color: var(--bg-dark);
-    box-sizing: border-box; /* Ensure padding/border doesn't affect width */
+    width: 100%; /* Set the width to span the entire viewport */
+    height: 100%; /* Set the height to span the entire viewport */
+    overflow-x: hidden; /* Prevent horizontal scrolling issues */
+    background-color: var(--bg-dark); /* Use the custom background color variable */
+    box-sizing: border-box; /* Include padding and border in element width and height */
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Full viewport height */
-    width: 100%; /* Full width */
+    display: flex; /* Enable flexbox layout for body */
+    flex-direction: column; /* Arrange children in a column */
+    min-height: 100vh; /* Ensure the body spans at least the viewport height */
+    width: 100%; /* Ensure the body spans the full width */
 }
+
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading) !important;
-    color: var(--text-secondary-color) !important;
+    font-family: var(--font-heading) !important; /* Use the custom heading font */
+    color: var(--text-secondary-color) !important; /* Apply secondary text color */
 }
 
 p {
-    font-family: var(--font-primary) !important;
-    color: var(--text-primary-color) !important;
-    font-weight: 100; /* Reduce font weight */
-    letter-spacing: 0.1em; /* Increase spacing between letters */
+    font-family: var(--font-primary) !important; /* Use the custom primary font */
+    color: var(--text-primary-color) !important; /* Apply primary text color */
+    font-weight: 100; /* Light font weight for better readability */
+    letter-spacing: 0.1em; /* Increase spacing between letters for clarity */
 }
 
 a, label {
-    font-family: var(--font-heading);
-    color: var(--text-primary-color);
+    font-family: var(--font-heading); /* Consistent font for links and labels */
+    color: var(--text-primary-color); /* Apply primary text color */
 }
 
-/* footer */
+
+/* Footer */
 footer {
-    bottom: 0;
-    position: relative; /* Change to relative */
-    width: 100%; /* Ensure it spans the full width */
-    text-align: center;
+    bottom: 0; /* Align the footer to the bottom */
+    position: relative; /* Relative positioning for layout flexibility */
+    width: 100%; /* Ensure the footer spans the full width */
+    text-align: center; /* Center-align the text */
     padding: 20px; /* Add padding for spacing */
 }
 
-footer i{
-    font-size: 40px;
-    margin: 5px !important;
-    text-align: center;
+footer i {
+    font-size: 40px; /* Larger icons in the footer */
+    margin: 5px !important; /* Add spacing around icons */
+    text-align: center; /* Center the icons */
 }
 
-footer h1, footer h2, footer h3, footer h4, footer h5, footer h6, footer p, footer label, footer a{
-    font-size: small;
+footer h1,
+footer h2, 
+footer h3, 
+footer h4, 
+footer h5, 
+footer h6, 
+footer p, 
+footer label, 
+footer a {
+    font-size: small; /* Consistent small font size for footer elements */
 }
 
-footer li{
-    margin: 0 !important;
+footer li {
+    margin: 0 !important; /* Remove margin for list items */
 }
 
-/* General */
+
+/* General styles */
 .text-secondary {
-    color: var(--text-secondary-color);
+    color: var(--text-secondary-color); /* Apply secondary text color */
 }
 
 .active {
-    color: var(--text-secondary-color) !important;
-    font-weight: 700;
+    color: var(--text-secondary-color) !important; /* Highlight active elements */
+    font-weight: 700; /* Bold font weight */
 }
 
 .small-heading {
-    color: var(--green-accent);
-    font-size: 1.1rem;
-    font-weight: bold;
+    color: var(--green-accent); /* Use green accent for small headings */
+    font-size: 1.1rem; /* Slightly larger font size */
+    font-weight: bold; /* Bold text */
 }
 
-.border-radius{
-    border-radius: var(--bs-border-radius);
+.border-radius {
+    border-radius: var(--bs-border-radius); /* Apply custom border radius */
 }
 
-/* Screen-reader only */
+
+/* Screen-reader only styles */
 .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    color: var(--bg-darker);
-    border: 0;
+    position: absolute; /* Position offscreen */
+    width: 1px; /* Minimal width */
+    height: 1px; /* Minimal height */
+    padding: 0; /* Remove padding */
+    margin: -1px; /* Offset margin */
+    overflow: hidden; /* Hide overflow */
+    clip-path: inset(50%); /* Use clip-path for modern equivalent */
+    color: var(--bg-darker); /* Match background color for invisibility */
+    border: 0; /* Remove border */
 }
 
 .privacy-link {
-    font-size: xx-small;
+    font-size: xx-small; /* Small font size for privacy links */
 }
 
-.centered-element{
-    margin: auto;
-    padding: 0;
-    width: auto;
-    text-align: center;
+.centered-element {
+    margin: auto; /* Center element horizontally and vertically */
+    padding: 0; /* Remove padding */
+    width: auto; /* Auto width adjustment */
+    text-align: center; /* Center-align text */
 }
 
-/* Content container */
+
+/* Content container styles */
 .content-container {
-    flex: 1; /* Allows it to fill the remaining space */
+    flex: 1; /* Allow the container to fill remaining space */
     width: 100%; /* Full width */
-    height: calc(100% - 60px); /* Adjust dynamically based on content */
-    position: absolute;
-    top: 0;
-    margin-top: 60px;
-    z-index: 300; /* Below the navbar */
+    height: calc(100% - 60px); /* Subtract navbar height dynamically */
+    position: absolute; /* Position relative to the viewport */
+    top: 0; /* Align to the top */
+    margin-top: 60px; /* Add margin to avoid overlap with navbar */
+    z-index: 300; /* Stack below navbar */
 }
 
 .background-gradient {
@@ -120,519 +132,525 @@ footer li{
         var(--bg-darker) 0%,
         var(--bg-darker) 60%,
         var(--bg-dark) 85%
-    );
-    background-repeat: no-repeat; /* Prevents the gradient from repeating */
-    background-size: cover;
-    width: 100%;
-    height: 100%;
-    max-height: 500px; /* Matches hero height */
-    z-index: 1; /* Below navbar and hero */
+    ); /* Smooth gradient from darker to dark background */
+    background-repeat: no-repeat; /* Prevent repetition */
+    background-size: cover; /* Cover the entire container */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    max-height: 500px; /* Constrain maximum height */
+    z-index: 1; /* Stack below hero */
 }
 
 .content-gradient {
-    position: relative; /* Allow the pseudo-element to position correctly */
-    width: 100%;
-    height: 100vh; /* Match the gradient height */
+    position: relative; /* Necessary for pseudo-element positioning */
+    width: 100%; /* Full width */
+    height: 100vh; /* Match viewport height */
     overflow: hidden; /* Prevent content overflow */
-    z-index: 20; /* Place it below higher layers */
-    top: -500px;
+    z-index: 20; /* Stack above lower layers */
+    top: -500px; /* Adjust positioning for effect */
 }
 
 .content-gradient::after {
-    content: ''; /* Required for the pseudo-element */
-    position: absolute; /* Allow precise placement */
-    top: 0; /* Align with the top of the container */
+    content: ''; /* Required for pseudo-element */
+    position: absolute; /* Position within the container */
+    top: 0; /* Align with container top */
     left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Proper centering */
-    width: 200vh; /* Extend for a smooth fade */
-    min-height: 100vh;
-    height: 100%; /* Match the parent height */
+    transform: translateX(-50%); /* Correct centering */
+    width: 200vh; /* Extend for smooth fade */
+    min-height: 100vh; /* Minimum height matches viewport */
+    height: 100%; /* Match parent height */
     background: radial-gradient(
         circle at top center,
-        rgba(var(--highlight-rgb), 0.08) 0%,   /* Bright at the center */
-        rgba(var(--highlight-rgb), 0.05) 30%, /* Gradual fade */
-        rgba(var(--highlight-rgb), 0.0) 65%, /* Subtle fading */
-        rgba(var(--highlight-rgb), 0) 100%   /* Fully transparent at edges */
+        rgba(var(--highlight-rgb), 0.08) 0%, /* Bright center */
+        rgba(var(--highlight-rgb), 0.05) 30%, /* Fading gradient */
+        rgba(var(--highlight-rgb), 0.0) 65%, /* Nearly transparent */
+        rgba(var(--highlight-rgb), 0) 100% /* Fully transparent edges */
     );
-    mix-blend-mode: screen; /* Natural blending with the background */
-    pointer-events: none; /* Prevent interaction interference */
-    z-index: -1; /* Place it below the content */
+    mix-blend-mode: screen; /* Blend with background */
+    pointer-events: none; /* Ignore user interactions */
+    z-index: -1; /* Stack below content */
 }
 
-/* hero image */
+
+/* Hero image styles */
 .hero::after {
-    content: '';
-    position: absolute;
-    top: 85%; /* Start at 85% of the height */
-    left: 50%;
-    width: 200vh; /* Slightly larger than the element for smooth fading */
-    max-width: 2000px;
-    height: 25%;
+    content: ''; /* Add a gradient overlay */
+    position: absolute; /* Overlay positioning */
+    top: 85%; /* Start gradient lower in the image */
+    left: 50%; /* Center horizontally */
+    width: 200vh; /* Wide gradient coverage */
+    max-width: 2000px; /* Constrain maximum width */
+    height: 25%; /* Limited height for subtle effect */
     background: radial-gradient(
         ellipse at center,
-        rgba(var(--highlight-rgb), 0.2) 0%,   /* Bright white center */
-        rgba(var(--highlight-rgb), 0.0) 70%  /* Fully transparent edges */
+        rgba(var(--highlight-rgb), 0.2) 0%, /* Bright center */
+        rgba(var(--highlight-rgb), 0.0) 70% /* Fully transparent edges */
     );
-    transform: translate(-50%, -50%); /* Center the gradient */
-    mix-blend-mode: screen; /* Natural blending with background */
-    pointer-events: none; /* No interference with user interactions */
+    transform: translate(-50%, -50%); /* Correct centering */
+    mix-blend-mode: screen; /* Blend naturally */
+    pointer-events: none; /* Ignore interactions */
 }
 
 .hero {
     width: 100%; /* Full width */
-    height: 500px; /* Default height */
-    max-height: 100vh; /* Constrain to viewport height */
-    position: relative;
-    overflow: hidden; /* Prevent overflow */
-    z-index: 500; /* Position it below the navbar */
-    padding-bottom: 50px;
+    height: 500px; /* Fixed height */
+    max-height: 100vh; /* Constrain height to viewport */
+    position: relative; /* Ensure positioned elements align */
+    overflow: hidden; /* Hide excess content */
+    z-index: 500; /* Stack appropriately */
+    padding-bottom: 50px; /* Add spacing below */
 }
 
 .hero img {
-    width: auto; /* Fill the width of the container */
-    max-width: 100%;
-    height: 100%; /* Fill the height of the container */
-    object-fit: cover; /* Maintain aspect ratio and cover the space */
-    display: block;
-    margin: auto;
+    width: auto; /* Auto-adjust width */
+    max-width: 100%; /* Prevent overflow */
+    height: 100%; /* Fill height */
+    object-fit: cover; /* Maintain aspect ratio */
+    display: block; /* Block-level display */
+    margin: auto; /* Center the image */
 }
 
 /* Buttons */
-.btn{
-    border: var(--border);
-    border-radius: var(--bs-border-radius);
-    font-family: var(--font-heading);
+.btn {
+    border: var(--border); /* Add border using custom variable */
+    border-radius: var(--bs-border-radius); /* Rounded corners */
+    font-family: var(--font-heading); /* Heading font */
 }
 
 .btn-primary {
-    --bs-btn-active-bg: var(--text-secondary-color);
-    --bs-btn-active-border-color: var(--text-secondary-color);
-    --bs-btn-active-color: var(--bg-darker);
-    color: var(--text-secondary-color);
-    background-color: var(--bg-darker);
-    border-color: var(--text-secondary-color);
+    --bs-btn-active-bg: var(--text-secondary-color); /* Active background */
+    --bs-btn-active-border-color: var(--text-secondary-color); /* Active border */
+    --bs-btn-active-color: var(--bg-darker); /* Active text color */
+    color: var(--text-secondary-color); /* Default text color */
+    background-color: var(--bg-darker); /* Default background */
+    border-color: var(--text-secondary-color); /* Default border */
 }
 
 .btn-primary:hover {
-    color: var(--bg-darker);
-    background-color: var(--text-secondary-color);
-    border-color: var(--bg-darker);
+    color: var(--bg-darker); /* Invert text color */
+    background-color: var(--text-secondary-color); /* Invert background */
+    border-color: var(--bg-darker); /* Invert border */
 }
 
 .btn-secondary {
-    --bs-btn-active-bg: var(--bg-darker);
-    --bs-btn-active-border-color: var(--bg-darker);
-    --bs-btn-active-color: var(--text-secondary-color);
-    color: var(--bg-darker);
-    background-color: var(--text-secondary-color);
-    border-color: var(--bg-darker);
+    --bs-btn-active-bg: var(--bg-darker); /* Active background */
+    --bs-btn-active-border-color: var(--bg-darker); /* Active border */
+    --bs-btn-active-color: var(--text-secondary-color); /* Active text color */
+    color: var(--bg-darker); /* Default text color */
+    background-color: var(--text-secondary-color); /* Default background */
+    border-color: var(--bg-darker); /* Default border */
 }
 
 .btn-secondary:hover {
-    color: var(--text-secondary-color);
-    background-color: var(--bg-darker);
-    border-color: var(--text-secondary-color);
+    color: var(--text-secondary-color); /* Invert text color */
+    background-color: var(--bg-darker); /* Invert background */
+    border-color: var(--text-secondary-color); /* Invert border */
 }
 
 .btn-extra-small {
-    font-size: 0.75rem;
+    font-size: 0.75rem; /* Smaller font size for compact buttons */
 }
 
 .btn-extra-small.btn {
-    padding: 0.2rem 0.4rem;
+    padding: 0.2rem 0.4rem; /* Compact padding */
 }
+
 
 /* Navbar */
 .navbar {
-    position: fixed; /* Fixed to the top */
-    top: 0;
-    left: 0;
+    position: fixed; /* Fixed at the top */
+    top: 0; /* Align to the top of the viewport */
+    left: 0; /* Align to the left of the viewport */
     width: 100%; /* Full width */
     height: 60px; /* Fixed height */
-    z-index: 1000; /* Ensure it appears above other elements */
-    display: flex;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0); /* Initial transparency */
-    backdrop-filter: blur(50px); /* Optional: blur for a frosted glass effect */
-    pointer-events: auto; /* Ensure interactivity */
-    transition: background-color 0.3s ease; /* Smooth transition on scroll */
+    z-index: 1000; /* Stack above other elements */
+    display: flex; /* Enable flex layout */
+    align-items: center; /* Center items vertically */
+    background-color: rgba(0, 0, 0, 0); /* Transparent background */
+    backdrop-filter: blur(50px); /* Add blur for a frosted effect */
+    pointer-events: visible; /* Ensure interactivity */
+    transition: background-color 0.3s ease; /* Smooth background transitions */
 }
 
 .navbar .container-fluid {
-    max-width: 1800px;
+    max-width: 1800px; /* Constrain maximum width */
 }
 
 .navbar-brand {
-    max-height: 50px;
-    color: var(--text-secondary-color);
-    margin-left: calc(50% - 85px);
+    max-height: 50px; /* Constrain logo height */
+    color: var(--text-secondary-color); /* Logo text color */
+    margin-left: calc(50% - 85px); /* Center align with offset */
 }
 
-.navbar-brand img{
-    width: 50px;
-    height: 50px;
+.navbar-brand img {
+    width: 50px; /* Set fixed width */
+    height: 50px; /* Set fixed height */
 }
 
 .nav-link {
-    color: var(--text-primary-color);
+    color: var(--text-primary-color); /* Link color */
 }
 
 .menu-item:hover {
-    color: var(--text-secondary-color);
+    color: var(--text-secondary-color); /* Change color on hover */
 }
 
 .navbar-toggler {
-    border-color: var(--text-primary-color);
-    border-width: 3px;
-    color: var(--text-primary-color) !important;
+    border-color: var(--text-primary-color); /* Toggler border color */
+    border-width: 3px; /* Thicker border */
+    color: var(--text-primary-color) !important; /* Toggler icon color */
 }
 
-.navbar-collapse .nav-item, .dropdown-item{
-    min-height: 50px;
-    margin-left: auto;
-    margin-right: 10px;
-    padding: 5px;
+.navbar-collapse .nav-item, .dropdown-item {
+    min-height: 50px; /* Ensure a consistent height for navbar items */
+    margin-left: auto; /* Push items to the right */
+    margin-right: 10px; /* Add spacing between items */
+    padding: 5px; /* Add internal spacing */
 }
 
-.dropdown-item{
-    text-align: right;
-    padding-right: 10px;
-    margin: auto;
-    margin-right: 0;
+.dropdown-item {
+    text-align: right; /* Align text to the right */
+    padding-right: 10px; /* Add padding for better spacing */
+    margin: auto; /* Center the dropdown item */
+    margin-right: 0; /* Reset right margin */
 }
 
-.dropdown-item:active{
-    background-color: transparent;
+.dropdown-item:active {
+    background-color: transparent; /* Remove background on active state */
 }
 
-.navbar-nav{
-    background-color: var(--bg-darker);
-    opacity: 1;
-    border: var(--border);
-    border-radius: var(--bs-border-radius);
-    border-color: var(--bg-lighter);
-    box-shadow: 0 0 2px var(--text-primary-color);
-    max-width: 10rem;
-    max-height: 80%;
-    margin-left: auto;
-    margin-top: 5px;
+.navbar-nav {
+    background-color: var(--bg-darker); /* Set navbar background color */
+    opacity: 1; /* Ensure full visibility */
+    border: var(--border); /* Add border using variable */
+    border-radius: var(--bs-border-radius); /* Apply rounded corners */
+    border-color: var(--bg-lighter); /* Define border color */
+    box-shadow: 0 0 2px var(--text-primary-color); /* Add a subtle shadow */
+    max-width: 10rem; /* Constrain navbar width */
+    max-height: 80%; /* Limit height */
+    margin-left: auto; /* Push to the right */
+    margin-top: 5px; /* Add margin at the top */
 }
 
-.menu-item.active{
-    color: var(--text-secondary-color);
+.menu-item.active {
+    color: var(--text-secondary-color); /* Highlight active menu items */
 }
 
-.dropdown-toggle::after{
-    border: 0;
-    content: none;
+.dropdown-toggle::after {
+    border: 0; /* Remove default border */
+    content: none; /* Remove dropdown icon */
 }
 
-/* User menu aligned to the right */
+
+/* User menu alignment */
 .menu-icon {
-    position: relative;
-    align-items: center;
-    justify-content: flex-end;
+    position: relative; /* Enable precise positioning */
+    align-items: center; /* Center icons vertically */
+    justify-content: flex-end; /* Align icons to the right */
 }
 
-.menu-icon i , .menu-icon svg{
-    font-size: 2rem;
-    cursor: pointer;
-    min-width: 60px;
-    margin: auto;
-    color: var(--text-primary-color);
-    padding-left: 20px;
+.menu-icon i, .menu-icon svg {
+    font-size: 2rem; /* Large icons */
+    cursor: pointer; /* Indicate clickable icons */
+    min-width: 60px; /* Ensure consistent spacing */
+    margin: auto; /* Center icons */
+    color: var(--text-primary-color); /* Default icon color */
+    padding-left: 20px; /* Add spacing on the left */
 }
 
 .menu-icon i:hover, .menu-icon svg:hover {
-    color: var(--text-secondary-color);
+    color: var(--text-secondary-color); /* Change color on hover */
 }
 
-.menu-item{
-    margin: auto;
-    cursor: pointer;
+.menu-item {
+    margin: auto; /* Center menu items */
+    cursor: pointer; /* Indicate clickable items */
 }
 
 .dropdown-menu {
-    right: 0;
-    border: var(--border);
-    border-color: var(--bg-lighter);
-    box-shadow: 0 0 2px var(--text-primary-color);
-    left: auto;
-    margin-top: 10px !important;
-    margin-bottom: 10px !important;
+    right: 0; /* Align to the right */
+    border: var(--border); /* Add border */
+    border-color: var(--bg-lighter); /* Define border color */
+    box-shadow: 0 0 2px var(--text-primary-color); /* Subtle shadow */
+    left: auto; /* Reset left alignment */
+    margin-top: 10px !important; /* Add margin at the top */
+    margin-bottom: 10px !important; /* Add margin at the bottom */
 }
 
-.dropdown-menu[data-bs-popper]{
-    left: auto;
+.dropdown-menu[data-bs-popper] {
+    left: auto; /* Reset alignment for dropdowns */
 }
 
 .navbar-nav .dropdown-menu {
-    position: absolute;
-    right: -11.5px;
-    top: 35px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    left: auto;
-    border: var(--border);
-    border-color: var(--bg-lighter);
-    box-shadow: 0 0 2px var(--text-primary-color);
-    background-color: var(--bg-dark);
-    opacity: 1;
+    position: absolute; /* Position dropdowns absolutely */
+    right: -11.5px; /* Offset dropdowns slightly */
+    top: 35px; /* Position below the navbar */
+    border-top-left-radius: 0; /* Remove top-left corner rounding */
+    border-top-right-radius: 0; /* Remove top-right corner rounding */
+    left: auto; /* Reset alignment */
+    border: var(--border); /* Add border */
+    border-color: var(--bg-lighter); /* Define border color */
+    box-shadow: 0 0 2px var(--text-primary-color); /* Subtle shadow */
+    background-color: var(--bg-dark); /* Set background color */
+    opacity: 1; /* Ensure full visibility */
 }
 
-/* Wrapper for centering the search bar */
+
+/* Search bar container */
 .search-bar-container {
-    display: flex;
-    justify-content: center; /* Horizontally centers the content */
-    align-items: center;    /* Vertically centers the content */
-    height: 100%;          /* Full viewport height to center the search bar vertically */
-    position: relative;     /* Makes sure it's relative to the page */
-    width:100%;
-    margin-top: 10px;
+    display: flex; /* Enable flex layout */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    height: 100%; /* Fill container height */
+    position: relative; /* Position relative to page */
+    width: 100%; /* Full width */
+    margin-top: 10px; /* Add margin at the top */
 }
 
 .search-bar {
-    display: flex;
-    flex-direction: row;
-    gap: 10px; /* Add spacing between input and button */
-    margin-left: auto;
-    margin-right: auto;
-    flex: 1;
-    width:50%;   
-    max-width: 400px;
+    display: flex; /* Enable flex layout */
+    flex-direction: row; /* Arrange items in a row */
+    gap: 10px; /* Add spacing between elements */
+    margin-left: auto; /* Center the bar */
+    margin-right: auto; /* Center the bar */
+    flex: 1; /* Allow flexibility in resizing */
+    width: 50%; /* Set width as a percentage */
+    max-width: 400px; /* Constrain maximum width */
 }
 
-.form-control, .form-select{
-    border: var(--border);
-    border-color: var(--bg-lighter);
-    box-shadow: 0 0 2px var(--text-primary-color);
+.form-control, .form-select {
+    border: var(--border); /* Add border */
+    border-color: var(--bg-lighter); /* Define border color */
+    box-shadow: 0 0 2px var(--text-primary-color); /* Subtle shadow */
 }
 
-input{
-    background-color: var(--bg-darker);
+input {
+    background-color: var(--bg-darker); /* Set background color */
 }
 
-/* Change the border color when the search input is focused */
-* input:focus,
-* select:focus, 
-.btn-category:focus, 
-* textarea:focus, 
+
+/* Focus styles for form elements */
+* input:focus, * select:focus, 
+.btn-category:focus, * textarea:focus, 
 .accordion-button:not(.collapsed), 
-.accordion-button:focus, 
-.accordion-body,
+.accordion-button:focus, .accordion-body,
 .StripeElement--focus {
-    outline: none !important; /* Removes the default blue outline */
-    border-color: var(--text-secondary-color) !important; /* Replace with your desired color */
-    box-shadow: 0 0 5px var(--text-primary-color) !important; /* Optional: Add a glow effect */
+    outline: none !important; /* Remove default outline */
+    border-color: var(--text-secondary-color) !important; /* Highlight border */
+    box-shadow: 0 0 5px var(--text-primary-color) !important; /* Add glow effect */
 }
+
 
 /* Cart menu option */
-.cart-menu.d-block{
-    padding-right: 10px;
+.cart-menu.d-block {
+    padding-right: 10px; /* Add padding to the right */
 }
 
-/* Styling for custom error pages */
+
+/* Error page layout */
 .error-page {
-    height: auto;
-    min-height: calc( 100vh - 60px );
-    width: 600px;
-    max-width: 80%;
-    margin: auto;
+    height: auto; /* Allow automatic height */
+    min-height: calc(100vh - 60px); /* Adjust height for navbar */
+    width: 600px; /* Set a fixed width */
+    max-width: 80%; /* Constrain to 80% of viewport */
+    margin: auto; /* Center horizontally */
 
-    /* Flexbox layout for vertical and horizontal centering */
+    /* Flexbox for centering */
     display: flex;
-    flex-direction: column;
-    justify-content: center; /* Center vertically */
-    align-items: center; /* Center horizontally */
-    text-align: center; /* Center the text content */
+    flex-direction: column; /* Arrange content vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    text-align: center; /* Center-align text */
 }
-
 
 .error-page p a {
-    font-family: inherit;
+    font-family: inherit; /* Use the same font as parent */
 }
 
-/* Pages container */
+
+/* Additional styles for better UX */
 .page-container {
-    width: 80%;
-    margin-top: clamp(100px, auto, auto); /* Ensures minimum 100px margin-top */
-    margin-left: auto;
-    margin-right: auto;
-    font-size: small;
-    min-height: calc(100vh - 60px);
+    width: 80%; /* Set width to 80% */
+    margin-top: clamp(100px, 5%, 10%); /* Add top margin dynamically */
+    margin-left: auto; /* Center horizontally */
+    margin-right: auto; /* Center horizontally */
+    font-size: small; /* Smaller font size */
+    min-height: calc(100vh - 60px); /* Adjust height for navbar */
 }
 
-/* Card template */
-.card{
-    border: var(--border);
-    border-color: var(--bg-lighter);
-    color: inherit;
-    margin: 0;
-    height: 100%;
-    width: auto;
-    max-width: 250px;
-    min-width: 150px;
-    background-color: var(--bg-dark);
-    box-shadow: 0 0 10px rgba(var(--highlight-rgb), 0.1);
-    border-radius: var(--bs-border-radius);
+
+/* Product cards */
+.card {
+    border: var(--border); /* Add a border around the card */
+    border-color: var(--bg-lighter); /* Light border color for subtle contrast */
+    color: inherit; /* Inherit the text color from parent */
+    margin: 0; /* Remove default margins */
+    height: 100%; /* Allow the card to occupy the full height */
+    width: auto; /* Adjust width automatically */
+    max-width: 250px; /* Limit the maximum width */
+    min-width: 150px; /* Ensure a minimum width for consistency */
+    background-color: var(--bg-dark); /* Dark background color */
+    box-shadow: 0 0 10px rgba(var(--highlight-rgb), 0.1); /* Soft shadow for depth */
+    border-radius: var(--bs-border-radius); /* Rounded corners for aesthetic */
 }
 
 .card * {
-    font-size: x-small;
-    padding: 0;
-    margin: 0;
+    font-size: x-small; /* Use small font size for all elements inside the card */
+    padding: 0; /* Remove padding for child elements */
+    margin: 0; /* Remove margins for child elements */
 }
 
 .card-body {
-    margin: 10px;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
+    margin: 10px; /* Add spacing around the body content */
+    padding: 0; /* Remove internal padding */
+    display: flex; /* Enable flexbox layout */
+    flex-direction: column; /* Arrange child elements vertically */
 }
 
-.card .content-gradient{
-    top: 0;
-    height: 150px;
+.card .content-gradient {
+    top: 0; /* Position at the top */
+    height: 150px; /* Set a fixed height for the gradient */
 }
 
-.card .background-gradient{
-    height: auto;
-    border-top-right-radius: var(--bs-border-radius);
-    border-top-left-radius: var(--bs-border-radius);
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Horizontally centers the image */
+.card .background-gradient {
+    height: auto; /* Automatically adjust height */
+    border-top-right-radius: var(--bs-border-radius); /* Round the top-right corner */
+    border-top-left-radius: var(--bs-border-radius); /* Round the top-left corner */
+    display: flex; /* Enable flexbox for centering */
+    flex-direction: column; /* Arrange child elements vertically */
+    justify-content: center; /* Center the content horizontally */
 }
 
 .card .content-gradient::after {
-    width: 100%; /* Extend for a smooth fade */
-    height: auto;
-    min-height: 500px;
+    width: 100%; /* Ensure the gradient covers full width */
+    height: auto; /* Automatically adjust height */
+    min-height: 500px; /* Ensure a minimum height */
     background: radial-gradient(
         circle at top center,
-        rgba(var(--highlight-rgb), 0.08) 0%,   /* Bright at the center */
+        rgba(var(--highlight-rgb), 0.08) 0%, /* Bright center */
         rgba(var(--highlight-rgb), 0.05) 7%, /* Gradual fade */
         rgba(var(--highlight-rgb), 0.0) 30%, /* Subtle fading */
-        rgba(var(--highlight-rgb), 0) 100%   /* Fully transparent at edges */
+        rgba(var(--highlight-rgb), 0) 100% /* Fully transparent edges */
     );
 }
 
-.card-title a{
-    color: var(--text-secondary-color);
-    text-decoration: none;
-    cursor: pointer;
-    font-size: small;
+.card-title a {
+    color: var(--text-secondary-color); /* Secondary text color for links */
+    text-decoration: none; /* Remove underline */
+    cursor: pointer; /* Indicate clickable links */
+    font-size: small; /* Use small font size */
 }
 
 .card-title a:hover {
-    color: var(--text-primary-color);
+    color: var(--text-primary-color); /* Change color on hover */
 }
 
 .card .btn {
-    width: 50%;
-    margin: auto;
-    height: 25px;
-    font-size: medium;
+    width: 50%; /* Set button width relative to the card */
+    margin: auto; /* Center-align the button */
+    height: 25px; /* Fixed height for buttons */
+    font-size: medium; /* Medium font size for clarity */
 }
 
 .card-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: center; /* Centers content horizontally */
+    display: flex; /* Enable flexbox layout */
+    flex-direction: row; /* Arrange items in a row */
+    justify-content: center; /* Center content horizontally */
 }
 
 .card-row > * {
-    text-align: center;
+    text-align: center; /* Center-align text */
 }
 
-.card-img-top{
-    max-height: 150px;
-    max-width: 100%;
-    object-fit: contain; /* Ensures the image maintains aspect ratio */
+.card-img-top {
+    max-height: 150px; /* Limit maximum height */
+    max-width: 100%; /* Constrain width to 100% */
+    object-fit: contain; /* Ensure the image maintains aspect ratio */
 }
 
 .card.card-image-detail {
-    max-height: max-content;
+    max-height: max-content; /* Allow height to adjust dynamically */
 }
 
 .review-stars {
-    display: flex;
-    justify-content: center; /* Centers the stars */
-    gap: 5px; /* Space between stars */
+    display: flex; /* Enable flexbox for star layout */
+    justify-content: center; /* Center-align the stars */
+    gap: 5px; /* Add spacing between stars */
 }
 
 .star {
-    font-size: xx-small;
+    font-size: xx-small; /* Smaller size for stars */
     color: var(--text-primary); /* Default bordered color */
-    opacity: 0.5;
-    text-shadow: 0 0 2px var(--text-primary-color);
+    opacity: 0.5; /* Reduce opacity for unselected stars */
+    text-shadow: 0 0 2px var(--text-primary-color); /* Subtle glow for visibility */
 }
 
 .star.filled {
-    opacity: 1;
-    color: var(--text-secondary-color) !important; /* Filled color for selected stars */
+    opacity: 1; /* Full opacity for selected stars */
+    color: var(--text-secondary-color) !important; /* Highlight selected stars */
 }
 
 .review-stars p {
-    margin: 0;
+    margin: 0; /* Remove margins */
 }
 
-#star-rating .star{
-    font-size: xxx-large;
-    cursor: pointer;
+#star-rating .star {
+    font-size: xxx-large; /* Larger size for rating stars */
+    cursor: pointer; /* Indicate clickable stars */
 }
 
 #star-rating .star.hovered {
-    filter: drop-shadow(0 5px 20px var(--text-secondary-color));
-    opacity: 0.8;
+    filter: drop-shadow(0 5px 20px var(--text-secondary-color)); /* Add shadow on hover */
+    opacity: 0.8; /* Slight transparency for hover state */
 }
 
 #star-rating .star.hovered.filled {
-    filter: drop-shadow(0 0 20px var(--text-primary-color));
-    opacity: 1;
+    filter: drop-shadow(0 0 20px var(--text-primary-color)); /* Highlight for hovered and filled */
+    opacity: 1; /* Full opacity */
 }
 
 #star-rating .star.filled {
-    filter: drop-shadow(0 0 20px var(--text-primary-color));
-    opacity: 1;
+    filter: drop-shadow(0 0 20px var(--text-primary-color)); /* Glow effect for filled stars */
+    opacity: 1; /* Full opacity */
 }
 
 #star-rating .star.filled.unhovered {
-    filter: drop-shadow(0 0 10px var(--red-accent));
-    opacity: 1;
+    filter: drop-shadow(0 0 10px var(--red-accent)); /* Subtle red accent for unhovered */
+    opacity: 1; /* Full opacity */
 }
 
-.card .form-control, .card .form-select{
-    max-width: 80%;
-    margin: auto;
-    text-align: center; /* Centers content horizontally */
-    background-image: none;
+.card .form-control, .card .form-select {
+    max-width: 80%; /* Constrain form width */
+    margin: auto; /* Center-align form elements */
+    text-align: center; /* Align text in the center */
+    background-image: none; /* Remove background image */
 }
 
-.card h1, .card-subtitle strong{
-    font-size: medium !important;
+.card h1, .card-subtitle strong {
+    font-size: medium !important; /* Medium font size for emphasis */
 }
 
 .card-text, .card-subtitle {
-    margin-bottom: 5px;
+    margin-bottom: 5px; /* Add spacing below text */
 }
 
 .card-text {
-    min-height: 30px;
-    text-align: center;
+    min-height: 30px; /* Ensure minimum height */
+    text-align: center; /* Center-align text */
 }
 
 .card-subtitle {
-    text-align: center;
+    text-align: center; /* Center-align subtitle */
 }
 
 #size-select {
-    background-position: right center;
+    background-position: right center; /* Position dropdown indicator */
 }
 
-.select-dropdown option:focus{
-    background-color: #c0c0c0 !important;
+.select-dropdown option:focus {
+    background-color: #c0c0c0 !important; /* Highlight focused options */
 }
+
 
 /* Filtering and sorting */
 .sort-menu .d-flex {
@@ -641,498 +659,513 @@ input{
 }
 
 .btn-category {
-    color: var(--text-primary-color);
-    border: var(--border);
-    background-color: var(--bs-body-bg);
-    box-shadow: 0 0 1px var(--text-primary-color);
-    border-radius: var(--bs-border-radius);
-    font-family: var(--font-heading);
-    height: 100%;
-    display: block;
-    width: 100%;
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    -webkit-appearance: none;
+    color: var(--text-primary-color); /* Default button text color */
+    border: var(--border); /* Apply border styling */
+    background-color: var(--bs-body-bg); /* Use background body color */
+    box-shadow: 0 0 1px var(--text-primary-color); /* Subtle shadow for effect */
+    border-radius: var(--bs-border-radius); /* Rounded corners */
+    font-family: var(--font-heading); /* Use heading font */
+    height: 100%; /* Full height buttons */
+    display: block; /* Block-level display */
+    width: 100%; /* Full width */
+    padding: .375rem .75rem; /* Padding for size */
+    font-size: 1rem; /* Standard font size */
+    font-weight: 400; /* Normal weight */
+    line-height: 1.5; /* Line height for readability */
+    -webkit-appearance: none; /* Remove platform-specific styling */
     -moz-appearance: none;
     appearance: none;
-    background-clip: padding-box;
-    border-radius: var(--bs-border-radius);
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    background-clip: padding-box; /* Prevent background bleeding */
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out; /* Smooth transitions */
 
     /* Truncation with ellipsis */
-    white-space: nowrap;          /* Prevent text from wrapping */
-    overflow: hidden;            /* Hide overflowing text */
-    text-overflow: ellipsis;     /* Add ellipsis (...) to truncated text */
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add ellipsis (...) for long text */
 }
 
 .btn-category:hover {
-    color: var(--text-secondary-color);
+    color: var(--text-secondary-color); /* Change color on hover */
 }
 
 .btn-category:active {
-    color: var(--text-secondary-color);
+    color: var(--text-secondary-color); /* Active button color */
 }
 
 .form-check-input:checked {
-    background-color: var(--text-secondary-color) !important;
-    color: var(--bg-darker) !important;
-    border-color: var(--bg-lighter) !important;
-    box-shadow: 0 0 2px var(--text-primary-color) !important;
+    background-color: var(--text-secondary-color) !important; /* Highlight checked state */
+    color: var(--bg-darker) !important; /* Darker text */
+    border-color: var(--bg-lighter) !important; /* Light border */
+    box-shadow: 0 0 2px var(--text-primary-color) !important; /* Add shadow */
 }
 
 .form-check-input:checked[type=checkbox] {
-    --bs-form-check-bg-image: url(data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e) !important;
-    background-image: var(--bs-form-check-bg-image) !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-    background-size: contain !important;
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important; /* Corrected syntax for data URI */
+    background-image: var(--bs-form-check-bg-image) !important; /* Custom checkbox background */
+    background-repeat: no-repeat !important; /* Prevent repetition */
+    background-position: center !important; /* Center the image */
+    background-size: contain !important; /* Scale the image */
 }
+
 
 /* Icon button styling */
 .sort-menu .nav-link {
-    display: flex; /* Ensure proper alignment */
-    justify-content: center; /* Center the icon horizontally */
-    align-items: center; /* Center the icon vertically */
-    width: 40px; /* Set width */
-    height: 40px; /* Set height */
-    font-size: 1.5rem; /* Increase font size */
-    border-radius: 50%; /* Optional: make the icons circular */
-    background-color: transparent; /* Optional: add background color for visual effect */
+    display: flex; /* Align items */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 40px; /* Fixed width */
+    height: 40px; /* Fixed height */
+    font-size: 1.5rem; /* Larger font size */
+    border-radius: 50%; /* Make circular */
+    background-color: transparent; /* Transparent background */
     text-decoration: none; /* Remove underline */
-    margin-left: auto;
+    margin-left: auto; /* Align to the right */
 }
 
-/* Additional hover effect for better UX */
+
+/* Additional hover effect */
 .sort-menu .nav-link:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* Slight background highlight */
-    transition: background-color 0.2s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.1); /* Light background highlight */
+    transition: background-color 0.2s ease-in-out; /* Smooth transition */
 }
+
 
 /* Adjust icon size */
 .sort-menu .menu-item.lg {
-    font-size: 1.8rem; /* Larger font size for icons */
+    font-size: 1.8rem; /* Increase size for large icons */
 }
 
-/* Product page */
-.product-page .review-stars{
-    justify-content: left;
+
+/* Product page styles */
+.product-page .review-stars {
+    justify-content: left; /* Align to the left */
 }
 
-.product-page .star{
-    font-size: medium;
+.product-page .star {
+    font-size: medium; /* Medium-sized stars */
 }
 
-.product-page .card-img-top{
-    min-width: 150px;
-    width: auto;
-    max-width: 100%;
-    max-height: none;
+.product-page .card-img-top {
+    min-width: 150px; /* Minimum image width */
+    width: auto; /* Adjust width automatically */
+    max-width: 100%; /* Constrain to container width */
+    max-height: none; /* Remove height constraint */
 }
 
-.product-page .card{
-    max-width: 100%;
+.product-page .card {
+    max-width: 100%; /* Use full container width */
 }
 
-.product-page .content-gradient, .product-page .content-gradient::after{
-    height: 100%;
+.product-page .content-gradient, .product-page .content-gradient::after {
+    height: 100%; /* Match parent height */
 }
 
-.btn-buy{
-    display: block; 
-    margin: 0 auto; 
-    width: 50%;
+.btn-buy {
+    display: block; /* Block-level button */
+    margin: 0 auto; /* Center the button */
+    width: 50%; /* Constrain width to 50% */
 }
 
 .btn-group {
-    margin-top: 5px;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap; /* Allow buttons to wrap */
-    gap: 2px; /* Add space between buttons */
-    justify-content: center; /* Center buttons within the parent */
-    border-radius: var(--bs-border-radius);
+    margin-top: 5px; /* Add margin at the top */
+    width: 100%; /* Full width */
+    display: flex; /* Enable flex layout */
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: 2px; /* Add spacing between buttons */
+    justify-content: center; /* Center-align buttons */
+    border-radius: var(--bs-border-radius); /* Rounded corners */
 }
 
 .btn-group .btn {
-    flex: 1 1 33%; /* Buttons will grow, shrink, and have a max width of 48% */
-    max-width: 33%; /* Ensure no button exceeds 48% of the parent width */
+    flex: 1 1 33%; /* Buttons adjust and take up equal space */
+    max-width: 33%; /* Constrain max width */
 }
 
 option[data-stock="0"] {
-    color: grey;
-    font-style: italic;
+    color: grey; /* Dim out-of-stock options */
+    font-style: italic; /* Italicize text */
 }
+
 
 /* Product selectors */
-/* Grouped styling for edit product selectors */
 .selector-group {
-    display: flex;
-    flex-direction: column;
+    display: flex; /* Flex layout */
+    flex-direction: column; /* Stack elements */
 }
 
-/* product Labels */
 .selector-label {
-    height: 25px;
-    line-height: 25px;
-    align-self: flex-start;
+    height: 25px; /* Fixed height */
+    line-height: 25px; /* Vertically center text */
+    align-self: flex-start; /* Align to the start */
 }
 
-/* Admin edit product Inputs */
 .selector-input {
-    height: 40px;
+    height: 40px; /* Fixed height for inputs */
 }
 
-/* Help page */
+
+/* Help page accordion */
 .accordion-button:not(.collapsed) {
-    color: var(--bg-darker);
-    background-color: var(--text-secondary-color);
+    color: var(--bg-darker); /* Darker text */
+    background-color: var(--text-secondary-color); /* Highlighted background */
 }
 
 .accordion-button:not(.collapsed)::after, .accordion-button::after {
-    background-image: none;
+    background-image: none; /* Remove default background */
 }
 
 .accordion-body {
-    border-radius: var(--bs-border-radius);
+    border-radius: var(--bs-border-radius); /* Rounded corners */
 }
+
 
 /* Product image selector */
 .position-relative {
-    position: relative;
+    position: relative; /* Enable precise positioning */
 }
 
 .image-upload-icon {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 10;
-    
+    position: absolute; /* Position above image */
+    top: 10px; /* Offset from top */
+    right: 10px; /* Offset from right */
+    z-index: 10; /* Place above content */
 }
 
-#div_id_name{
-    margin-top: 1.5rem;
+#div_id_name {
+    margin-top: 1.5rem; /* Add spacing above */
 }
 
-/* Rating form */
-.rating-form{
-    height: 100%;
-    max-width: 600px;
-    margin: auto;
+
+/* Rating form styles */
+.rating-form {
+    height: 100%; /* Full height */
+    max-width: 600px; /* Constrain width */
+    margin: auto; /* Center form */
 }
 
-.rating-form .btn{
-    margin-top: 25px;
-    margin-bottom: 35px;
-    max-width: 50px;
+.rating-form .btn {
+    margin-top: 25px; /* Spacing above */
+    margin-bottom: 35px; /* Spacing below */
+    max-width: 50px; /* Constrain button width */
 }
 
-.btn-review{
-    margin-top: 26px;
-    height: calc(100% - 60px);
-    width: 100%;
+.btn-review {
+    margin-top: 26px; /* Add spacing above */
+    height: calc(100% - 60px); /* Adjust height */
+    width: 100%; /* Full width */
 }
 
-.bg-primary{
-    background-color: var(--text-primary-color) !important;
-    color: var(--bg-darker) !important;
-    margin-left: 5px;
-    margin-bottom: 0;
+.bg-primary {
+    background-color: var(--text-primary-color) !important; /* Primary background */
+    color: var(--bg-darker) !important; /* Darker text color */
+    margin-left: 5px; /* Offset from left */
+    margin-bottom: 0; /* Remove bottom margin */
 }
 
 .rating-container .list-group-item {
-    margin: 0;
-    background-color: transparent;
-    border: none;
-    padding: 2px;
+    margin: 0; /* Remove margins */
+    background-color: transparent; /* Transparent background */
+    border: none; /* Remove border */
+    padding: 2px; /* Add slight padding */
 }
 
-#review_title p{
-    margin: 0;
-    padding: 0;
+#review_title p {
+    margin: 0; /* Remove margins */
+    padding: 0; /* Remove padding */
 }
 
-.review-list .btn{
-    width: 40px;
-    height: 40px;
-    align-self: flex-end;
+.review-list .btn {
+    width: 40px; /* Fixed width */
+    height: 40px; /* Fixed height */
+    align-self: flex-end; /* Align to the end */
 }
 
-.list-group-item{
-    width: fit-content;
+.list-group-item {
+    width: fit-content; /* Adjust width to fit content */
 }
 
 .text-end {
-    text-align: right;
+    text-align: right; /* Right-align text */
 }
 
-.silenced{
-    text-decoration: line-through;
-    color: gray;
+.silenced {
+    text-decoration: line-through; /* Strike-through text */
+    color: gray; /* Gray color */
 }
 
 .silenced-indicator {
-    color: var(--red-accent) !important;
+    color: var(--red-accent) !important; /* Red indicator */
 }
 
-#div_id_price{
-    margin-top: 1rem;
+#div_id_price {
+    margin-top: 1rem; /* Add spacing above */
 }
 
-.action-btn-form{
-    padding-left: 0;
+.action-btn-form {
+    padding-left: 0; /* Remove left padding */
 }
 
-.selector-label{
-    padding-right: 0;
+.selector-label {
+    padding-right: 0; /* Remove right padding */
 }
 
-/* Badges */
+
+/* Badge styles */
 .badge-container {
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    z-index: 10; /* Place above content */
+    display: flex; /* Flex layout */
+    flex-direction: column; /* Stack badges */
+    gap: 4px; /* Spacing between badges */
 }
 
 .badge {
-    font-size: 12px;
-    font-weight: bold;
-    color: var(--text-primary-color);
-    padding: 2px 6px;
-    border-radius: 4px;
-    border-radius: var(--bs-border-radius);
-    border-color: var(--bg-lighter);
-    box-shadow: 0 0 2px var(--text-primary-color);
+    font-size: 12px; /* Standard font size */
+    font-weight: bold; /* Bold text */
+    color: var(--text-primary-color); /* Primary text color */
+    padding: 2px 6px; /* Add padding */
+    border-radius: var(--bs-border-radius); /* Rounded corners */
+    border-color: var(--bg-lighter); /* Light border color */
+    box-shadow: 0 0 2px var(--text-primary-color); /* Subtle shadow */
 }
 
 .badge-active {
-    background-color: var(--green-accent);
+    background-color: var(--green-accent); /* Green for active */
 }
 
 .badge-inactive {
-    background-color: var(--red-accent);
+    background-color: var(--red-accent); /* Red for inactive */
 }
+
 
 /* Icon coffee */
 .icon {
-    width: 1em; /* Set width to match font size */
-    height: 1em; /* Set height to match font size */
-    fill: currentColor; /* Inherit color from the text */
-    margin-bottom: 0.3em;
-    margin-top: auto;
+    width: 1em; /* Match font size */
+    height: 1em; /* Match font size */
+    fill: currentColor; /* Match text color */
+    margin-bottom: 0.3em; /* Offset below */
+    margin-top: auto; /* Automatic top margin */
 }
+
 
 /* Cookie Consent Banner */
 .cookie-banner {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: var(--bg-light);
-    color: var(--text-primary-color);
-    text-align: center;
-    padding: 15px;
-    z-index: 1000;
-    box-shadow: 0 -2px 10px rgba(255, 255, 255, 0.2);
+    position: fixed; /* Stick to the bottom of the viewport */
+    bottom: 0; /* Align to the bottom edge */
+    left: 0; /* Align to the left edge */
+    width: 100%; /* Full width */
+    background-color: var(--bg-light); /* Light background for contrast */
+    color: var(--text-primary-color); /* Primary text color */
+    text-align: center; /* Center the content */
+    padding: 15px; /* Add space inside the banner */
+    z-index: 1000; /* Place above other elements */
+    box-shadow: 0 -2px 10px rgba(255, 255, 255, 0.2); /* Subtle shadow effect */
 }
 
 .cookie-banner button {
-    margin: 5px;
-    padding: 10px 20px;
-    background-color: var(--text-secondary-color);
-    color: var(--bg-dark);
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    margin: 5px; /* Space between buttons */
+    padding: 10px 20px; /* Add padding for clickability */
+    background-color: var(--text-secondary-color); /* Button background */
+    color: var(--bg-dark); /* Button text color */
+    border: none; /* Remove default border */
+    cursor: pointer; /* Pointer cursor for buttons */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth color transition */
 }
 
 .cookie-banner button:hover {
-    background-color: var(--green-accent);
+    background-color: var(--green-accent); /* Highlight color on hover */
 }
+
 
 /* Toasts */
 .toast {
-    border-radius: var(--bs-border-radius);
-    background-color: var(--bg-darker);
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    border-radius: var(--bs-border-radius); /* Rounded corners */
+    background-color: var(--bg-darker); /* Dark background */
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); /* Subtle shadow */
 }
 
-.toast-container{
-    top: 60px;
+.toast-container {
+    top: 60px; /* Offset from the top */
 }
 
 .toast-header, .toast-body {
-    margin: 0;
+    margin: 0; /* Remove margins */
 }
 
 .toast-body {
-    padding: 0.5rem 1rem; 
+    padding: 0.5rem 1rem; /* Add padding inside the toast */
 }
+
 
 /* Cart cards */
 .card-cart {
-    display: contents;
-    max-height: 150px;
+    display: contents; /* Use card content directly */
+    max-height: 150px; /* Constrain height */
 }
 
 .card-cart * {
-    font-size: medium;
+    font-size: medium; /* Medium font size */
 }
 
 .card-cart .card-title a {
-    font-size: large;
+    font-size: large; /* Larger font for titles */
 }
 
-.card-cart img{
-    max-height: 150px;
-    max-width: 150px;
+.card-cart img {
+    max-height: 150px; /* Limit image height */
+    max-width: 150px; /* Limit image width */
 }
 
 .card-cart .card-text {
-    text-align: left;
+    text-align: left; /* Align text to the left */
 }
 
 .card-cart .cart-image {
-    height: 150px;
+    height: 150px; /* Fixed image height */
 }
 
-.w-150{
-    width: 150px;
+.w-150 {
+    width: 150px; /* Fixed width */
 }
+
 
 /* Checkout page */
 .card-checkout {
-    display: contents;
-    max-height: 100px;
+    display: contents; /* Use card content directly */
+    max-height: 100px; /* Constrain height */
 }
 
-.card-checkout  * {
-    font-size: small;
+.card-checkout * {
+    font-size: small; /* Smaller font size */
 }
 
 .card-checkout .card-title a {
-    font-size: medium;
+    font-size: medium; /* Medium font for titles */
 }
 
-.card-checkout img{
-    max-height: 100px;
-    max-width: 100px;
+.card-checkout img {
+    max-height: 100px; /* Limit image height */
+    max-width: 100px; /* Limit image width */
 }
 
 .card-checkout .card-text {
-    text-align: left;
+    text-align: left; /* Align text to the left */
 }
 
 .card-checkout .cart-image {
-    height: 100px;
+    height: 100px; /* Fixed image height */
 }
 
-.card-checkout .btn{
-    min-width: 25px;
+.card-checkout .btn {
+    min-width: 25px; /* Minimum button width */
 }
 
-.card-checkout select:invalid,
-.card-checkout option[value=""]{
-    color:rgba(255, 255, 255, 0.6);
+.card-checkout select:invalid, .card-checkout option[value=""] {
+    color: rgba(255, 255, 255, 0.6); /* Lighter color for invalid options */
 }
+
 
 /* Stripe element */
-.StripeElement{
-    height: 40px;
+.StripeElement {
+    height: 40px; /* Fixed height for the element */
 }
 
 .StripeElement * {
-    max-height: 25px;
-} 
-
-/* Tables */
-.table{
-    --bs-table-bg: transparent !important;
-    max-width: 100%;
+    max-height: 25px; /* Constrain child element height */
 }
 
+
+/* Tables */
+.table {
+    --bs-table-bg: transparent !important; /* Transparent table background */
+    max-width: 100%; /* Full width table */
+}
+
+
 /* Order view */
-.order-confirmation-wrapper{
-    width: 100%;
+.order-confirmation-wrapper {
+    width: 100%; /* Full width container */
 }
 
 .text-truncate {
-    white-space: nowrap;     /* Prevent text wrapping */
-    overflow: hidden;        /* Hide overflowing text */
-    text-overflow: ellipsis; /* Add ellipsis at the end */
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis for truncated text */
 }
+
 
 /* Cart choice page */
-.merge-cart-button{
-    width: 50%;
+.merge-cart-button {
+    width: 50%; /* Half-width button */
 }
 
+
 /* About page */
-.about-page li{
-    font-size: medium;
+.about-page li {
+    font-size: medium; /* Medium font size for list items */
 }
+
 
 /* Mailchimp newsletter */
 #mc_embed_signup {
-    background: #fff;
-    clear: left;
-    font: 14px Helvetica, Arial, sans-serif;
-    width: 600px;
+    background: #fff; /* White background */
+    clear: left; /* Clear floats */
+    font: 14px Helvetica, Arial, sans-serif; /* Font style */
+    width: 600px; /* Fixed width */
 }
 
-.mce_inline_error, #mce_inline_error{
-    font-size: small;
-    color: var(--red-accent);
+.mce_inline_error, #mce_inline_error {
+    font-size: small; /* Small font size */
+    color: var(--red-accent); /* Error text color */
 }
 
-.mce-success-response, #mce-success-response{
-    font-size: small;
-    color: var(--green-accent);
+.mce-success-response, #mce-success-response {
+    font-size: small; /* Small font size */
+    color: var(--green-accent); /* Success text color */
 }
+
 
 /* Layout shift fix */
 @media (min-width: 768px) {
-    #div_id_stock{
-        margin-top: 1rem;
+    #div_id_stock {
+        margin-top: 1rem; /* Add spacing above */
     }
 
-    .merge-cart-button{
-        width: 25%;
+    .merge-cart-button {
+        width: 25%; /* Smaller width on larger screens */
     }
 }
+
 
 /* Desktop styles */
 @media (min-width: 992px) {
     /* Logo aligned to the left */
     .navbar-brand {
-        width: auto;
-        margin: auto;
-        margin-right: auto;
+        width: auto; /* Adjust width automatically */
+        margin: auto; /* Center the logo */
+        margin-right: auto; /* Ensure alignment */
     }
 
     /* Desktop menu alignment */
     .navbar-nav .nav-item {
-        margin-right: 15px;
+        margin-right: 15px; /* Space between menu items */
     }
 
-    .navbar-nav{
-        flex-direction: row;
-        align-items: center;
-        background-color: transparent;
-        opacity: 1;
-        border: none;
-        box-shadow: none;
-        border-color: transparent;
-        max-width: 100%;
-        max-height: 100%;
-        margin-left: 10px;
-        margin-top: auto;
+    .navbar-nav {
+        flex-direction: row; /* Horizontal layout */
+        align-items: center; /* Align items vertically */
+        background-color: transparent; /* Transparent background */
+        opacity: 1; /* Fully opaque */
+        border: none; /* Remove borders */
+        box-shadow: none; /* Remove shadows */
+        border-color: transparent; /* No border color */
+        max-width: 100%; /* Full width */
+        max-height: 100%; /* Full height */
+        margin-left: 10px; /* Add spacing on the left */
+        margin-top: auto; /* Align to top */
     }
 
     .search-bar-container {
-        margin-top: 0px;
+        margin-top: 0px; /* Remove top margin */
     }
 }

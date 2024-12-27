@@ -1,3 +1,8 @@
+/**
+ * Previews an uploaded image by updating the source of a specified image element.
+ * @param {HTMLInputElement} input - The file input element.
+ * @param {string} imageId - The ID of the image element to update.
+ */
 function previewImage(input, imageId) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -11,6 +16,9 @@ function previewImage(input, imageId) {
     }
 }
 
+/**
+ * Handles the interactions and updates for product cards, such as size selection, stock updates, and button states.
+ */
 class ProductCardHandler {
     constructor() {
         this.disabledClass = "disabled";
@@ -18,11 +26,14 @@ class ProductCardHandler {
         this.init();
     }
 
+    /**
+     * Initializes event listeners for size selectors, image inputs, and other interactions.
+     */
     init() {
         const sizeSelectors = document.querySelectorAll(".size");
 
         this.handleBuyButton();
-        this.handleReviewSubmission()
+        this.handleReviewSubmission();
 
         sizeSelectors.forEach(sizeSelect => {
             this.updateProductCard(sizeSelect);
@@ -43,6 +54,10 @@ class ProductCardHandler {
         });
     }
 
+    /**
+     * Updates the product card with the selected size's details.
+     * @param {HTMLSelectElement} sizeSelect - The size selection dropdown.
+     */
     updateProductCard(sizeSelect) {
         if (!sizeSelect) return;
 
@@ -65,6 +80,12 @@ class ProductCardHandler {
         this.updateVariantState(cardElement, variantActive, variantId);
     }
 
+    /**
+     * Updates the variant state (active/inactive) and related UI elements.
+     * @param {HTMLElement} cardElement - The product card element.
+     * @param {boolean} isActive - Whether the variant is active.
+     * @param {string} variantId - The ID of the variant.
+     */
     updateVariantState(cardElement, isActive, variantId) {
         const variantButton = cardElement.querySelector(".toggle-variant-btn");
         const variantBadge = cardElement.querySelector(`#badge-size-${cardElement.querySelector('.size').id.split('-')[2]}`);
@@ -85,29 +106,39 @@ class ProductCardHandler {
                 variantButton.textContent = isActive ? "Deactivate Size" : "Activate Size";
             }
             if (saveButton) {
-                saveButton.setAttribute("data-variant-id", `${variantId}`)
+                saveButton.setAttribute("data-variant-id", `${variantId}`);
             }
         }
     }
 
+    /**
+     * Updates the stock input field based on the selected variant.
+     * @param {HTMLElement} cardElement - The product card element.
+     * @param {number} stock - The stock quantity of the selected variant.
+     */
     updateStockInput(cardElement, stock) {
         let stockInput = cardElement.querySelector(`#id_stock`);
         const quantityInput = cardElement.querySelector(`#quantity-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
 
         if (stockInput) {
-            stockInput.value = stock; // Update stock input if found
+            stockInput.value = stock;
         } else if (quantityInput) {
-            quantityInput.value = 1; // Set default quantity input value if found
+            quantityInput.value = 1;
             quantityInput.max = stock;
         } else {
-            // Find the stock input element using querySelector
             stockInput = cardElement.querySelector(`#stock-select-${cardElement.querySelector('.size').id.split('-')[2]}`);
             if (stockInput) {
-                stockInput.value = `${stock}`; // Update the value of the stock input
+                stockInput.value = `${stock}`;
             }
         }
     }
 
+    /**
+     * Updates the price display based on stock and variant information.
+     * @param {HTMLElement} cardElement - The product card element.
+     * @param {string} price - The price of the selected variant.
+     * @param {number} stock - The stock quantity of the selected variant.
+     */
     updatePriceDisplay(cardElement, price, stock) {
         const sizeInput = cardElement.querySelector('.size');
         let slug = '';
@@ -131,6 +162,11 @@ class ProductCardHandler {
         }
     }
 
+    /**
+     * Updates the state of the buy button based on stock availability.
+     * @param {HTMLElement} cardElement - The product card element.
+     * @param {number} stock - The stock quantity of the selected variant.
+     */
     updateBuyButton(cardElement, stock) {
         const buyButton = cardElement.querySelector(`#buy-button-${cardElement.querySelector('.size').id.split('-')[2]}`);
         if (buyButton) {
@@ -144,6 +180,10 @@ class ProductCardHandler {
         }
     }
 
+    /**
+     * Updates the product URL based on the selected size.
+     * @param {HTMLSelectElement} sizeSelect - The size selection dropdown.
+     */
     updateProductUrl(sizeSelect) {
         if (!sizeSelect) return;
 
@@ -173,10 +213,18 @@ class ProductCardHandler {
         }
     }
 
+    /**
+     * Wrapper function for previewing an image.
+     * @param {HTMLInputElement} input - The file input element.
+     * @param {string} imageId - The ID of the image element to update.
+     */
     previewImage(input, imageId) {
         previewImage(input, imageId);
     }
 
+    /**
+     * Handles the "Buy" button click event.
+     */
     handleBuyButton() {
         const buyButtons = document.querySelectorAll('[id^="buy-button-"]');
 
@@ -203,9 +251,9 @@ class ProductCardHandler {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            showToast('success', `${data.message}`)
+                            showToast('success', `${data.message}`);
                         } else {
-                            showToast('error', `${data.error}`)
+                            showToast('error', `${data.error}`);
                         }
                     })
                     .catch(error => showToast('error', `${error.message}`));
@@ -213,6 +261,9 @@ class ProductCardHandler {
         });
     }
 
+    /**
+     * Handles the product review submission event.
+     */
     handleReviewSubmission() {
         const reviewForm = document.querySelector('.rating-form');
         if (!reviewForm) return;
@@ -240,12 +291,19 @@ class ProductCardHandler {
         });
     }
 
+    /**
+     * Retrieves the CSRF token for secure form submissions.
+     * @returns {string} - The CSRF token.
+     */
     getCSRFToken() {
         const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
         return csrfToken ? csrfToken.value : "";
     }
 }
 
+/**
+ * Manages the star rating interactions for product reviews.
+ */
 class StarRatingHandler {
     constructor(starContainerSelector, ratingInputSelector) {
         this.starContainer = document.querySelector(starContainerSelector);
@@ -256,6 +314,9 @@ class StarRatingHandler {
         }
     }
 
+    /**
+     * Initializes event listeners for the stars in the star rating system.
+     */
     init() {
         this.stars = this.starContainer.querySelectorAll('.star');
         this.stars.forEach(star => {
@@ -265,6 +326,10 @@ class StarRatingHandler {
         });
     }
 
+    /**
+     * Handles the click event on a star, setting the rating.
+     * @param {HTMLElement} star - The clicked star element.
+     */
     handleClick(star) {
         const chosenValue = parseInt(star.getAttribute('data-value'), 10);
         let currentRating = parseInt(this.ratingInput?.value || '0', 10);
@@ -279,17 +344,29 @@ class StarRatingHandler {
         this.updateStars(currentRating, 'filled');
     }
 
+    /**
+     * Handles the mouseover event on a star, displaying a hover effect.
+     * @param {HTMLElement} star - The hovered star element.
+     */
     handleMouseOver(star) {
         const hoverValue = parseInt(star.getAttribute('data-value'), 10);
         this.updateStars(hoverValue, 'hovered');
         this.updateStars(hoverValue, 'unhovered');
     }
 
+    /**
+     * Handles the mouseout event on the star container, removing hover effects.
+     */
     handleMouseOut() {
         this.stars.forEach(s => s.classList.remove('hovered'));
         this.stars.forEach(s => s.classList.remove('unhovered'));
     }
 
+    /**
+     * Updates the star elements' classes based on the rating.
+     * @param {number} value - The rating value to apply.
+     * @param {string} className - The class to update (e.g., 'filled', 'hovered').
+     */
     updateStars(value, className) {
         this.stars.forEach(s => {
             const starValue = parseInt(s.getAttribute('data-value'), 10);
@@ -304,6 +381,9 @@ class StarRatingHandler {
     }
 }
 
+/**
+ * Filters reviews based on their ratings.
+ */
 class ReviewFilterHandler {
     constructor(filterSelector, reviewSelector, noResultsMessageSelector) {
         this.filters = document.querySelectorAll(filterSelector);
@@ -315,17 +395,22 @@ class ReviewFilterHandler {
         }
     }
 
+    /**
+     * Initializes event listeners for the review filters.
+     */
     init() {
         this.filters.forEach(filter => {
             filter.addEventListener('click', () => {
-                const filterValue = filter.dataset.filter
-                    ? parseInt(filter.dataset.filter, 10)
-                    : "all";
+                const filterValue = filter.dataset.filter ? parseInt(filter.dataset.filter, 10) : "all";
                 this.filterReviews(filterValue);
             });
         });
     }
 
+    /**
+     * Filters the reviews based on the selected rating.
+     * @param {number|string} filterValue - The rating value to filter by or 'all' to show all reviews.
+     */
     filterReviews(filterValue) {
         let reviewsShown = 0;
 
@@ -346,6 +431,9 @@ class ReviewFilterHandler {
     }
 }
 
+/**
+ * Handles toggling the silence state of reviews.
+ */
 class ReviewSilenceHandler {
     constructor(buttonSelector, reviewContainerSelector) {
         this.buttons = document.querySelectorAll(buttonSelector);
@@ -356,6 +444,9 @@ class ReviewSilenceHandler {
         }
     }
 
+    /**
+     * Initializes event listeners for silence toggle buttons.
+     */
     init() {
         this.buttons.forEach(button => {
             button.addEventListener('click', async (event) => {
@@ -379,6 +470,12 @@ class ReviewSilenceHandler {
         });
     }
 
+    /**
+     * Updates the review's state in the UI based on the silence toggle response.
+     * @param {HTMLElement} button - The button triggering the toggle.
+     * @param {string} reviewId - The ID of the review.
+     * @param {boolean} silenced - Whether the review is silenced.
+     */
     updateReviewState(button, reviewId, silenced) {
         this.toggleButtonState(button, silenced);
         const reviewContainer = document.querySelector(`${this.reviewContainerSelector}[data-review-id="${reviewId}"]`);
@@ -393,6 +490,11 @@ class ReviewSilenceHandler {
         }
     }
 
+    /**
+     * Toggles the state of the button based on the silenced state.
+     * @param {HTMLElement} button - The button to update.
+     * @param {boolean} silenced - Whether the review is silenced.
+     */
     toggleButtonState(button, silenced) {
         button.classList.toggle('btn-primary', !silenced);
         button.classList.toggle('btn-secondary', silenced);
@@ -405,6 +507,9 @@ class ReviewSilenceHandler {
     }
 }
 
+/**
+ * Handles activation and deactivation of products or variants.
+ */
 class ProductActivationHandler {
     constructor(buttonSelector) {
         this.buttons = document.querySelectorAll(buttonSelector);
@@ -414,6 +519,9 @@ class ProductActivationHandler {
         }
     }
 
+    /**
+     * Initializes event listeners for activation toggle buttons.
+     */
     init() {
         this.buttons.forEach(button => {
             button.addEventListener("click", () => {
@@ -442,6 +550,11 @@ class ProductActivationHandler {
         });
     }
 
+    /**
+     * Updates the button's state based on activation status.
+     * @param {HTMLElement} button - The button triggering the activation.
+     * @param {boolean} isActive - Whether the product or variant is active.
+     */
     updateButtonState(button, isActive) {
         const buttonText = button.textContent.trim().replace(/(Activate|Deactivate)/, "");
         button.classList.toggle("btn-success", !isActive);
@@ -450,6 +563,11 @@ class ProductActivationHandler {
         button.setAttribute("data-active", isActive ? "true" : "false");
     }
 
+    /**
+     * Updates badges for products or variants based on activation state.
+     * @param {HTMLElement} button - The button triggering the activation.
+     * @param {Object} data - The response data containing activation state.
+     */
     updateBadges(button, data) {
         const cardElement = button.closest(".product-card");
         if (!cardElement) return;
@@ -481,12 +599,19 @@ class ProductActivationHandler {
         }
     }
 
+    /**
+     * Retrieves the CSRF token for secure requests.
+     * @returns {string} - The CSRF token.
+     */
     getCSRFToken() {
         const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
         return csrfToken ? csrfToken.value : "";
     }
 }
 
+/**
+ * Manages adding, editing, and saving of selectors like categories or sizes.
+ */
 class SelectorHandler {
     constructor(type) {
         this.type = type; // 'category' or 'size'
@@ -494,6 +619,9 @@ class SelectorHandler {
         this.init();
     }
 
+    /**
+     * Initializes event listeners for add, edit, cancel, and save actions.
+     */
     init() {
         this.addButton = document.querySelector(`#add_${this.type}`);
         this.editButton = document.querySelector(`#edit_${this.type}`);
@@ -522,11 +650,19 @@ class SelectorHandler {
         }
     }
 
+    /**
+     * Sets up references to selector and input elements.
+     */
     setElements() {
         this.selectElement = document.querySelector(`.${this.type}`);
         this.inputElement = document.querySelector(`.${this.type}-input`);
     }
 
+    /**
+     * Toggles visibility of elements and handles input for add, edit, or cancel actions.
+     * @param {Event} event - The triggering event.
+     * @param {string} action - The action being performed ('add', 'edit', or 'cancel').
+     */
     toggleInput(event, action) {
         this.setElements();
         const clickedButton = event.target;
@@ -568,6 +704,9 @@ class SelectorHandler {
         }
     }
 
+    /**
+     * Resets buttons and visibility to default state.
+     */
     resetButtons() {
         this.addButton.classList.remove("d-none");
         this.editButton.classList.remove("d-none");
@@ -580,6 +719,9 @@ class SelectorHandler {
         this.enableAllInputs();
     }
 
+    /**
+     * Handles saving of the current input, either adding or editing.
+     */
     async handleSave() {
         this.setElements();
         const newName = this.inputElement.value.trim();
@@ -587,7 +729,7 @@ class SelectorHandler {
         // Validate empty name
         if (!newName) {
             showToast('warning', 'Empty name is not valid.');
-            return; // Prevent further processing
+            return;
         }
 
         const selectedOption = this.selectElement.options[this.selectElement.selectedIndex];
@@ -596,10 +738,10 @@ class SelectorHandler {
         // If no actual changes were made
         if (currentValue && selectedOption.textContent.trim() === newName) {
             showToast('info', 'No changes made.');
-            return; // Skip saving, as there's nothing to save
+            return;
         }
 
-        const productId = this.selectElement.id.split('-').pop(); // Restore direct product_id extraction
+        const productId = this.selectElement.id.split('-').pop();
 
         const payload = {
             action: this.lastAction,
@@ -620,7 +762,6 @@ class SelectorHandler {
                 this.updateUI(response);
                 showToast('success', `${this.type.charAt(0).toUpperCase() + this.type.slice(1)} saved successfully!`);
 
-                // Use `slug` for size, `id` for category in URL update
                 const identifier = this.type === 'size' ? response.slug : response.id;
                 this.updateURL(identifier);
             } else {
@@ -632,19 +773,23 @@ class SelectorHandler {
         }
     }
 
+    /**
+     * Updates the UI after saving a selector.
+     * @param {Object} data - The response data from the server.
+     */
     updateUI(data) {
         this.setElements();
 
         if (this.lastAction === "add") {
             const newOption = document.createElement("option");
-            newOption.value = this.type === 'size' ? data.slug : data.id; // Use slug for size, id for category
+            newOption.value = this.type === 'size' ? data.slug : data.id;
             newOption.textContent = data.name;
             this.selectElement.add(newOption);
-            this.selectElement.value = this.type === 'size' ? data.slug : data.id; // Automatically select the new option
+            this.selectElement.value = this.type === 'size' ? data.slug : data.id;
         } else if (this.lastAction === "edit") {
             const selectedOption = this.selectElement.options[this.selectElement.selectedIndex];
             if (selectedOption) {
-                selectedOption.value = this.type === 'size' ? data.slug : data.id; // Use slug for size, id for category
+                selectedOption.value = this.type === 'size' ? data.slug : data.id;
                 selectedOption.textContent = data.name;
             }
         }
@@ -653,12 +798,20 @@ class SelectorHandler {
         this.lastAction = null;
     }
 
+    /**
+     * Updates the URL with the new selector identifier.
+     * @param {string} identifier - The new identifier (slug or id).
+     */
     updateURL(identifier) {
         const url = new URL(window.location.href);
-        url.searchParams.set(this.type, identifier); // Use slug for size, id for category
+        url.searchParams.set(this.type, identifier);
         window.history.replaceState(null, "", url);
     }
 
+    /**
+     * Disables inputs in other selector groups.
+     * @param {HTMLElement} parentSelectorGroup - The parent group of the active selector.
+     */
     disableOtherInputs(parentSelectorGroup) {
         document.querySelectorAll(".product-card input, .product-card button, .product-card select, .product-card textarea").forEach((element) => {
             if (!element.closest(".selector-group") || element.closest(".selector-group") !== parentSelectorGroup) {
@@ -667,18 +820,28 @@ class SelectorHandler {
         });
     }
 
+    /**
+     * Enables all inputs in the product card.
+     */
     enableAllInputs() {
         document.querySelectorAll(".product-card input, .product-card button, .product-card select, .product-card textarea").forEach((element) => {
             element.disabled = false;
         });
     }
 
+    /**
+     * Retrieves the CSRF token for secure requests.
+     * @returns {string} - The CSRF token.
+     */
     getCSRFToken() {
         const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
         return csrfToken ? csrfToken.value : "";
     }
 }
 
+/**
+ * Handles saving of product and variant data, including image previews and submissions.
+ */
 class ProductSaveHandler {
     constructor(buttonSelector) {
         const cardElement = document.querySelector(".product-card");
@@ -695,10 +858,13 @@ class ProductSaveHandler {
         }
 
         if (!this.previewElement) {
-            showToast('error', `Preview element with ID ${dynamicPart} not found.`)
+            showToast('error', `Preview element with ID ${dynamicPart} not found.`);
         }
     }
 
+    /**
+     * Initializes event listeners for image preview and save buttons.
+     */
     init() {
         this.imageInput.addEventListener('change', this.previewImage.bind(this));
         this.saveButtons.forEach(button => {
@@ -706,12 +872,15 @@ class ProductSaveHandler {
                 const productId = button.getAttribute('data-product-id');
                 const variantId = button.getAttribute('data-variant-id'); // Ensure variantId is retrieved correctly
                 const url = button.getAttribute('data-url');
-                console.log = productId, variantId, url
                 this.saveProductAndVariant(productId, variantId, url);
             });
         });
     }
 
+    /**
+     * Previews the selected image in the corresponding preview element.
+     * @param {Event} event - The change event triggered by the file input.
+     */
     previewImage(event) {
         const file = event.target.files[0];
         if (file) {
@@ -722,7 +891,7 @@ class ProductSaveHandler {
                 if (this.previewElement) {
                     this.previewElement.src = e.target.result; // Update the image preview
                 } else {
-                    showToast('error', 'Preview element not found.')
+                    showToast('error', 'Preview element not found.');
                 }
             };
 
@@ -730,11 +899,19 @@ class ProductSaveHandler {
         }
     }
 
+    /**
+     * Retrieves the CSRF token for secure requests.
+     * @returns {string} - The CSRF token.
+     */
     getCSRFToken() {
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
         return csrfToken ? csrfToken.value : '';
     }
 
+    /**
+     * Retrieves product data from the input fields.
+     * @returns {Object} - An object containing product data.
+     */
     getProductData() {
         const categorySelector = document.querySelector('[id^="category-select-"]');
 
@@ -745,6 +922,10 @@ class ProductSaveHandler {
         };
     }
 
+    /**
+     * Retrieves variant data from the input fields.
+     * @returns {Object|null} - An object containing variant data or null if validation fails.
+     */
     getVariantData() {
         const sizeSelector = document.querySelector('.size');
         const productId = sizeSelector ? sizeSelector.id.split('-')[2] : null;
@@ -765,16 +946,22 @@ class ProductSaveHandler {
             }
 
             if (!size) {
-                showToast('warning', `Size data is incomplete, select a valid size`)
+                showToast('warning', `Size data is incomplete, select a valid size`);
                 return null;
             }
 
             return { size, price, stock, variantId }; // Include variantId in the payload
         }
-        showToast('error', 'Size selector not found.')
+        showToast('error', 'Size selector not found.');
         return null;
     }
 
+    /**
+     * Saves product and variant data, including handling image uploads.
+     * @param {string} productId - The ID of the product.
+     * @param {string} variantId - The ID of the variant.
+     * @param {string} url - The endpoint URL for saving data.
+     */
     saveProductAndVariant(productId, variantId, url) {
         const formData = new FormData();
         const productData = this.getProductData();
@@ -839,13 +1026,23 @@ class ProductSaveHandler {
 
 // Initialize handlers on DOM load
 document.addEventListener('DOMContentLoaded', () => {
-    new ProductCardHandler();
-    new StarRatingHandler('#star-rating', '#id_rating');
-    new ReviewFilterHandler('.filter', '.review-container', '#no-reviews-message');
-    new ReviewSilenceHandler('.toggle-silence-btn', '.review-container');
-    new ProductActivationHandler('.toggle-product-btn');
-    new ProductActivationHandler('.toggle-variant-btn');
-    new SelectorHandler("category");
-    new SelectorHandler("size");
-    new ProductSaveHandler('.save-product-btn');
+    const productCardHandler = ProductCardHandler();
+    const starRatingHandler = StarRatingHandler('#star-rating', '#id_rating');
+    const reviewFilterHandler = ReviewFilterHandler('.filter', '.review-container', '#no-reviews-message');
+    const reviewSilenceHandler = ReviewSilenceHandler('.toggle-silence-btn', '.review-container');
+    const productActivationHandler = ProductActivationHandler('.toggle-product-btn');
+    const variantActivationHandler = ProductActivationHandler('.toggle-variant-btn');
+    const categoryHandler = SelectorHandler("category");
+    const sizeHandler = SelectorHandler("size");
+    const productSaveHandler = ProductSaveHandler('.save-product-btn');
+
+    window.productCardHandler = productCardHandler;
+    window.starRatingHandler = starRatingHandler;
+    window.reviewFilterHandler = reviewFilterHandler;
+    window.reviewSilenceHandler = reviewSilenceHandler;
+    window.productActivationHandler = productActivationHandler;
+    window.variantActivationHandler = variantActivationHandler;
+    window.categoryHandler = categoryHandler;
+    window.sizeHandler = sizeHandler;
+    window.productSaveHandler = productSaveHandler;
 });

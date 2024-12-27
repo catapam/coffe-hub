@@ -32,6 +32,7 @@ def get_cart_data(request):
     cart_items = []
     total = 0
     adjustments = []  # To store any quantity adjustments
+    items_to_remove = []
 
     if request.user.is_authenticated:
         # Load cart from database for logged-in users
