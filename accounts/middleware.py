@@ -1,3 +1,4 @@
+# Django imports
 from django.contrib import messages
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
@@ -38,15 +39,15 @@ class LoginRequiredMiddleware(MiddlewareMixin):
             # Allow access to certain URLs without authentication
             allowed_urls = [
                 'account_login', 'account_signup', 'account_reset_password',
-                'home', 'about', 'privacy_policy', 'product', 'product_detail', 
+                'home', 'about', 'privacy_policy', 'product', 'product_detail',
                 'product_list', 'custom_401', 'custom_404', 'wireframes',
                 'account_reset_password_done', 'help',
                 'account_reset_password_from_key',
                 'account_confirm_email', 'account_verified_email_required',
-                'account_email_verification_sent', 'cart', 'add_to_cart', 
+                'account_email_verification_sent', 'cart', 'add_to_cart',
                 'render_toast', 'validate_data', 'delete_cart', 'update_cart',
                 'set_cookie_consent', 'reset_cookie_consent',
-                'webhook', 'cache_checkout_data',       
+                'webhook', 'cache_checkout_data',
             ]
 
             if current_url not in allowed_urls:
@@ -59,7 +60,10 @@ class LoginRequiredMiddleware(MiddlewareMixin):
             elif current_url == 'account_login' and 'next' not in request.GET:
                 # Direct request to login page, capture the referring page
                 previous_page = request.META.get('HTTP_REFERER', '/')
-                if previous_page and previous_page != request.build_absolute_uri(reverse('account_login')):
+                if (
+                    previous_page and previous_page !=
+                    request.build_absolute_uri(reverse('account_login'))
+                ):
                     request.session['previous_page'] = previous_page
 
         # Enforce superuser access for the admin panel

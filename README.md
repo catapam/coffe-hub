@@ -681,7 +681,7 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | auth.js | Passed |
 | base.js | Passed - ES8 |
 | cart.js | Passed |
-| product.js | Passed |
+| product.js | Passed - ES11 |
 | stripe_elements.js | Passed |
 
 * JS files follow different approaches depending on the complexity and need for deeper organization. Files like admin, auth and stripe_elements are very specifiy for certain pages and just change a little bit the default behaviors for those setups, so those are not Class based. Base.js is intended to create general functions that may have been used across other files. The more complex JS setups (cart and product) are well organized and use OOP techniches, strong use of classes and interconnection between internal functions.
@@ -695,14 +695,14 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ## Python
 | **File** | **<a href="https://pep8ci.herokuapp.com/" target="_blank">PEP8 validator</a>** |
 |----------|--------------------------------------------------------------------------------|
-| accounts/templatetags/url_path.py |  |
-| accounts/admin.py |  |
-| accounts/apps.py |  |
-| accounts/forms.py |  |
-| accounts/middleware.py |  |
-| accounts/models.py |  |
-| accounts/urls.py |  |
-| accounts/views.py |  |
+| accounts/templatetags/url_path.py | Passed |
+| accounts/admin.py | Passed |
+| accounts/apps.py | Passed |
+| accounts/forms.py | Passed |
+| accounts/middleware.py | Passed |
+| accounts/models.py | Passed |
+| accounts/urls.py | Passed |
+| accounts/views.py | Passed |
 | cart/admin.py |  |
 | cart/apps.py |  |
 | cart/middleware.py |  |
@@ -740,7 +740,7 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | store/views.py |  |
 
 * It was opted to use Class based structure for most files like models, views, forms, middleware and admin.
-* Minor files like signals, utils, templatetags, weebhooks are using direct methods instead of Classes. The reason for that is because they are either based on structures from third party configurations (eg Stripe) and converting to classes could be troubling due to unknown factors, or they have very simple functions which do not justify a class based approach.
+* Minor files like signals, utils, templatetags, webhooks are using direct methods instead of Classes. The reason for that is because they are either based on structures from third party configurations (eg Stripe) and converting to classes could be troubling due to unknown factors and external references, or they have very simple functions which do not justify a class based approach.
 
 ## Manual testing
 

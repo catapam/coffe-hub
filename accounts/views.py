@@ -1,17 +1,19 @@
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+# Django imports
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
-from django.views.generic.edit import FormView
-from django.views.generic.base import RedirectView
-from .forms import UpdateUsernameForm, UserProfileForm
-from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login
-
-from django.shortcuts import get_object_or_404, redirect
+from django.utils.decorators import method_decorator
+from django.views.generic.edit import FormView
+from django.views.generic.base import RedirectView
+from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseForbidden
+
+# Internal imports
+from .forms import UpdateUsernameForm, UserProfileForm
 from checkout.models import Order
+
 
 class CustomLoginView(LoginView):
     """
@@ -19,7 +21,7 @@ class CustomLoginView(LoginView):
     if they directly accessed the login page and provided valid credentials.
     """
     template_name = 'accounts/allauth/account/login.html'
-    redirect_authenticated_user = True  # Automatically redirect logged-in users
+    redirect_authenticated_user = True
     next_page = reverse_lazy('home')  # Default redirect after successful login
 
     def form_valid(self, form):
@@ -32,7 +34,10 @@ class CustomLoginView(LoginView):
         # Check if a previous page was stored in the session
         previous_page = self.request.session.pop('previous_page', None)
 
-        # Redirect to the previous page if available; otherwise, default to `next_page`
+        """
+        Redirect to the previous page if available;
+        otherwise, default to `next_page`
+        """
         if previous_page:
             return redirect(previous_page)
         else:
@@ -40,12 +45,16 @@ class CustomLoginView(LoginView):
 
     def get(self, request, *args, **kwargs):
         """
-        Handle GET requests. Capture the previous page for direct login requests.
+        Handle GET requests. Capture the previous page for
+        direct login requests.
         """
         if 'next' not in request.GET:
             # Capture the HTTP_REFERER as the previous page, if available
             previous_page = request.META.get('HTTP_REFERER')
-            if previous_page and previous_page != request.build_absolute_uri(reverse_lazy('account_login')):
+            if (
+                previous_page and previous_page !=
+                request.build_absolute_uri(reverse_lazy('account_login'))
+            ):
                 request.session['previous_page'] = previous_page
 
         return super().get(request, *args, **kwargs)
@@ -101,7 +110,7 @@ class UpdateUsernameView(FormView):
             return self.form_class(
                 self.request.POST,
                 instance=self.request.user
-                    )
+            )
         # Bind the form only to the current user instance for GET requests
         return self.form_class(instance=self.request.user)
 
@@ -115,7 +124,7 @@ class UpdateUsernameView(FormView):
         messages.success(
             self.request,
             'Your username has been updated successfully!'
-                )
+        )
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -127,7 +136,7 @@ class UpdateUsernameView(FormView):
         messages.error(
             self.request,
             'There was an error updating your username. Please try again.'
-                )
+        )
         return super().form_invalid(form)
 
 
@@ -142,7 +151,8 @@ class RedirectUserView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         """
         Return the URL to redirect to based on user permissions.
-        Staff and superusers go to account_user, regular users stay on current path.
+        Staff and superusers go to account_user, regular users
+        stay on current path.
         """
         if self.request.user.is_staff or self.request.user.is_superuser:
             self.pattern_name = 'account_user'
@@ -174,9 +184,15 @@ class ProfileView(FormView):
 
     def form_valid(self, form):
         form.save()
-        messages.success(self.request, "Your profile has been updated.")
+        messages.success(
+            self.request,
+            "Your profile has been updated."
+        )
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, "Please correct the errors and try again.")
+        messages.error(
+            self.request,
+            "Please correct the errors and try again."
+        )
         return super().form_invalid(form)
