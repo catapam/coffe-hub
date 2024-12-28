@@ -726,11 +726,11 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | coffee_hub/wsgi.py | Passed |
 | product/templatetags/custom_filters.py | Passed |
 | product/admin.py | Passed |
-| product/apps.py |  |
-| product/forms.py |  |
-| product/models.py |  |
-| product/urls.py |  |
-| product/views.py |  |
+| product/apps.py | Passed |
+| product/forms.py | Passed |
+| product/models.py | Passed |
+| product/urls.py | Passed |
+| product/views.py | Passed |
 | store/templatetags/custom_tags.py |  |
 | store/admin.py |  |
 | store/apps.py |  |
