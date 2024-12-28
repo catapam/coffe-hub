@@ -27,20 +27,20 @@ User = get_user_model()
 
 
 class UserProfileInline(admin.StackedInline):
-    """
+    '''
     Inline class to display and edit UserProfile data
     within the User admin interface.
-    """
+    '''
     model = UserProfile
     can_delete = False  # Prevent deletion of profiles through the inline
-    verbose_name_plural = "User Profiles"
+    verbose_name_plural = 'User Profiles'
     fk_name = 'user'
 
 
 class EmailAddressInline(TabularInline):
-    """
+    '''
     Inline for showing and managing email addresses in the User admin page.
-    """
+    '''
     model = EmailAddress
     extra = 0  # Number of extra blank fields to display for adding new records
     fields = ('email', 'verified', 'primary')  # Fields to display
@@ -55,9 +55,9 @@ class EmailAddressInline(TabularInline):
                 '<a class="button" href="{}">Send Forgot Password Email</a>',
                 reset_url
             )
-        return "Save email to enable"
+        return 'Save email to enable'
 
-    forgot_password.short_description = "Forgot Password"
+    forgot_password.short_description = 'Forgot Password'
 
     def has_view_permission(self, request, obj=None):
         return request.user.is_staff or request.user.is_superuser
@@ -72,9 +72,9 @@ class CustomSessionAdmin(ModelAdmin):
     ordering = ('-expire_date',)
 
     def username(self, obj):
-        """
+        '''
         Extract the username from the session data if available.
-        """
+        '''
         try:
             # Decode the session data
             session_data = obj.get_decoded()
@@ -87,9 +87,9 @@ class CustomSessionAdmin(ModelAdmin):
     username.short_description = 'User'
 
     def decoded_data(self, obj):
-        """
+        '''
         Display the decoded session data for debugging.
-        """
+        '''
         try:
             session_data = obj.get_decoded()
             formatted_data = json.dumps(session_data, indent=4)
@@ -99,26 +99,26 @@ class CustomSessionAdmin(ModelAdmin):
     decoded_data.short_description = 'Session Data'
 
     def has_view_permission(self, request, obj=None):
-        """
+        '''
         Allow staff users to view Users while restricting access to others.
-        """
+        '''
         if obj:  # Detailed view
             return request.user.is_superuser
         return True  # List view
 
     def has_module_permission(self, request):
-        """
+        '''
         Restrict admin access for staff users to only the User model
         and ContactMessage.
-        """
+        '''
         if request.user.is_superuser:
             return True
         return super().has_module_permission(request)
 
     def has_add_permission(self, request):
-        """
+        '''
         Allow staff users to add Users while restricting access to others.
-        """
+        '''
         return False
 
     def has_change_permission(self, request, obj=None):
@@ -129,44 +129,44 @@ class CustomSessionAdmin(ModelAdmin):
 
 
 class CustomUserAdmin(UserAdmin):
-    """
+    '''
     Custom User admin to include EmailAddress and CartEntry inlines.
-    """
+    '''
     readonly_fields = ('last_login', 'date_joined')
     inlines = [UserProfileInline, EmailAddressInline, CartEntryInline,
                OrderInline]
 
     def get_list_display(self, request):
-        """
+        '''
         Dynamically determine the list_display fields based on the user's role.
-        """
+        '''
         if request.user.is_superuser:
             return ('username', 'get_primary_email', 'is_staff',
                     'is_superuser', 'is_active')
         return ('username', 'get_primary_email', 'is_active')
 
     def get_primary_email(self, obj):
-        """
+        '''
         Retrieves the primary email address for the user.
-        """
+        '''
         primary_email = EmailAddress.objects.filter(user=obj, primary=True).first()
         if primary_email:
             return primary_email.email
-        return "No primary email"
+        return 'No primary email'
 
     get_primary_email.short_description = 'Primary Email'
 
     def get_form(self, request, obj=None, **kwargs):
-        """
+        '''
         Customize the form fields for staff users by hiding sensitive fields.
-        """
+        '''
         return super().get_form(request, obj, **kwargs)
 
     def get_queryset(self, request):
-        """
+        '''
         Limit the users displayed in the admin list to non-staff users for staff.
         Superusers see all users.
-        """
+        '''
         qs = super().get_queryset(request)
         if request.user.is_staff and not request.user.is_superuser:
             # Restrict staff users to only see non-staff users
@@ -174,10 +174,10 @@ class CustomUserAdmin(UserAdmin):
         return qs
 
     def get_fieldsets(self, request, obj=None):
-        """
-        Dynamically customize fieldsets to hide the "Permissions" section
+        '''
+        Dynamically customize fieldsets to hide the 'Permissions' section
         for non-superusers.
-        """
+        '''
         # Retrieve the default fieldsets
         fieldsets = (
             (None, {'fields': ('username', 'password', 'last_login',
@@ -191,7 +191,7 @@ class CustomUserAdmin(UserAdmin):
         modified_fieldsets = []
 
         for name, options in fieldsets:
-            # Exclude the "Permissions" section dynamically for non-superusers
+            # Exclude the 'Permissions' section dynamically for non-superusers
             if not request.user.is_superuser and name == 'Permissions':
                 # Remove specific fields or the entire section for non-superusers
                 fields = options.get('fields', [])
@@ -205,32 +205,32 @@ class CustomUserAdmin(UserAdmin):
         return modified_fieldsets
 
     def has_permission(self, request):
-        """
+        '''
         Allow access to superusers and staff users only.
-        """
+        '''
         return request.user.is_superuser or request.user.is_staff
 
     def has_module_permission(self, request):
-        """
+        '''
         Restrict admin access for staff users to only the User model
         and ContactMessage.
-        """
+        '''
         if request.user.is_staff and not request.user.is_superuser:
             return self.model in [User, OrderAdmin]
         return super().has_module_permission(request)
 
     def has_view_permission(self, request, obj=None):
-        """
+        '''
         Allow staff users to view Users while restricting access to others.
-        """
+        '''
         if request.user.is_staff and not request.user.is_superuser:
             return True
         return super().has_view_permission(request, obj)
 
     def has_change_permission(self, request, obj=None):
-        """
+        '''
         Allow staff users to edit Users while restricting access to others.
-        """
+        '''
         if request.user.is_staff and not request.user.is_superuser:
             # Prevent staff from editing other staff users or superusers
             if obj and obj.is_staff:
@@ -239,9 +239,9 @@ class CustomUserAdmin(UserAdmin):
         return super().has_change_permission(request, obj)
 
     def has_add_permission(self, request):
-        """
+        '''
         Allow staff users to add Users while restricting access to others.
-        """
+        '''
         if request.user.is_staff and not request.user.is_superuser:
             return False
         return super().has_add_permission(request)
@@ -253,11 +253,11 @@ class CustomUserAdmin(UserAdmin):
         return super().login(request, extra_context)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
-        """
+        '''
         Add session data for the user being viewed to the admin context
         and handle session deletion. Add contact messages for the user's
         email addresses to the context.
-        """
+        '''
         extra_context = extra_context or {}
         user_sessions = []
         user_contact_messages = []

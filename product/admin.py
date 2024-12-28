@@ -1,87 +1,217 @@
+# Django imports
 from django.contrib import admin
-from .models import Product, ProductVariant, Category, ProductReview
 from django.utils.html import format_html
+
+# Internal imports
+from .models import (
+    Product,
+    ProductVariant,
+    Category,
+    ProductReview
+)
 
 
 class ProductVariantInline(admin.TabularInline):
+    '''
+    Inline class for managing ProductVariant entries.
+
+    Displays variant details like size, activity status, price, and stock.
+    '''
     model = ProductVariant
     extra = 1
-    fields = ('size', 'active', 'price', 'stock') 
+    fields = (
+        'size',
+        'active',
+        'price',
+        'stock'
+    )
 
 
 class ProductReviewInline(admin.TabularInline):
+    '''
+    Inline class for managing ProductReview entries.
+
+    Displays user reviews with details like rating, comments, and timestamps.
+    '''
     model = ProductReview
     extra = 0
-    fields = ('user', 'rating', 'comment', 'silenced', 'created_at')
     readonly_fields = ('created_at',)
     show_change_link = True
     can_delete = False
+    fields = (
+        'user',
+        'rating',
+        'comment',
+        'silenced',
+        'created_at'
+    )
+
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    # Exclude slug field from the list display
-    list_display = ('name', 'category', 'active', 'rating', 'created_at', 'updated_at', 'image_preview')  # Add image preview to the list
-    list_filter = ('category', 'rating', 'active', 'created_at', 'updated_at')
-    search_fields = ('name', 'description')
-    inlines = [ProductVariantInline, ProductReviewInline]
+    '''
+    Admin class for managing Product entries.
 
-    # Use `fields` to explicitly include the slug in the form view
-    fields = ('name', 'slug', 'category', 'description', 'rating', 'image_path', 'image_preview', 'active', 'created_at', 'updated_at')
-    readonly_fields = ('slug', 'created_at', 'updated_at', 'image_preview', 'rating')  # Make non-editable fields read-only
+    Includes list display, search functionality, filters, and inlines
+    for managing product variants and reviews.
+    '''
+    list_display = (
+        'name',
+        'category',
+        'active',
+        'rating',
+        'created_at',
+        'updated_at',
+        'image_preview'
+    )
+
+    list_filter = (
+        'category',
+        'rating',
+        'active',
+        'created_at',
+        'updated_at'
+    )
+
+    search_fields = (
+        'name',
+        'description'
+    )
+
+    inlines = [
+        ProductVariantInline,
+        ProductReviewInline
+    ]
+
+    fields = (
+        'name',
+        'slug',
+        'category',
+        'description',
+        'rating',
+        'image_path',
+        'image_preview',
+        'active',
+        'created_at',
+        'updated_at'
+    )
+
+    readonly_fields = (
+        'slug',
+        'created_at',
+        'updated_at',
+        'image_preview',
+        'rating'
+    )
 
     def image_preview(self, obj):
-        """
-        Returns an HTML img tag for the product's image.
-        If no image is available, it shows a placeholder.
-        """
-        if obj.image_path:
-            # Generate the Cloudinary image URL
-            return format_html('<img src="{}" style="max-height: 150px;" />', obj.image())
-        # Placeholder image
-        return format_html('<img src="/static/images/product-holder.webp" style="max-height: 150px;" />')
+        '''
+        Return an HTML img tag for the product's image.
 
-    image_preview.short_description = "Image Preview"  # Set the column header name
+        If no image is available, a placeholder image is returned.
+        '''
+        if obj.image_path:
+            return format_html(
+                '<img src="{}" style="max-height: 150px;" />',
+                obj.image()
+            )
+        return format_html(
+            '<img src="/static/images/product-holder.webp" '
+            'style="max-height: 150px;" />'
+        )
+
+    image_preview.short_description = 'Image Preview'
 
     def save_model(self, request, obj, form, change):
-        # Automatically set the slug using the model's save method
+        '''
+        Automatically set the slug using the model's save method.
+        '''
         obj.save()
 
 
 class ProductInline(admin.TabularInline):
+    '''
+    Inline class for managing Product entries within categories.
+
+    Displays product details like name, rating, activity status, and
+    timestamps.
+    '''
     model = Product
     extra = 0
-    fields = ('name', 'rating', 'active', 'created_at')
     readonly_fields = ('created_at',)
     show_change_link = True
     can_delete = False
+    fields = (
+        'name',
+        'rating',
+        'active',
+        'created_at'
+    )
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    exclude = ('slug',)  # Exclude slug field from the admin form
-    list_display = ('name', 'slug', 'created_at')
-    inlines = [ProductInline] 
+    '''
+    Admin class for managing Category entries.
+
+    Provides list display, inline product management, and slug exclusion.
+    '''
+    exclude = ('slug',)
+
+    list_display = (
+        'name',
+        'slug',
+        'created_at'
+    )
+
+    inlines = [ProductInline]
 
     def save_model(self, request, obj, form, change):
-        # Automatically set the slug using the model's save method
+        '''
+        Automatically set the slug using the model's save method.
+        '''
         obj.save()
 
 
 @admin.register(ProductReview)
 class ProductReviewAdmin(admin.ModelAdmin):
-    list_display = ('product', 'user', 'rating', 'silenced', 'comment', 'created_at')
-    list_filter = ('product', 'rating', 'created_at')
-    search_fields = ('product__name', 'user__username', 'comment')
+    '''
+    Admin class for managing ProductReview entries.
+
+    Includes list display, filters, search functionality, and
+    permission restrictions for edits and deletions.
+    '''
+    list_display = (
+        'product',
+        'user',
+        'rating',
+        'silenced',
+        'comment',
+        'created_at'
+    )
+
+    list_filter = (
+        'product',
+        'rating',
+        'created_at'
+    )
+
+    search_fields = (
+        'product__name',
+        'user__username',
+        'comment'
+    )
+
     ordering = ('-created_at',)
 
     def has_change_permission(self, request, obj=None):
-        """
+        '''
         Allow edits only if the user is a superuser.
-        """
+        '''
         return request.user.is_superuser
 
     def has_delete_permission(self, request, obj=None):
-        """
+        '''
         Allow deletes only if the user is a superuser.
-        """
+        '''
         return request.user.is_superuser

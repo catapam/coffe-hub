@@ -6,20 +6,28 @@ from .models import CartEntry
 
 
 class CartEntryInline(TabularInline):
-    """
+    '''
     Inline for displaying CartEntry objects in the User admin page.
 
     This class allows admin users to view, add, and delete CartEntry objects
     directly from the User admin interface.
-    """
+    '''
     model = CartEntry
-    extra = 0  # Number of extra blank fields for adding new entries
-    fields = ('product', 'size', 'quantity')  # Fields to display in the inline
-    readonly_fields = ('product', 'size',)  # Fields that are not editable
-    can_delete = True  # Allow deletion of entries
+    extra = 0
+    can_delete = True
+    fields = (
+        'product',
+        'size',
+        'quantity'
+    )
+
+    readonly_fields = (
+        'product',
+        'size'
+    )
 
     def has_view_permission(self, request, obj=None):
-        """
+        '''
         Determine if the user has permission to view CartEntry objects.
 
         Args:
@@ -28,11 +36,11 @@ class CartEntryInline(TabularInline):
 
         Returns:
             bool: True if the user is staff or superuser, otherwise False.
-        """
+        '''
         return request.user.is_staff or request.user.is_superuser
 
     def has_change_permission(self, request, obj=None):
-        """
+        '''
         Determine if the user has permission to change CartEntry objects.
 
         Args:
@@ -41,5 +49,5 @@ class CartEntryInline(TabularInline):
 
         Returns:
             bool: True if the user is staff or superuser, otherwise False.
-        """
+        '''
         return request.user.is_staff or request.user.is_superuser

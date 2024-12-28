@@ -3,20 +3,20 @@ from django.shortcuts import redirect
 
 
 class CartRedirectMiddleware:
-    """
+    '''
     Middleware to handle post-login redirection to the cart choice page.
-    """
+    '''
     def __init__(self, get_response):
-        """
+        '''
         Initializes the middleware with the provided response handler.
 
         Args:
             get_response (function): The next middleware or view in the chain.
-        """
+        '''
         self.get_response = get_response
 
     def __call__(self, request):
-        """
+        '''
         Processes the incoming request and checks for post-login redirection.
 
         Args:
@@ -25,7 +25,7 @@ class CartRedirectMiddleware:
         Returns:
             HttpResponse: The response after handling the post-login
             redirection.
-        """
+        '''
         response = self.get_response(request)
 
         if (

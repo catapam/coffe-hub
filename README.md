@@ -703,29 +703,29 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | accounts/models.py | Passed |
 | accounts/urls.py | Passed |
 | accounts/views.py | Passed |
-| cart/admin.py |  |
-| cart/apps.py |  |
-| cart/middleware.py |  |
-| cart/models.py |  |
-| cart/urls.py |  |
-| cart/utils.py |  |
-| cart/views.py |  |
-| checkout/admin.py |  |
-| checkout/apps.py |  |
-| checkout/forms.py |  |
-| checkout/models.py |  |
-| checkout/signals.py |  |
-| checkout/urls.py |  |
-| checkout/views.py |  |
-| checkout/webhook_handler.py |  |
-| checkout/webhooks.py |  |
-| coffee_hub/asgi.py |  |
-| coffee_hub/settings.py |  |
-| coffee_hub/urls.py |  |
-| coffee_hub/views.py |  |
-| coffee_hub/wsgi.py |  |
-| product/templatetags/custom_filters.py |  |
-| product/admin.py |  |
+| cart/admin.py | Passed |
+| cart/apps.py | Passed |
+| cart/middleware.py | Passed |
+| cart/models.py | Passed |
+| cart/urls.py | Passed |
+| cart/utils.py | Passed |
+| cart/views.py | Passed |
+| checkout/admin.py | Passed |
+| checkout/apps.py | Passed |
+| checkout/forms.py | Passed |
+| checkout/models.py | Passed |
+| checkout/signals.py | Passed |
+| checkout/urls.py | Passed |
+| checkout/views.py | Passed |
+| checkout/webhook_handler.py | Passed |
+| checkout/webhooks.py | Passed |
+| coffee_hub/asgi.py | Passed |
+| coffee_hub/settings.py | Passed |
+| coffee_hub/urls.py | Passed |
+| coffee_hub/views.py | Passed |
+| coffee_hub/wsgi.py | Passed |
+| product/templatetags/custom_filters.py | Passed |
+| product/admin.py | Passed |
 | product/apps.py |  |
 | product/forms.py |  |
 | product/models.py |  |

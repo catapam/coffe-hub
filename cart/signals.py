@@ -10,7 +10,7 @@ from product.models import Product
 
 @receiver(user_logged_in)
 def handle_user_login(sender, request, user, **kwargs):
-    """
+    '''
     Signal handler to check if a user logs in with items in either the
     session or database cart.
 
@@ -22,7 +22,7 @@ def handle_user_login(sender, request, user, **kwargs):
         request (HttpRequest): The HTTP request object.
         user (User): The user logging in.
         **kwargs: Additional keyword arguments.
-    """
+    '''
     # Check session cart
     has_session_cart = (
         'cart' in request.session and

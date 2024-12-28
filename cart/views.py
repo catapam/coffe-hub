@@ -22,11 +22,11 @@ from product.models import Product
 
 
 class CartChoiceView(View):
-    """
+    '''
     Handles user choice when managing session and database carts.
-    """
+    '''
     def get(self, request):
-        """
+        '''
         Display the cart choice options to the user.
 
         Args:
@@ -34,7 +34,7 @@ class CartChoiceView(View):
 
         Returns:
             HttpResponse: The rendered cart choice page.
-        """
+        '''
         session_cart = request.session.get('cart', {})
         session_cart_items = []
         session_cart_total = 0
@@ -75,7 +75,7 @@ class CartChoiceView(View):
         })
 
     def post(self, request):
-        """
+        '''
         Handle the user's choice to manage the cart.
 
         Args:
@@ -83,21 +83,21 @@ class CartChoiceView(View):
 
         Returns:
             HttpResponse: Redirects to the appropriate cart page.
-        """
+        '''
         choice = request.POST.get('cart_choice')
 
         if not choice:
-            messages.error(request, "Invalid choice. Please try again.")
+            messages.error(request, 'Invalid choice. Please try again.')
             return redirect('cart_choice')
 
         if choice == 'merge':
             merge_session_cart_to_user(request, request.user)
-            messages.success(request, "Your carts have been merged.")
+            messages.success(request, 'Your carts have been merged.')
         elif choice == 'keep_database':
             if 'cart' in request.session:
                 del request.session['cart']
                 request.session.modified = True
-            messages.success(request, "Kept only the database cart.")
+            messages.success(request, 'Kept only the database cart.')
         elif choice == 'keep_session':
             CartEntry.objects.filter(user=request.user).delete()
 
@@ -113,17 +113,17 @@ class CartChoiceView(View):
                     )
             del request.session['cart']
             request.session.modified = True
-            messages.success(request, "Kept only the session cart.")
+            messages.success(request, 'Kept only the session cart.')
 
         return redirect('cart')
 
 
 class CartView(View):
-    """
+    '''
     Displays the user's current cart.
-    """
+    '''
     def get(self, request):
-        """
+        '''
         Retrieve and render the cart data.
 
         Args:
@@ -131,32 +131,32 @@ class CartView(View):
 
         Returns:
             HttpResponse: The rendered cart page.
-        """
+        '''
         cart_items, total, adjustments = get_cart_data(request)
 
         context = {
-            "cart": {
-                "items": cart_items,
-                "total": total
+            'cart': {
+                'items': cart_items,
+                'total': total
             }
         }
 
         if adjustments:
             messages.warning(
                 request,
-                "Some items in your cart had quantities exceeding "
-                "available stock. Adjustments have been made."
+                'Some items in your cart had quantities exceeding '
+                'available stock. Adjustments have been made.'
             )
 
         return render(request, 'cart/cart.html', context)
 
 
 class AddToCartView(View):
-    """
+    '''
     Handles adding items to the cart.
-    """
+    '''
     def post(self, request, item_id):
-        """
+        '''
         Add an item to the cart based on user input.
 
         Args:
@@ -165,7 +165,7 @@ class AddToCartView(View):
 
         Returns:
             JsonResponse: A response indicating success or failure.
-        """
+        '''
         try:
             data = json.loads(request.body)
             size = str(data.get('size'))
@@ -174,9 +174,9 @@ class AddToCartView(View):
             if not size or quantity < 0:
                 return JsonResponse(
                     {
-                        "success": False,
-                        "type": "error",
-                        "error": "Invalid size or quantity."
+                        'success': False,
+                        'type': 'error',
+                        'error': 'Invalid size or quantity.'
                     },
                     status=400
                 )
@@ -186,29 +186,29 @@ class AddToCartView(View):
         except ValueError:
             return JsonResponse(
                 {
-                    "success": False,
-                    "type": "error",
-                    "error": "Invalid input: quantity must be a number."
+                    'success': False,
+                    'type': 'error',
+                    'error': 'Invalid input: quantity must be a number.'
                 },
                 status=400
             )
         except Exception as e:
             return JsonResponse(
                 {
-                    "success": False,
-                    "type": "error",
-                    "error": str(e)
+                    'success': False,
+                    'type': 'error',
+                    'error': str(e)
                 },
                 status=500
             )
 
 
 class UpdateCartView(View):
-    """
+    '''
     Handles updating cart items.
-    """
+    '''
     def post(self, request, item_id):
-        """
+        '''
         Update an item's details in the cart.
 
         Args:
@@ -217,7 +217,7 @@ class UpdateCartView(View):
 
         Returns:
             JsonResponse: A response indicating success or failure.
-        """
+        '''
         try:
             data = json.loads(request.body)
             size = str(data.get('size'))
@@ -226,9 +226,9 @@ class UpdateCartView(View):
             if not size or quantity < 0:
                 return JsonResponse(
                     {
-                        "success": False,
-                        "type": "error",
-                        "error": "Invalid size or quantity."
+                        'success': False,
+                        'type': 'error',
+                        'error': 'Invalid size or quantity.'
                     },
                     status=400
                 )
@@ -238,29 +238,29 @@ class UpdateCartView(View):
         except ValueError:
             return JsonResponse(
                 {
-                    "success": False,
-                    "type": "error",
-                    "error": "Invalid input: quantity must be a number."
+                    'success': False,
+                    'type': 'error',
+                    'error': 'Invalid input: quantity must be a number.'
                 },
                 status=400
             )
         except Exception as e:
             return JsonResponse(
                 {
-                    "success": False,
-                    "type": "error",
-                    "error": str(e)
+                    'success': False,
+                    'type': 'error',
+                    'error': str(e)
                 },
                 status=500
             )
 
 
 class DeleteCartView(View):
-    """
+    '''
     Handles deleting items from the cart.
-    """
+    '''
     def post(self, request, item_id):
-        """
+        '''
         Remove an item from the cart.
 
         Args:
@@ -269,7 +269,7 @@ class DeleteCartView(View):
 
         Returns:
             JsonResponse: A response indicating success or failure.
-        """
+        '''
         try:
             data = json.loads(request.body)
             size = data.get('size')
@@ -277,9 +277,9 @@ class DeleteCartView(View):
             if not size:
                 return JsonResponse(
                     {
-                        "success": False,
-                        "type": "error",
-                        "error": "Size is required."
+                        'success': False,
+                        'type': 'error',
+                        'error': 'Size is required.'
                     },
                     status=400
                 )
@@ -289,18 +289,18 @@ class DeleteCartView(View):
         except json.JSONDecodeError:
             return JsonResponse(
                 {
-                    "success": False,
-                    "type": "error",
-                    "error": "Invalid JSON payload."
+                    'success': False,
+                    'type': 'error',
+                    'error': 'Invalid JSON payload.'
                 },
                 status=400
             )
         except Exception as e:
             return JsonResponse(
                 {
-                    "success": False,
-                    "type": "error",
-                    "error": str(e)
+                    'success': False,
+                    'type': 'error',
+                    'error': str(e)
                 },
                 status=500
             )

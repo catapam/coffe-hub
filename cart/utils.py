@@ -11,13 +11,13 @@ from .models import CartEntry
 
 
 def merge_session_cart_to_user(request, user):
-    """
+    '''
     Merge the session cart with the database cart for a logged-in user.
 
     Args:
         request: The current request object.
         user: The authenticated user.
-    """
+    '''
     session_cart = request.session.get('cart', {})
 
     if session_cart:
@@ -38,7 +38,7 @@ def merge_session_cart_to_user(request, user):
 
 
 def get_cart_data(request):
-    """
+    '''
     Retrieve cart data for the current user or session.
 
     Args:
@@ -46,7 +46,7 @@ def get_cart_data(request):
 
     Returns:
         tuple: A tuple containing cart items, total cost, and any adjustments.
-    """
+    '''
     cart_items = []
     total = 0
     adjustments = []  # To store any quantity adjustments
@@ -65,10 +65,10 @@ def get_cart_data(request):
 
                 if entry.quantity > stock:
                     adjustments.append({
-                        "product": product.name,
-                        "size": entry.size,
-                        "old_quantity": entry.quantity,
-                        "new_quantity": stock,
+                        'product': product.name,
+                        'size': entry.size,
+                        'old_quantity': entry.quantity,
+                        'new_quantity': stock,
                     })
                     entry.quantity = stock
                     entry.save()
@@ -80,14 +80,14 @@ def get_cart_data(request):
                 subtotal = price * entry.quantity
                 total += subtotal
                 cart_items.append({
-                    "product": product,
-                    "slug": product.slug,
-                    "size": entry.size,
-                    "price": price,
-                    "quantity": entry.quantity,
-                    "stock": stock,
-                    "subtotal": subtotal,
-                    "id": product.id,
+                    'product': product,
+                    'slug': product.slug,
+                    'size': entry.size,
+                    'price': price,
+                    'quantity': entry.quantity,
+                    'stock': stock,
+                    'subtotal': subtotal,
+                    'id': product.id,
                 })
             except ObjectDoesNotExist:
                 continue
@@ -103,10 +103,10 @@ def get_cart_data(request):
 
                     if quantity > stock:
                         adjustments.append({
-                            "product": product.name,
-                            "size": size,
-                            "old_quantity": quantity,
-                            "new_quantity": stock,
+                            'product': product.name,
+                            'size': size,
+                            'old_quantity': quantity,
+                            'new_quantity': stock,
                         })
                         cart[product_id][size] = stock
 
@@ -117,14 +117,14 @@ def get_cart_data(request):
                     subtotal = price * cart[product_id][size]
                     total += subtotal
                     cart_items.append({
-                        "product": product,
-                        "slug": product.slug,
-                        "size": size,
-                        "price": price,
-                        "quantity": cart[product_id][size],
-                        "stock": stock,
-                        "subtotal": subtotal,
-                        "id": product_id,
+                        'product': product,
+                        'slug': product.slug,
+                        'size': size,
+                        'price': price,
+                        'quantity': cart[product_id][size],
+                        'stock': stock,
+                        'subtotal': subtotal,
+                        'id': product_id,
                     })
             except ObjectDoesNotExist:
                 continue
@@ -141,7 +141,7 @@ def get_cart_data(request):
 
 
 def add_to_cart_logic(request, item_id, size, quantity):
-    """
+    '''
     Logic for adding items to the cart.
 
     Args:
@@ -152,7 +152,7 @@ def add_to_cart_logic(request, item_id, size, quantity):
 
     Returns:
         JsonResponse: The response indicating success or failure.
-    """
+    '''
     product_variant = ProductVariant.objects.filter(
         product_id=item_id, size=size
     ).first()
@@ -160,9 +160,9 @@ def add_to_cart_logic(request, item_id, size, quantity):
     if not product_variant:
         return JsonResponse(
             {
-                "success": False,
-                "type": "error",
-                "error": "Product variant not found."
+                'success': False,
+                'type': 'error',
+                'error': 'Product variant not found.'
             },
             status=404
         )
@@ -172,9 +172,9 @@ def add_to_cart_logic(request, item_id, size, quantity):
     if quantity > stock:
         return JsonResponse(
             {
-                "success": False,
-                "type": "error",
-                "error": f"Invalid quantity. Only {stock} items are available."
+                'success': False,
+                'type': 'error',
+                'error': f'Invalid quantity. Only {stock} items are available.'
             },
             status=400
         )
@@ -209,10 +209,10 @@ def add_to_cart_logic(request, item_id, size, quantity):
             if new_quantity > stock:
                 return JsonResponse(
                     {
-                        "success": False,
-                        "type": "error",
-                        "error": f"Adding {quantity} exceeds available stock"
-                                 f" of {stock}."
+                        'success': False,
+                        'type': 'error',
+                        'error': f'Adding {quantity} exceeds available stock'
+                                 f' of {stock}.'
                     },
                     status=400
                 )
@@ -221,14 +221,14 @@ def add_to_cart_logic(request, item_id, size, quantity):
 
     return JsonResponse(
         {
-            "success": True,
-            "type": "success",
-            "message": "Item added to cart successfully!"
+            'success': True,
+            'type': 'success',
+            'message': 'Item added to cart successfully!'
         })
 
 
 def update_cart_logic(request, item_id, size, quantity):
-    """
+    '''
     Logic for updating items in the cart.
 
     Args:
@@ -239,7 +239,7 @@ def update_cart_logic(request, item_id, size, quantity):
 
     Returns:
         JsonResponse: The response indicating success or failure.
-    """
+    '''
     product_variant = ProductVariant.objects.filter(
         product_id=item_id, size=size
     ).first()
@@ -247,9 +247,9 @@ def update_cart_logic(request, item_id, size, quantity):
     if not product_variant:
         return JsonResponse(
             {
-                "success": False,
-                "type": "error",
-                "error": "Product variant not found."
+                'success': False,
+                'type': 'error',
+                'error': 'Product variant not found.'
             },
             status=404
         )
@@ -259,9 +259,9 @@ def update_cart_logic(request, item_id, size, quantity):
     if quantity > stock:
         return JsonResponse(
             {
-                "success": False,
-                "type": "error",
-                "error": f"Invalid quantity. Only {stock} items are available."
+                'success': False,
+                'type': 'error',
+                'error': f'Invalid quantity. Only {stock} items are available.'
             },
             status=400
         )
@@ -279,17 +279,17 @@ def update_cart_logic(request, item_id, size, quantity):
                 cart_entry.save()
             return JsonResponse(
                 {
-                    "success": True,
-                    "type": "success",
-                    "message": "Cart updated successfully."
+                    'success': True,
+                    'type': 'success',
+                    'message': 'Cart updated successfully.'
                 }
             )
         else:
             return JsonResponse(
                 {
-                    "success": False,
-                    "type": "error",
-                    "error": "Item not found in cart."
+                    'success': False,
+                    'type': 'error',
+                    'error': 'Item not found in cart.'
                 },
                 status=404
             )
@@ -311,24 +311,24 @@ def update_cart_logic(request, item_id, size, quantity):
 
             return JsonResponse(
                 {
-                    "success": True,
-                    "type": "success",
-                    "message": "Cart updated successfully."
+                    'success': True,
+                    'type': 'success',
+                    'message': 'Cart updated successfully.'
                 }
             )
 
         return JsonResponse(
             {
-                "success": False,
-                "type": "error",
-                "error": "Item not found in cart."
+                'success': False,
+                'type': 'error',
+                'error': 'Item not found in cart.'
             },
             status=404
         )
 
 
 def delete_cart_item_logic(request, item_id, size):
-    """
+    '''
     Logic for deleting items from the cart.
 
     Args:
@@ -338,7 +338,7 @@ def delete_cart_item_logic(request, item_id, size):
 
     Returns:
         JsonResponse: The response indicating success or failure.
-    """
+    '''
     if request.user.is_authenticated:
         product = get_object_or_404(Product, pk=item_id)
         cart_entry = CartEntry.objects.filter(
@@ -349,17 +349,17 @@ def delete_cart_item_logic(request, item_id, size):
             cart_entry.delete()
             return JsonResponse(
                 {
-                    "success": True,
-                    "type": "success",
-                    "message": "Item removed from cart successfully."
+                    'success': True,
+                    'type': 'success',
+                    'message': 'Item removed from cart successfully.'
                 }
             )
         else:
             return JsonResponse(
                 {
-                    "success": False,
-                    "type": "error",
-                    "error": "Item not found in cart."
+                    'success': False,
+                    'type': 'error',
+                    'error': 'Item not found in cart.'
                 },
                 status=404
             )
@@ -378,17 +378,17 @@ def delete_cart_item_logic(request, item_id, size):
 
             return JsonResponse(
                 {
-                    "success": True,
-                    "type": "success",
-                    "message": "Item removed from cart successfully."
+                    'success': True,
+                    'type': 'success',
+                    'message': 'Item removed from cart successfully.'
                 }
             )
 
         return JsonResponse(
             {
-                "success": False,
-                "type": "error",
-                "error": "Item not found in cart."
+                'success': False,
+                'type': 'error',
+                'error': 'Item not found in cart.'
             },
             status=404
         )

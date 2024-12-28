@@ -7,10 +7,10 @@ from django_countries.fields import CountryField
 
 
 class UserProfile(models.Model):
-    """
+    '''
     A user profile model for maintaining default delivery information
     and order history.
-    """
+    '''
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     default_full_name = models.CharField(
         max_length=50,
@@ -54,15 +54,15 @@ class UserProfile(models.Model):
     )
 
     def __str__(self):
-        """
+        '''
         String representation of the user profile, returning the username.
-        """
+        '''
         return self.user.username
 
 
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
-    """
+    '''
     Create or update the user profile upon saving a User instance.
 
     Args:
@@ -70,7 +70,7 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         instance: The User instance being saved.
         created: A boolean; True if the User instance is newly created.
         **kwargs: Additional keyword arguments.
-    """
+    '''
     if created:
         UserProfile.objects.create(user=instance)
     # Existing users: just save the profile

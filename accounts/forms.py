@@ -7,23 +7,23 @@ from .models import UserProfile
 
 
 class UpdateUsernameForm(forms.ModelForm):
-    """
+    '''
     Form for updating the username of the currently logged-in user.
     This form is tied to the built-in User model.
-    """
+    '''
     class Meta:
         model = User
         fields = ['username']
 
     def __init__(self, *args, **kwargs):
-        """
+        '''
         Initialize the form with custom attributes for the username field.
-        """
+        '''
         super(UpdateUsernameForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({'class': 'form-control'})
 
     def clean_username(self):
-        """
+        '''
         Validate that the new username is not already taken by another user.
 
         Returns:
@@ -32,7 +32,7 @@ class UpdateUsernameForm(forms.ModelForm):
         Raises:
             forms.ValidationError: If the username is already in use by
                                    another user.
-        """
+        '''
         username = self.cleaned_data.get('username')
 
         # Check if the new username is already taken by another user
@@ -42,25 +42,25 @@ class UpdateUsernameForm(forms.ModelForm):
             pk=self.instance.pk
         ).exists():
             raise forms.ValidationError(
-                "This username is already taken. Please choose another one."
+                'This username is already taken. Please choose another one.'
             )
 
         return username
 
 
 class UserProfileForm(forms.ModelForm):
-    """
+    '''
     Form for managing the UserProfile model, excluding the associated user.
-    """
+    '''
     class Meta:
         model = UserProfile
         exclude = ('user',)
 
     def __init__(self, *args, **kwargs):
-        """
+        '''
         Add placeholders and classes, remove auto-generated labels,
         and set autofocus on the first field.
-        """
+        '''
         super().__init__(*args, **kwargs)
         placeholders = {
             'default_full_name': 'Full Name',

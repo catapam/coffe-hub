@@ -8,17 +8,17 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 
 
 class LoginRequiredMiddleware(MiddlewareMixin):
-    """
+    '''
     Middleware to ensure that users are authenticated before accessing
     specific parts of the application, such as the admin panel
     and operations.
 
     Handles redirects for login and unauthorized access based
     on user permissions.
-    """
+    '''
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        """
+        '''
         Process each view to enforce authentication and authorization rules.
         Redirects users to login or 401 pages when necessary.
 
@@ -31,23 +31,41 @@ class LoginRequiredMiddleware(MiddlewareMixin):
         Returns:
             None or HttpResponse: Returns a redirect or forbidden response
             based on user authentication and authorization status.
-        """
+        '''
         current_url = resolve(request.path_info).url_name
 
         # Check if the user is not authenticated
         if not request.user.is_authenticated:
             # Allow access to certain URLs without authentication
             allowed_urls = [
-                'account_login', 'account_signup', 'account_reset_password',
-                'home', 'about', 'privacy_policy', 'product', 'product_detail',
-                'product_list', 'custom_401', 'custom_404', 'wireframes',
-                'account_reset_password_done', 'help',
+                'about',
+                'account_confirm_email',
+                'account_email_verification_sent',
+                'account_login',
+                'account_reset_password',
+                'account_reset_password_done',
                 'account_reset_password_from_key',
-                'account_confirm_email', 'account_verified_email_required',
-                'account_email_verification_sent', 'cart', 'add_to_cart',
-                'render_toast', 'validate_data', 'delete_cart', 'update_cart',
-                'set_cookie_consent', 'reset_cookie_consent',
-                'webhook', 'cache_checkout_data',
+                'account_signup',
+                'account_verified_email_required',
+                'add_to_cart',
+                'cache_checkout_data',
+                'cart',
+                'custom_401',
+                'custom_404',
+                'delete_cart',
+                'help',
+                'home',
+                'privacy_policy',
+                'product',
+                'product_detail',
+                'product_list',
+                'render_toast',
+                'reset_cookie_consent',
+                'set_cookie_consent',
+                'update_cart',
+                'validate_data',
+                'webhook',
+                'wireframes',
             ]
 
             if current_url not in allowed_urls:

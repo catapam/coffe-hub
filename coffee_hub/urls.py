@@ -1,35 +1,97 @@
+# Django imports
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
-from .views import Custom404View, Custom401View, set_cookie_consent, reset_cookie_consent, render_toast_template
+
+# Internal imports
+from .views import (
+    Custom404View,
+    Custom401View,
+    set_cookie_consent,
+    reset_cookie_consent,
+    render_toast_template
+)
 
 
 urlpatterns = [
-    path("admin/", admin.site.urls, name='admin'),
-
     # Home app URLs
-    path('', include('store.urls')),
+    path(
+        '',
+        include('store.urls')
+    ),
 
-    # Authentication and account management URLs from 'allauth' and custom app
-    path('accounts/', include('allauth.urls')),  # Third-party auth package
-    path('accounts/', include('accounts.urls')),  # Custom account-related URLs
+    # Admin panel
+    path(
+        "admin/",
+        admin.site.urls,
+        name='admin'
+    ),
+
+    # Authentication and account management
+    # Third-party auth package
+    path(
+        'accounts/',
+        include('allauth.urls')
+    ),
+
+    # Apps
+    # Custom account-related URLs
+    path(
+        'accounts/',
+        include('accounts.urls')
+    ),
 
     # Products
-    path('products/', include('product.urls')),
+    path(
+        'products/',
+        include('product.urls')
+    ),
 
     # Cart
-    path('cart/', include('cart.urls')),
+    path(
+        'cart/',
+        include('cart.urls')
+    ),
 
     # Checkout
-    path('checkout/', include('checkout.urls')),
+    path(
+        'checkout/',
+        include('checkout.urls')
+    ),
 
-    # Custom error pages for 404 Not Found
-    path('404/', Custom404View.as_view(), name='custom_404'),
-    path('401/', Custom401View.as_view(), name='custom_401'),
+    # Custom error pages
+    # 404 - not found
+    path(
+        '404/',
+        Custom404View.as_view(),
+        name='custom_404'
+    ),
 
-    # cookies consent
-    path('set-cookie-consent/', set_cookie_consent, name='set_cookie_consent'),
-    path('reset-cookie-consent/', reset_cookie_consent, name='reset_cookie_consent'),
+    # 401 - not permitted
+    path(
+        '401/',
+        Custom401View.as_view(),
+        name='custom_401'
+    ),
 
-    # Toasts
-    path('render-toast/', render_toast_template, name='render_toast'),
+    # Cookies consent
+    # Set cookies
+    path(
+        'set-cookie-consent/',
+        set_cookie_consent,
+        name='set_cookie_consent'
+    ),
+
+    # Reset cookies
+    path(
+        'reset-cookie-consent/',
+        reset_cookie_consent,
+        name='reset_cookie_consent'
+    ),
+
+    # Toast messages
+    path(
+        'render-toast/',
+        render_toast_template,
+        name='render_toast'
+    ),
 ]
