@@ -219,10 +219,10 @@ class ProductListView(ListView):
             for variant in self.object_list:
                 stock_by_size = {
                     v.size: {
-                        "price": v.price,
-                        "stock": v.stock,
-                        "id": v.id,
-                        "active": v.active,
+                        'price': v.price,
+                        'stock': v.stock,
+                        'id': v.id,
+                        'active': v.active,
                     }
                     for v in (
                         ProductVariant.objects.filter(
@@ -236,13 +236,13 @@ class ProductListView(ListView):
                 }
 
                 products_with_context.append({
-                    "product": variant.product,
-                    "variant_id": variant.id,
-                    "variant_size": variant.size,
-                    "variant_price": variant.adjusted_price,
-                    "variant_stock": variant.stock,
-                    "size_active": variant.active,
-                    "stock_by_size": stock_by_size,
+                    'product': variant.product,
+                    'variant_id': variant.id,
+                    'variant_size': variant.size,
+                    'variant_price': variant.adjusted_price,
+                    'variant_stock': variant.stock,
+                    'size_active': variant.active,
+                    'stock_by_size': stock_by_size,
                 })
         else:
             for product in self.object_list:
@@ -253,27 +253,27 @@ class ProductListView(ListView):
                 )
                 stock_by_size = {
                     v.size: {
-                        "price": v.price,
-                        "stock": v.stock,
-                        "id": v.id,
-                        "active": v.active,
+                        'price': v.price,
+                        'stock': v.stock,
+                        'id': v.id,
+                        'active': v.active,
                     }
                     for v in variants_qs
                 }
 
                 products_with_context.append({
-                    "product": product,
-                    "variant_id": product.default_variant_id,
-                    "variant_size": product.default_variant_size,
-                    "variant_price": product.default_variant_price,
-                    "variant_stock": product.default_variant_stock,
-                    "size_active": product.default_variant_active,
-                    "stock_by_size": stock_by_size,
-                    "buy_url": product.get_buy_url,
+                    'product': product,
+                    'variant_id': product.default_variant_id,
+                    'variant_size': product.default_variant_size,
+                    'variant_price': product.default_variant_price,
+                    'variant_stock': product.default_variant_stock,
+                    'size_active': product.default_variant_active,
+                    'stock_by_size': stock_by_size,
+                    'buy_url': product.get_buy_url,
                 })
 
         category_items = [
-            {"id": category.id, "name": category.name, "slug": category.slug}
+            {'id': category.id, 'name': category.name, 'slug': category.slug}
             for category in Category.objects.all().order_by('slug')
         ]
 
@@ -366,7 +366,7 @@ class ProductDetailView(DetailView):
         Returns:
             HttpResponseRedirect: Redirect response to the updated URL.
         '''
-        url = f"{request.path}?size={size}"
+        url = f'{request.path}?size={size}'
         return redirect(url)
 
     def post(self, request, *args, **kwargs):
@@ -472,19 +472,19 @@ class ProductDetailView(DetailView):
 
         selected_category = product.category.id
         category_items = [
-            {"id": category.id, "name": category.name}
+            {'id': category.id, 'name': category.name}
             for category in Category.objects.all().order_by('slug')
         ]
 
         meta_description = (
-            f"Buy {product.name} in {product.category.name} category. "
-            f"Enjoy premium quality with sizes like {', '.join(sizes)}. "
-            "Perfect for coffee enthusiasts."
+            f'Buy {product.name} in {product.category.name} category. '
+            f'Enjoy premium quality with sizes like {', '.join(sizes)}. '
+            'Perfect for coffee enthusiasts.'
         )
         meta_keywords = (
-            f"{product.name}, {product.category.name}, {' '.join(sizes)}, "
-            "premium coffee, coffee accessories, buy coffee online, "
-            "specialty coffee"
+            f'{product.name}, {product.category.name}, {' '.join(sizes)}, '
+            'premium coffee, coffee accessories, buy coffee online, '
+            'specialty coffee'
         )
 
         context.update({
@@ -1015,7 +1015,7 @@ class ProductCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['product_form'] = self.get_form()
         context['category_items'] = [
-            {"id": category.id, "name": category.name}
+            {'id': category.id, 'name': category.name}
             for category in Category.objects.all().order_by('slug')
         ]
         context['is_admin'] = (

@@ -47,7 +47,7 @@ urlpatterns = [
     path(
         'reviews/toggle-silence/<int:review_id>/',
         ReviewSilenceToggler.as_view(),
-        name="toggle_silence"
+        name='toggle_silence'
     ),
 
     path(

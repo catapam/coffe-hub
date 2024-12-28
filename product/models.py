@@ -284,7 +284,7 @@ class ProductVariant(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.product.name} - {self.size}"
+        return f'{self.product.name} - {self.size}'
 
     class Meta:
         unique_together = ('product', 'size')
@@ -326,6 +326,6 @@ class ProductReview(models.Model):
 
     def __str__(self):
         return (
-            f"Review of {self.product.name} by "
-            f"{self.user if self.user else 'Anonymous'}: {self.rating}"
+            f'Review of {self.product.name} by '
+            f'{self.user if self.user else 'Anonymous'}: {self.rating}'
         )

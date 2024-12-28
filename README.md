@@ -731,13 +731,13 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | product/models.py | Passed |
 | product/urls.py | Passed |
 | product/views.py | Passed |
-| store/templatetags/custom_tags.py |  |
-| store/admin.py |  |
-| store/apps.py |  |
-| store/forms.py |  |
-| store/models.py |  |
-| store/urls.py |  |
-| store/views.py |  |
+| store/templatetags/custom_tags.py | Passed |
+| store/admin.py | Passed |
+| store/apps.py | Passed |
+| store/forms.py | Passed |
+| store/models.py | Passed |
+| store/urls.py | Passed |
+| store/views.py | Passed |
 
 * It was opted to use Class based structure for most files like models, views, forms, middleware and admin.
 * Minor files like signals, utils, templatetags, webhooks are using direct methods instead of Classes. The reason for that is because they are either based on structures from third party configurations (eg Stripe) and converting to classes could be troubling due to unknown factors and external references, or they have very simple functions which do not justify a class based approach.

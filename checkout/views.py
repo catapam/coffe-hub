@@ -13,13 +13,15 @@ from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import FormView
 from django.views.decorators.http import require_POST
 
+# Third Party imports
+from allauth.account.models import EmailAddress
+
 # Internal imports
 from .forms import OrderForm
 from .models import Order, OrderLineItem
 from product.models import Product
 from cart.utils import get_cart_data
 from accounts.models import UserProfile
-from allauth.account.models import EmailAddress
 from accounts.forms import UserProfileForm
 
 

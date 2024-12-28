@@ -1,5 +1,9 @@
 # Django imports
 from django.apps import AppConfig
+from django.contrib import admin
+
+# third party imports
+from allauth.account.models import EmailAddress
 
 
 class AccountsConfig(AppConfig):
@@ -20,9 +24,6 @@ class AccountsConfig(AppConfig):
         Unregisters the EmailAddress model from the Django admin site if it
         is already registered.
         '''
-        from django.contrib import admin
-        from allauth.account.models import EmailAddress
-
         # Unregister EmailAddress if already registered
         if admin.site.is_registered(EmailAddress):
             admin.site.unregister(EmailAddress)
