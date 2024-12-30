@@ -636,34 +636,33 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 
 | **Page** | **<a href="https://validator.w3.org/nu/#textarea" target="_blank">W3C Markup validator</a>** | **<a href="https://wave.webaim.org/" target="_blank">Wave accessibility</a>** | **Performance** | **Acessibility** | **Best practices** | **SEO** |
 |------------------------------------------|------------|------------|------------|------------|------------|------------|
-| / |
-| /about |
-| /help |
-| /401 |
-| /404 |
-| /privacy_policy |
-| /products | 
-| /products/ | 
-| /products/ | 
-| /products/ | 
-| /cart/ | 
-| /checkout/ | 
-| /accounts/login |
-| /accounts/signup |  
-| /accounts/password/reset | 
-| /accounts/logout |  
-| /accounts/profile |
-| /accounts/user |
-| /accounts/password |
-| /accounts/email |
-| /accounts/orders |  
+| / | Passed |
+| /about | Passed |
+| /help | Passed |
+| /401 | Passed |
+| /404 | Passed |
+| /privacy_policy | Passed |
+| /products | Passed |
+| /products/manual_coffee_grinder/?size=Small | Passed |
+| /cart/ | Passed |
+| /checkout/ | Passed |
+| /accounts/login | Passed |
+| /accounts/signup | Passed |
+| /accounts/password/reset | Passed |
+| /accounts/logout | Passed |
+| /accounts/profile | Passed |
+| /accounts/user | Passed |
+| /accounts/password | Passed |
+| /accounts/email | Passed |
+| /accounts/orders | Passed |
+| /accounts/orders/<order#> | Passed |
 
 * Passed state means the test was run, and returned no errors or alerts
 * Due to the nature of dashboard pages, Wave was run using the browser extension rather than the site tool.
 * M=mobile, D=desktop.
 * Performance issues caused by initial server response (TTFB) were ignored due to the server were the current site is hosted being a free version of a third party service I don't have much control over. Initial server response may also be result of slow postgress queries, which is not the focus for this project, those can be dealt with once the site is deployed to a permanent server
 * Render blocking issues were avoided whenever possible, and only left when optimizing caused major layout shifts.
-* For product pages, a few random products were selected for testing. As all of them follow the same structure, use the same templates and deliver the contents from same locations the sampling represents an aproximation of what should be expected in all other similar pages.
+* For product and order view pages, a sigle page was selected for testing. As all of them follow the same structure, use the same templates and deliver the contents from same locations the sampling represents an aproximation of what should be expected in all other similar pages.
 
 ## CSS
 | **File** | **<a href="https://jigsaw.w3.org/css-validator/" target="_blank">WC3 CSS validator</a>** |
@@ -685,12 +684,14 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | stripe_elements.js | Passed |
 
 * JS files follow different approaches depending on the complexity and need for deeper organization. Files like admin, auth and stripe_elements are very specifiy for certain pages and just change a little bit the default behaviors for those setups, so those are not Class based. Base.js is intended to create general functions that may have been used across other files. The more complex JS setups (cart and product) are well organized and use OOP techniches, strong use of classes and interconnection between internal functions.
-
 * JS files may call other file's functions which would return an undefined warning on the JS validation. Those are correctly defined on the base.js file which is loaded on all contexts. Due to that setup variables/functions set on base.js may be flagged as not in use, while they are only being used on other files but are in better fit if set globally on that main file.
-
 * Async functions were used for the AJAX setup, those are correctly set and validated against ES8+.
-
 * Optional chaining is used for some specific classes and functions on the products.js which is also part of the functionalities related to AJAX. Those only validate against ES11, but they are valid and working as intended.
+* When using jshint.com for the tests, in order to correctly set the specified ES version this has to be added before the code:
+```
+/* jshint esnext: false */
+/* jshint esversion: 11 */
+```
 
 ## Python
 | **File** | **<a href="https://pep8ci.herokuapp.com/" target="_blank">PEP8 validator</a>** |

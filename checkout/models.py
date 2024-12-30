@@ -43,13 +43,16 @@ class Order(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='orders', blank=True, null=True
     )
+
     order_number = models.CharField(
         max_length=32, null=False, editable=False
     )
+
     status = models.CharField(
         max_length=12, choices=STATUS_CHOICES, default='processing',
         blank=False, null=False
     )
+
     full_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
     phone_number = models.CharField(max_length=20, null=False, blank=False)

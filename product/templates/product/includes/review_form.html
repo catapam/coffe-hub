@@ -10,6 +10,9 @@
                 <!-- Hidden Rating Input (not displayed) -->
                 <div class="sr-only">
                     {{ review_form.rating }}
+                    <small id="id_rating_helptext">
+                        Select your rating from 0 to 5.
+                    </small>
                 </div>
                 {% for star in max_review %}
                     <svg class="star icon icon-coffee-bean {% if star < rating %}filled{% endif %}" data-value="{{ forloop.counter }}"><use xlink:href="#icon-coffee-bean"></use></svg>

@@ -2,7 +2,7 @@
     {% if is_admin %}
         {{ product_form.description|as_crispy_field }}
     {% else %}
-        <label for="description" class="form-label">
+        <label class="form-label">
             Description
         </label>
         <p class="card-text mx-auto {% if view == 'detail' %}text-start{% endif %}" id="description">

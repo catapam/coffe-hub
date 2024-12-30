@@ -11,12 +11,12 @@
 
         <!-- Category Filter -->
         <div class="col-12 col-md-3">
-            <label for="categoryDropdown" class="form-label">Category</label>
+            <label for="categoryDropdownButton" class="form-label">Category</label>
             <div class="dropdown">
                 <button class="btn-category dropdown-toggle w-100" type="button" id="categoryDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                     All
                 </button>
-                <ul class="dropdown-menu w-100" aria-labelledby="categoryDropdown">
+                <ul class="dropdown-menu w-100" aria-labelledby="categoryDropdownButton">
                     <li>
                         <label class="dropdown-item">
                             <input type="checkbox" name="category[]" value="" 
@@ -88,13 +88,13 @@
     </div>
 
     <!-- Filter icon -->
-    <a id="toggle-filters" class="nav-link" aria-label="Cart button">
-        <i class="fa-solid fa-filter menu-item lg" aria-label="Filter toggler"></i>
+    <a id="toggle-filters" class="nav-link" aria-label="Filtering menu option">
+        <i class="fa-solid fa-filter menu-item lg"></i>
     </a>
 
     <div class="dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" id="sortingDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa-solid fa-sort menu-item lg" aria-label="Sorting options"></i>
+        <a class="nav-link dropdown-toggle" href="#" role="button" id="sortingDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Sorting menu option">
+            <i class="fa-solid fa-sort menu-item lg"></i>
         </a>
         <ul class="dropdown-menu" aria-labelledby="sortingDropdown">
             {% for sort_key, sort_label in sorting_options.items %}

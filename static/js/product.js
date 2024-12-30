@@ -1026,15 +1026,15 @@ class ProductSaveHandler {
 
 // Initialize handlers on DOM load
 document.addEventListener('DOMContentLoaded', () => {
-    const productCardHandler = ProductCardHandler();
-    const starRatingHandler = StarRatingHandler('#star-rating', '#id_rating');
-    const reviewFilterHandler = ReviewFilterHandler('.filter', '.review-container', '#no-reviews-message');
-    const reviewSilenceHandler = ReviewSilenceHandler('.toggle-silence-btn', '.review-container');
-    const productActivationHandler = ProductActivationHandler('.toggle-product-btn');
-    const variantActivationHandler = ProductActivationHandler('.toggle-variant-btn');
-    const categoryHandler = SelectorHandler("category");
-    const sizeHandler = SelectorHandler("size");
-    const productSaveHandler = ProductSaveHandler('.save-product-btn');
+    const productCardHandler = new ProductCardHandler();
+    const starRatingHandler = new StarRatingHandler('#star-rating', '#id_rating');
+    const reviewFilterHandler = new ReviewFilterHandler('.filter', '.review-container', '#no-reviews-message');
+    const reviewSilenceHandler = new ReviewSilenceHandler('.toggle-silence-btn', '.review-container');
+    const productActivationHandler = new ProductActivationHandler('.toggle-product-btn');
+    const variantActivationHandler = new ProductActivationHandler('.toggle-variant-btn');
+    const categoryHandler = new SelectorHandler("category");
+    const sizeHandler = new SelectorHandler("size");
+    const productSaveHandler = new ProductSaveHandler('.save-product-btn');
 
     window.productCardHandler = productCardHandler;
     window.starRatingHandler = starRatingHandler;

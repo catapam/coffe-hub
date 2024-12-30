@@ -115,7 +115,7 @@ class ProductReviewForm(forms.ModelForm):
                 'min': 0,
                 'max': 5,
                 'step': 1,
-                'required': True
+                'required': True,
             }),
             'comment': forms.Textarea(attrs={
                 'maxlength': 100,

@@ -6,6 +6,18 @@ from django_countries.widgets import CountrySelectWidget
 from .models import Order
 
 
+class CustomCountrySelectWidget(CountrySelectWidget):
+    def render(self, name, value, attrs=None, renderer=None):
+        # Render the default widget
+        html = super().render(name, value, attrs, renderer)
+
+        # Add an `alt` attribute to the flag image
+        return html.replace(
+            'class="country-select-flag"',
+            'class="country-select-flag" alt="Flag"'
+        )
+
+
 class OrderForm(forms.ModelForm):
     '''
     Form for managing user order details.
@@ -28,7 +40,10 @@ class OrderForm(forms.ModelForm):
         )
 
         widgets = {
-            'country': CountrySelectWidget(),
+            'country': CustomCountrySelectWidget(attrs={
+                'class': 'form-select',
+                'required': True,
+            }),
         }
 
     def __init__(self, *args, **kwargs):
@@ -45,7 +60,6 @@ class OrderForm(forms.ModelForm):
             'full_name': 'Full Name',
             'email': 'Email Address',
             'phone_number': 'Phone Number',
-            'country': 'Country',
             'postcode': 'Postal Code',
             'town_or_city': 'Town or City',
             'street_address1': 'Street Address 1',
@@ -53,8 +67,15 @@ class OrderForm(forms.ModelForm):
             'county': 'County, State or Locality',
         }
 
+        # Set autofocus for the first field
         self.fields['full_name'].widget.attrs['autofocus'] = True
+
         for field in self.fields:
+            # Skip adding placeholder for the country field
+            if field == 'country':
+                continue
+
+            # Add placeholder and remove label
             if self.fields[field].required:
                 placeholder = f'{placeholders[field]} *'
             else:

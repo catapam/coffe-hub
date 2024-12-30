@@ -20,7 +20,7 @@
             <!-- Cart menu -->
             <div class="cart-menu d-block d-lg-none menu-icon">
                 <a class="nav-link" href="{% url 'cart' %}" aria-label="Cart button">
-                    <i class="fa-solid fa-cart-shopping menu-item" aria-label="Cart menu"></i>
+                    <i class="fa-solid fa-cart-shopping menu-item"></i>
                 </a>
             </div>
 
@@ -42,10 +42,10 @@
                     </li>
                     
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle d-block d-lg-none menu-item" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle d-block d-lg-none menu-item" id="navbarDropdownMobile" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Account
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMobile">
                             {% include 'includes/account-menu.html' %}
                         </div>
                     </li>
@@ -73,7 +73,7 @@
             <!-- Cart menu -->
             <div class="cart-menu d-none d-lg-block menu-icon">
                 <a class="nav-link" href="{% url 'cart' %}" aria-label="Cart button">
-                    <i class="fa-solid fa-cart-shopping menu-item" aria-label="Cart menu"></i>
+                    <i class="fa-solid fa-cart-shopping menu-item"></i>
                 </a>
             </div>
             {% endif %}
@@ -81,7 +81,7 @@
             <!-- User menu for desktop -->
             <div class="user-menu menu-icon d-none d-lg-block">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa-solid fa-user menu-item" aria-label="User menu"></i>
+                    <i class="fa-solid fa-user menu-item"></i>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     {% include 'includes/account-menu.html' %}

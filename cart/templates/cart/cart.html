@@ -12,7 +12,7 @@
 
 {% block content %}
 <div role="main" aria-labelledby="shopping-cart" class="shopping-cart page-container mt-4">
-    <h1 class="mb-5">Shopping cart</h1>
+    <h1 class="mb-5" id="shopping-cart">Shopping cart</h1>
     <hr>
     {% if cart and cart.items %}
         {% include 'cart/includes/cart_items.html' with view='cart' %}
