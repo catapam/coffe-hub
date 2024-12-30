@@ -7,15 +7,19 @@
             <div class="d-flex justify-content-end gap-2 col action-btn-form">
                 <button class="btn btn-secondary btn-sm selector-edit-button" id="edit_{{ type }}" type="button">
                     <i class="fa-solid fa-pencil"></i>
+                    <span class="sr-only">Edit</span>
                 </button>
                 <button class="btn btn-success btn-sm selector-add-button" id="add_{{ type }}" type="button">
                     <i class="fa-solid fa-plus"></i>
+                    <span class="sr-only">Add</span>
                 </button>
                 <button class="btn btn-danger btn-sm selector-cancel-button d-none" id="cancel_{{ type }}" type="button">
                     <i class="fa-solid fa-xmark"></i>
+                    <span class="sr-only">Cancel</span>
                 </button>
                 <button class="btn btn-success btn-sm selector-save-button d-none" id="save_{{ type }}" type="button">
                     <i class="fa-solid fa-save"></i>
+                    <span class="sr-only">Save</span>
                 </button>
             </div>
             {% endif %}
@@ -54,11 +58,12 @@
         {% endif %}
     </select>
 
-    {% if view == 'detail' %}
+    {% if view == 'detail' and is_admin %}
     <!-- Text input for new {{ type }} (hidden by default) -->
+    <label for="{{ type }}-input-{{ product.id }}" class="sr-only">Category</label>
     <input type="text" 
         id="{{ type }}-input-{{ product.id }}" 
-        class="form-control {{ type }}-input d-none mt-1" 
+        class="form-control {{ type }}-input d-none mt-1 sr-only" 
         placeholder="New {{ type|capfirst }}">
     {% endif %}
 </div>

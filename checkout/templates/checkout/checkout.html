@@ -21,16 +21,26 @@
                 {% csrf_token %}
                 <fieldset class="rounded px-3 mb-5">
                     <legend class="fieldset-label small px-2 w-auto">Details</legend>
+                    <br>
+                    <label for="id_full_name">Full name</label>
                     {{ order_form.full_name | as_crispy_field }}
+                    <label for="id_email">Email address</label>
                     {{ order_form.email | as_crispy_field }}
                 </fieldset>
                 <fieldset class="rounded px-3 mb-5">
                     <legend class="fieldset-label small px-2 w-auto">Delivery</legend>
+                    <br>
+                    <label for="id_phone_number">Phone number</label>
                     {{ order_form.phone_number | as_crispy_field }}
+                    <label for="id_street_address1">Street address 1</label>
                     {{ order_form.street_address1 | as_crispy_field }}
+                    <label for="id_street_address2">Street address 2</label>
                     {{ order_form.street_address2 | as_crispy_field }}
+                    <label for="id_town_or_city">Town or City</label>
                     {{ order_form.town_or_city | as_crispy_field }}
+                    <label for="id_county">County, State or location</label>
                     {{ order_form.county | as_crispy_field }}
+                    <label for="id_postcode">Postcode</label>
                     {{ order_form.postcode | as_crispy_field }}
                     {{ order_form.country | as_crispy_field }}
                     <div class="form-check form-check-inline float-right mr-0">

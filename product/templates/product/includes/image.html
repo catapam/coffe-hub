@@ -26,7 +26,12 @@
                        class="form-control d-none"
                        onchange="previewImage(this, 'product-image-{{ product.id }}')">
                 <i class="fa-solid fa-upload upload-icon menu-item"
-                   onclick="document.getElementById('id_image_path').click()"></i>
+                    tabindex="0"
+                    role="button"
+                    aria-label="Upload file"
+                    onclick="document.getElementById('id_image_path').click()"
+                    onkeydown="if(event.key === 'Enter' || event.key === ' ') document.getElementById('id_image_path').click()">
+                </i>
             </div>
         {% endif %}
     </div>

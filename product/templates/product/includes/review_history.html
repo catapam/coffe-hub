@@ -41,6 +41,7 @@
                         data-review-id="{{ review.id }}"
                         data-silenced="{{ review.silenced|yesno:'true,false' }}">
                             <i class="fa-solid fa-eye{% if not review.silenced %}-slash{% endif %}"></i>
+                            <span class="sr-only">View</span>
                         </a>
                     {% endif %}
                 </div>

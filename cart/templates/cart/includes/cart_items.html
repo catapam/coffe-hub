@@ -13,12 +13,12 @@
                     <!-- Product Details -->
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h5 class="card-title">
+                            <h2 class="card-title">
                                 <a id="detail-link-{{ item.id }}"
                                     href="{% url 'product_detail' slug=item.slug %}?size={{ item.size }}">
                                     {{ item.product }}
                                 </a>
-                            </h5>
+                            </h2>
                             <p class="card-text">
                                 <strong>{% translate "Size:" %}</strong> {{ item.size }}
                             </p>
@@ -26,8 +26,11 @@
                                 <strong>{% translate "Price:" %}</strong> ${{ item.price }} 
                             </p>
                             <p class="card-text">
-                                <strong>{% translate "Quantity:" %}</strong>
+                                <label for="quantity-{{ item.id }}">
+                                    <strong>{% translate "Quantity:" %}</strong>
+                                </label>
                                 <input 
+                                    id="quantity-{{ item.id }}"
                                     type="number" 
                                     class="form-control d-inline-block w-auto cart-quantity" 
                                     value="{{ item.quantity }}" 
@@ -50,6 +53,7 @@
                                     data-item-id="{{ item.id }}" 
                                     data-size="{{ item.size }}">
                                     <i class="fa-solid fa-trash"></i>
+                                    <span class="sr-only">Delete</span>
                             </button>
                         
                             <!-- Update Button -->
@@ -59,6 +63,7 @@
                                 data-item-id="{{ item.id }}" 
                                 data-size="{{ item.size }}">
                                 <i class="fa-solid fa-check"></i>
+                                <span class="sr-only">Confirm</span>
                             </button>
                         </div>
                     </div>

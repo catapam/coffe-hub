@@ -99,12 +99,13 @@ footer li {
     margin: -1px; /* Offset margin */
     overflow: hidden; /* Hide overflow */
     clip-path: inset(50%); /* Use clip-path for modern equivalent */
-    color: var(--bg-darker); /* Match background color for invisibility */
+    color: var(--text-primary-color); /* Match primary color for visibility */
+    background-color: var(--bg-darker); /* Forces dark background on all elements */
     border: 0; /* Remove border */
 }
 
 .privacy-link {
-    font-size: xx-small; /* Small font size for privacy links */
+    font-size: small; /* Small font size for privacy links */
 }
 
 .centered-element {
@@ -495,7 +496,7 @@ input {
 }
 
 .card * {
-    font-size: x-small; /* Use small font size for all elements inside the card */
+    font-size: small; /* Use small font size for all elements inside the card */
     padding: 0; /* Remove padding for child elements */
     margin: 0; /* Remove margins for child elements */
 }
@@ -1124,6 +1125,10 @@ option[data-stock="0"] {
     color: var(--green-accent); /* Success text color */
 }
 
+/* Logout page */
+.logout-dashboard.active{
+    color: black !important;
+}
 
 /* Layout shift fix */
 @media (min-width: 768px) {

@@ -12,11 +12,13 @@ Your Destination for Premium Coffee
 
 {% block content %}
 <div class="hero">
-    <img class="image" src="{% static 'images/hero.webp' %}" alt="Commercial Hero Image">
+    <img class="image" src="{% static 'images/hero.webp' %}" alt="Hero image showing range of products that can be found on the site">
 </div>
 
 <div class="container my-4">
-    
-    {% include 'product/includes/catalog.html' %}
+    <div role="main" aria-labelledby="product-list" class="product-list page-container mt-4">
+        <h1 class="mb-5" id="product-list">Products</h1>
+        {% include 'product/includes/catalog.html' %}
+    </div>
 </div>
 {% endblock content %}

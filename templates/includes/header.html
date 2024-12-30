@@ -21,6 +21,7 @@
             <div class="cart-menu d-block d-lg-none menu-icon">
                 <a class="nav-link" href="{% url 'cart' %}" aria-label="Cart button">
                     <i class="fa-solid fa-cart-shopping menu-item"></i>
+                    <span class="sr-only">Cart button</span>
                 </a>
             </div>
 
@@ -74,6 +75,7 @@
             <div class="cart-menu d-none d-lg-block menu-icon">
                 <a class="nav-link" href="{% url 'cart' %}" aria-label="Cart button">
                     <i class="fa-solid fa-cart-shopping menu-item"></i>
+                    <span class="sr-only">Cart button</span>
                 </a>
             </div>
             {% endif %}
@@ -82,6 +84,7 @@
             <div class="user-menu menu-icon d-none d-lg-block">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa-solid fa-user menu-item"></i>
+                    <span class="sr-only">User button</span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     {% include 'includes/account-menu.html' %}

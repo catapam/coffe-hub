@@ -11,29 +11,32 @@
 
         <!-- Category Filter -->
         <div class="col-12 col-md-3">
-            <label for="categoryDropdownButton" class="form-label">Category</label>
+            <p class="form-label">Category</p>
             <div class="dropdown">
                 <button class="btn-category dropdown-toggle w-100" type="button" id="categoryDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                     All
                 </button>
-                <ul class="dropdown-menu w-100" aria-labelledby="categoryDropdownButton">
-                    <li>
-                        <label class="dropdown-item">
-                            <input type="checkbox" name="category[]" value="" 
-                                {% if not selected_categories or '' in selected_categories %}checked{% endif %}>
-                            All
-                        </label>
-                    </li>
-                    {% for category in category_items %}
-                    <li>
-                        <label class="dropdown-item">
-                            <input type="checkbox" name="category[]" value="{{ category.slug }}" 
-                                {% if category.slug in selected_categories %}checked{% endif %}>
-                            {{ category.name }}
-                        </label>
-                    </li>
-                    {% endfor %}
-                </ul>
+                <fieldset>
+                    <legend class="sr-only">Categories selected</legend>
+                    <ul class="dropdown-menu w-100" aria-labelledby="categoryDropdownButton">
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="category[]" value="" 
+                                        {% if not selected_categories or '' in selected_categories %}checked{% endif %}>
+                                    All
+                                </label>
+                            </li>
+                            {% for category in category_items %}
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="category[]" value="{{ category.slug }}" 
+                                        {% if category.slug in selected_categories %}checked{% endif %}>
+                                    {{ category.name }}
+                                </label>
+                            </li>
+                            {% endfor %}
+                    </ul>
+                </fieldset>
             </div>
         </div>                       
 

@@ -208,7 +208,7 @@ class ProductCardHandler {
             }
 
             if (editLink && base_url) {
-                editLink.href = `${base_url}?size=${size}`;
+                editLink.href = `${base_url}?size=${size}#`;
             }
         }
     }

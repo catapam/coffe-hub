@@ -636,26 +636,31 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 
 | **Page** | **<a href="https://validator.w3.org/nu/#textarea" target="_blank">W3C Markup validator</a>** | **<a href="https://wave.webaim.org/" target="_blank">Wave accessibility</a>** | **Performance** | **Acessibility** | **Best practices** | **SEO** |
 |------------------------------------------|------------|------------|------------|------------|------------|------------|
-| / | Passed |
-| /about | Passed |
-| /help | Passed |
-| /401 | Passed |
-| /404 | Passed |
-| /privacy_policy | Passed |
-| /products | Passed |
-| /products/manual_coffee_grinder/?size=Small | Passed |
-| /cart/ | Passed |
-| /checkout/ | Passed |
-| /accounts/login | Passed |
-| /accounts/signup | Passed |
-| /accounts/password/reset | Passed |
-| /accounts/logout | Passed |
-| /accounts/profile | Passed |
-| /accounts/user | Passed |
-| /accounts/password | Passed |
-| /accounts/email | Passed |
-| /accounts/orders | Passed |
-| /accounts/orders/<order#> | Passed |
+| / | Passed | Passed |
+| /about | Passed | Passed |
+| /help | Passed | Passed |
+| /401 | Passed | Passed |
+| /404 | Passed | Passed |
+| /privacy_policy | Passed | Passed |
+| /products | Passed | Passed |
+| /products/manual_coffee_grinder/?size=Small | Passed | Passed |
+| /cart/ | Passed | Passed |
+| /cart/select/ | Passed | Passed |
+| /checkout/ | Passed | Passed |
+| /accounts/login | Passed | Passed |
+| /accounts/signup | Passed | Passed |
+| /accounts/password/reset | Passed | Passed |
+| /accounts/logout | Passed | Passed |
+| /accounts/profile | Passed | Passed |
+| /accounts/user | Passed | Passed |
+| /accounts/password | Passed | Passed |
+| /accounts/email | Passed | Passed |
+| /accounts/orders | Passed | Passed |
+| /accounts/orders/<order#> | Passed | Passed |
+| / (as admin or staff) | Passed | Passed |
+| /products (as admin or staff) | Passed | Passed |
+| /products/manual_coffee_grinder/?size=Small (as admin or staff) | Passed | Passed |
+| /products/create (as admin or staff) | Passed | Passed |
 
 * Passed state means the test was run, and returned no errors or alerts
 * Due to the nature of dashboard pages, Wave was run using the browser extension rather than the site tool.

@@ -22,7 +22,7 @@
     </div>   
     {% else %}
     <a id="edit-link-{{ product.id }}"
-        href="{% url 'product_detail' slug=product.slug %}?size={{ product_data.variant_size }}"
+        href="{% url 'product_detail' slug=product.slug %}?size={{ product_data.variant_size }}#"
         class="btn btn-secondary {% if view == 'list' %}btn-sm{% else %}btn-buy{% endif %}"
         data-base-url="{% url 'product_detail' slug=product.slug %}">
         Edit

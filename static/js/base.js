@@ -343,6 +343,42 @@ function capitalizeField(field) {
 }
 
 /**
+ * Updates the flag image based on the selected country.
+ *
+ * This function listens for changes in the country selector dropdown.
+ * When a country is selected, it dynamically updates the flag image to match
+ * the selected country using the country code.
+ *
+ * Expected IDs:
+ * - `id_country`: The <select> element for selecting the country.
+ * - `flag_id_country`: The <img> element displaying the corresponding flag.
+ *
+ * The flag images are expected to follow the naming convention:
+ * `/static/flags/{country_code}.gif`, where `{country_code}` is the lowercase
+ * value of the selected country's code.
+ */
+function flagOnCountryChange() {
+    // Get the country selector dropdown by its ID
+    const countrySelect = document.getElementById('id_country');
+    // Get the flag image element by its ID
+    const flagImage = document.getElementById('flag_id_country');
+
+    // Check if the country selector exists
+    if (countrySelect) {
+        // Add an event listener to detect changes in the dropdown
+        countrySelect.addEventListener('change', function () {
+            // Get the selected country's value and convert it to lowercase
+            const selectedCountry = countrySelect.value.toLowerCase();
+
+            // If the flag image exists, update its `src` attribute
+            if (flagImage) {
+                flagImage.src = `/static/flags/${selectedCountry}.gif`;
+            }
+        });
+    }
+}
+
+/**
  * Initializes all event listeners once DOM is fully loaded.
  */
 document.addEventListener('DOMContentLoaded', function () {
@@ -354,4 +390,5 @@ document.addEventListener('DOMContentLoaded', function () {
     setupOutOfStockToggle();
     setupCookieConsent();
     initializeToasts();
+    flagOnCountryChange();
 });

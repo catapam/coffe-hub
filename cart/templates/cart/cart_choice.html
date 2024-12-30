@@ -16,7 +16,7 @@
     <div class="row">
         <!-- Database Cart -->
         <div class="col-12 col-md-6 mt-4 d-flex flex-column">
-            <h4 class="text-center">{% translate "Account's Cart" %}</h4>
+            <h3 class="text-center">{% translate "Account's Cart" %}</h3>
             <div class="cart-items flex-grow-1">
                 {% if database_cart and database_cart.items %}
                     {% for item in database_cart.items %}
@@ -47,7 +47,7 @@
 
         <!-- Session Cart -->
         <div class="col-12 col-md-6 mt-4 d-flex flex-column">
-            <h4 class="text-center">{% translate "Browser's Cart" %}</h4>
+            <h3 class="text-center">{% translate "Browser's Cart" %}</h3>
             <div class="cart-items flex-grow-1">
                 {% if session_cart and session_cart.items %}
                     {% for item in session_cart.items %}
