@@ -8,7 +8,9 @@ from .views import (
     Custom401View,
     set_cookie_consent,
     reset_cookie_consent,
-    render_toast_template
+    render_toast_template,
+    robots_txt,
+    sitemap_xml
 )
 
 
@@ -93,5 +95,19 @@ urlpatterns = [
         'render-toast/',
         render_toast_template,
         name='render_toast'
+    ),
+
+    # Robots.txt
+    path(
+        'robots.txt',
+        robots_txt,
+        name='robots_txt'
+    ),
+
+    # Sitemap.xml
+    path(
+        'sitemap.xml',
+        sitemap_xml,
+        name='sitemap_xml'
     ),
 ]

@@ -484,10 +484,10 @@ Key design principles include:
 ### SEO and marketing features
 
 - **Sitemap.xml**  
-  The sitemap provides a structured list of pages accessible to search engines, enhancing their ability to index your site efficiently. It works side-by-side with the `robots.txt` file to fine-tune crawler access.
+  The sitemap provides a structured list of pages accessible to search engines, enhancing their ability to index your site efficiently. It works side-by-side with the `robots.txt` file to fine-tune crawler access. This was set up to be served as a static file.
 
 - **Robots.txt**  
-  The `robots.txt` file links to the sitemap and restricts crawlers from accessing certain pages or sections, ensuring an optimized and secure crawling process. Disallowing search queries for example to avoid over-crawling. It's worth keeping in mind this setting is a soft block, the crawlers can choose to follow it or not.
+  The `robots.txt` file links to the sitemap and restricts crawlers from accessing certain pages or sections, ensuring an optimized and secure crawling process. Disallowing search queries for example to avoid over-crawling. It's worth keeping in mind this setting is a soft block, the crawlers can choose to follow it or not. This was set up to be served as a static file.
 
 - **Unique and dynamic page titles**  
   By leveraging Django's block elements, each page dynamically updates its title to reflect its content, improving SEO visibility and enhancing the user experience.
@@ -750,6 +750,14 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 
 ## Manual testing
 
+### Header menu
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Footer
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
 ### Home
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
@@ -822,7 +830,7 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
-### User Portal - general
+### User Portal - Side menu
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 

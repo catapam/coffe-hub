@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
+from django.http import FileResponse
 
 
 class Custom404View(TemplateView):
@@ -139,3 +140,17 @@ def render_toast_template(request):
         },
         status=405
     )
+
+
+def robots_txt(request):
+    """
+    Serve robots.txt from the project root.
+    """
+    return FileResponse(open('robots.txt', 'rb'), content_type='text/plain')
+
+
+def sitemap_xml(request):
+    """
+    Serve sitemap.xml from the project root.
+    """
+    return FileResponse(open('sitemap.xml', 'rb'), content_type='application/xml')
