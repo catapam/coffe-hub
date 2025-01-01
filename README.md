@@ -540,6 +540,12 @@ Coffee Hub is dedicated to enhancing the platform with features that improve usa
 - **Dedicated Offers Section**  
   A new section will showcase discounts and promotions, making the platform more engaging and encouraging repeat purchases.
 
+- **Caching system**
+  Create a caching setup to improve database queries execution as well as full page caching on static pages.
+
+- **SSL and domain**
+  Add custom domain and SSL for enhanced user experience and security.
+
 Each of these features aligns with Coffee Hub's vision of delivering a premium, user-centric e-commerce experience while driving future growth and innovation.
 
 ---
