@@ -5,15 +5,7 @@
  * CSS from here:
  * https://stripe.com/docs/stripe-js
  */
-
 let stripe, elements, card;
-
-// Retrieve Stripe public key and client secret from the DOM
-(function defineStripeKeys() {
-    const stripePublicKey = JSON.parse(document.getElementById('id_stripe_public_key').textContent.trim());
-    const clientSecret = JSON.parse(document.getElementById('id_client_secret').textContent.trim());
-    setupStripe(stripePublicKey, clientSecret);
-})();
 
 /**
  * Initialize Stripe and set up the payment form.
@@ -29,7 +21,7 @@ function setupStripe(stripePublicKey, clientSecret) {
             color: 'white',
             fontFamily: '"Nunito", Arial, sans-serif',
             fontSmoothing: 'antialiased',
-            fontSize: '1.2rem',
+            fontSize: '16px',
             '::placeholder': {
                 color: 'rgba(255, 255, 255, 0.65)',
             },
@@ -197,3 +189,14 @@ function displayPaymentError(error) {
     $(errorDiv).html(html);
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize after DOM is ready
+    $(document).ready(function () {
+        // Retrieve Stripe public key and client secret from the DOM
+        (function defineStripeKeys() {
+            const stripePublicKey = JSON.parse(document.getElementById('id_stripe_public_key').textContent.trim());
+            const clientSecret = JSON.parse(document.getElementById('id_client_secret').textContent.trim());
+            setupStripe(stripePublicKey, clientSecret);
+        })();
+    });
+});
