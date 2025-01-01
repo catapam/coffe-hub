@@ -30,10 +30,18 @@ class HomeView(ProductListView):
         '''
         context = super().get_context_data(**kwargs)
 
+        # Add hero image to the context with a default value for small screens
+        context['hero_image_small'] = (
+            'https://res.cloudinary.com/dufkubq4n/image'
+            '/upload/v1735757480/hero_small_1_phyxti.webp'
+        )
+
+        context['fallback_image_small'] = static('images/hero_small.webp')
+
         # Add hero image to the context with a default value
         context['hero_image'] = (
-            'https://res.cloudinary.com/dufkubq4n/image/upload/'
-            'v1735579883/hero_ucfamh.webp'
+            'https://res.cloudinary.com/dufkubq4n/image'
+            '/upload/v1735579883/hero_ucfamh.webp'
         )
 
         context['fallback_image'] = static('images/hero.webp')

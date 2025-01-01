@@ -12,13 +12,19 @@ Your Destination for Premium Coffee
 
 {% block content %}
 
-<link rel="preload" href="{% if hero_image %}{{ hero_image }}{% else %}{{ fallback_image }}{% endif %}" as="image">
+<link rel="preload" href="{% if hero_image_small %}{{ hero_image_small }}{% else %}{{ fallback_image_small }}{% endif %}" as="image" media="(max-width: 768px)">
+<link rel="preload" href="{% if hero_image %}{{ hero_image }}{% else %}{{ fallback_image }}{% endif %}" as="image" media="(min-width: 769px)">
 
 <div class="hero">
-    <img class="image"
-         src="{% if hero_image %}{{ hero_image }}{% else %}{{ fallback_image }}{% endif %}"
-         alt="Hero image showing range of products that can be found on the site"
-         loading="lazy">
+    <img 
+        class="image"
+        src="{% if hero_image %}{{ hero_image }}{% else %}{{ fallback_image }}{% endif %}" 
+        srcset="
+            {% if hero_image_small %}{{ hero_image_small }}{% else %}{{ fallback_image_small }}{% endif %} 768w,
+            {% if hero_image %}{{ hero_image }}{% else %}{{ fallback_image }}{% endif %} 1200w"
+        sizes="(max-width: 768px) 100vw, 1200px"
+        alt="Hero image showing range of products that can be found on the site"
+        loading="eager">
 </div>
 
 <div class="container my-4">
