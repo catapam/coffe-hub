@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% if is_admin %}
-<form class="form w-100">
+<form class="form w-100 product-card {% if view == 'detail' %}container mt-5 product-page page-container{% else %}card{% endif %}">
     {% csrf_token %}
 {% endif %}
     <div class="product-card {% if view == 'detail' %}container mt-5 product-page page-container{% else %}card{% endif %} w-100">
