@@ -38,9 +38,9 @@
                         {% endif %}
                     {% endif %}
 
-                    <!-- Quantity/Stock Selector -->
                     {% if not is_admin or view == 'list' %}
                         {% if product.id %}
+                            <!-- Quantity/Stock Selector -->
                             {% include 'product/includes/quantity_stock.html' %}
                         {% endif %}
                     {% else %}
@@ -49,8 +49,8 @@
                     {% endif %}
                 </div>
 
-                <!-- Price -->
                 {% if product.id %}
+                    <!-- Price -->
                     {% if not is_admin or view == 'list' %}
                         {% include 'product/includes/price.html' %}
                     {% else %}

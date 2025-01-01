@@ -11,8 +11,14 @@ Your Destination for Premium Coffee
 {% endblock extra_css %}
 
 {% block content %}
+
+<link rel="preload" href="{% if hero_image %}{{ hero_image }}{% else %}{{ fallback_image }}{% endif %}" as="image">
+
 <div class="hero">
-    <img class="image" src="{% static 'images/hero.webp' %}" alt="Hero image showing range of products that can be found on the site">
+    <img class="image"
+         src="{% if hero_image %}{{ hero_image }}{% else %}{{ fallback_image }}{% endif %}"
+         alt="Hero image showing range of products that can be found on the site"
+         loading="lazy">
 </div>
 
 <div class="container my-4">

@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.templatetags.static import static
 
 # Internal imports
 from product.views import ProductListView
@@ -28,7 +29,15 @@ class HomeView(ProductListView):
             dict: Updated context with additional data for the home page.
         '''
         context = super().get_context_data(**kwargs)
-        context['extra_data'] = 'Additional data for Catalog view'
+
+        # Add hero image to the context with a default value
+        context['hero_image'] = (
+            'https://res.cloudinary.com/dufkubq4n/image/upload/'
+            'v1735579883/hero_ucfamh.webp'
+        )
+
+        context['fallback_image'] = static('images/hero.webp')
+
         return context
 
 

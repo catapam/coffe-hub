@@ -34,15 +34,15 @@
     integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.rel='stylesheet'">
 
-  <!-- JQuey import -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- JQuey import, needs to import before Mailchimp's setup -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
 
   <!-- Mailchimp's CSS -->
-  <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+  <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css" media="print" onload="this.media='all'">
 
   <!-- Import custom css -->
-  <link rel="stylesheet" href="{% static 'css/brand.css' %}">
-  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/brand.css' %}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}" media="print" onload="this.media='all'">
 
   <!-- Page specific styles -->
   {% block extra_css %}
@@ -50,12 +50,16 @@
   {% endblock %}
 
   {% block onload_js %}
+
+  <!-- Fontsawesome -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"
     integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
-  <script src="https://kit.fontawesome.com/ab75482a80.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/ab75482a80.js" crossorigin="anonymous" defer></script>
+
   <!-- Stripe -->
-  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://js.stripe.com/v3/" defer></script>
+
   {% endblock %}
 </head>
 
@@ -96,12 +100,6 @@
   </div>
 
   <script src="{% static 'js/base.js' %}" defer></script>
-
-  <!-- Mailchimp JS -->
-  <script src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
-  <script>
-    (function ($) { window.fnames = new Array(); window.ftypes = new Array(); fnames[0] = 'EMAIL'; ftypes[0] = 'email'; fnames[1] = 'FNAME'; ftypes[1] = 'text'; fnames[2] = 'LNAME'; ftypes[2] = 'text'; fnames[3] = 'ADDRESS'; ftypes[3] = 'address'; fnames[4] = 'PHONE'; ftypes[4] = 'phone'; fnames[5] = 'BIRTHDAY'; ftypes[5] = 'birthday'; fnames[6] = 'COMPANY'; ftypes[6] = 'text'; }(jQuery)); var $mcj = jQuery.noConflict(true);
-  </script>
 
   {% block extra_js %}
   {% endblock %}

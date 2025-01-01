@@ -91,13 +91,15 @@
     </div>
 
     <!-- Filter icon -->
-    <a id="toggle-filters" class="nav-link" aria-label="Filtering menu option">
+    <a id="toggle-filters" class="nav-link">
         <i class="fa-solid fa-filter menu-item lg"></i>
+        <span class="sr-only">Filter</span>
     </a>
 
     <div class="dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" id="sortingDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Sorting menu option">
             <i class="fa-solid fa-sort menu-item lg"></i>
+            <span class="sr-only">Sort</span>
         </a>
         <ul class="dropdown-menu" aria-labelledby="sortingDropdown">
             {% for sort_key, sort_label in sorting_options.items %}

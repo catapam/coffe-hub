@@ -391,4 +391,36 @@ document.addEventListener('DOMContentLoaded', function () {
     setupCookieConsent();
     initializeToasts();
     flagOnCountryChange();
+
+    // Mailchimp
+    $(document).ready(function () {
+        // Dynamically load the Mailchimp validation script
+        var mailchimpScript = document.createElement('script');
+        mailchimpScript.src = '//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js';
+        mailchimpScript.defer = true;
+        mailchimpScript.onload = function () {
+            // Once the script is loaded, initialize Mailchimp functions
+            (function ($) {
+                window.fnames = [];
+                window.ftypes = [];
+                
+                fnames[0] = 'EMAIL';
+                ftypes[0] = 'email';
+                fnames[1] = 'FNAME';
+                ftypes[1] = 'text';
+                fnames[2] = 'LNAME';
+                ftypes[2] = 'text';
+                fnames[3] = 'ADDRESS';
+                ftypes[3] = 'address';
+                fnames[4] = 'PHONE';
+                ftypes[4] = 'phone';
+                fnames[5] = 'BIRTHDAY';
+                ftypes[5] = 'birthday';
+                fnames[6] = 'COMPANY';
+                ftypes[6] = 'text';
+            }(jQuery));
+            var $mcj = jQuery.noConflict(true);
+        };
+        document.head.appendChild(mailchimpScript);
+    });
 });
