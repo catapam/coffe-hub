@@ -12,7 +12,8 @@
                 class="card-img-top deferred-image"
                 data-src="{% if view == 'detail' %}{{ product.image }}{% else %}{{ product.image }}{% endif %}"
                 src="{% static 'images/product-holder.webp' %}"
-                alt="{% if view == 'detail' %}{{ product.name }}{% else %}{{ product.name }}{% endif %}">
+                alt="{% if view == 'detail' %}{{ product.name }}{% else %}{{ product.name }}{% endif %}"
+                loading="lazy">
             </div>
         </div>
 
