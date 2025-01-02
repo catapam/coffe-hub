@@ -5,7 +5,7 @@
 <div class="row g-4">
     {% for product_data in products_with_context %}
     <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
-        {% include 'product/includes/product_card.html' with view='list' product=product_data.product %}
+        {% include 'product/includes/product_card.html' with view='list' product=product_data.product image=product_data.image %}
     </div>
     {% empty %}
 

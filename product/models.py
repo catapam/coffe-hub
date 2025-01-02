@@ -153,14 +153,21 @@ class Product(models.Model):
             self.rating = self.average_rating
             super().save(update_fields=['rating'])
 
-    def image(self):
+    def image(self, view=None):
         '''
         Retrieve the product image URL or return a placeholder if unavailable.
+        If the view is 'list', return a thumbnail version of the image.
+
+        Args:
+            view (str): The view context (e.g., 'list' or 'detail').
 
         Returns:
             str: The URL of the product image or a static placeholder.
         '''
         try:
+            # Access the CLOUD_NAME from settings.CLOUDINARY_STORAGE
+            cloud_name = settings.CLOUDINARY_STORAGE['CLOUD_NAME']
+
             if self.image_path:
                 public_id = (
                     self.image_path.public_id
@@ -169,9 +176,16 @@ class Product(models.Model):
                 )
 
                 version = self.cloudinary_version or None
-                url, _ = cloudinary_url(
-                    public_id, secure=True, version=version,
-                    resource_type='image', fetch_format='auto'
+
+                # Use the 'Thumbnail' transformation for the list view
+                if view == 'list':
+                    transformation = "t_Thumbnail/"
+                else:
+                    transformation = ""
+
+                url = (
+                    f"https://res.cloudinary.com/{cloud_name}/image/upload/"
+                    f"{transformation}v{version}/{public_id}"
                 )
                 return url
         except Exception:

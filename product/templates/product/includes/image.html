@@ -10,9 +10,9 @@
                 <!-- Product Image -->
                 <img id="product-image-{{ product.id }}" 
                 class="card-img-top deferred-image"
-                data-src="{% if view == 'detail' %}{{ product.image }}{% else %}{{ product.image }}{% endif %}"
+                data-src="{{ image }}"
                 src="{% static 'images/product-holder.webp' %}"
-                alt="{% if view == 'detail' %}{{ product.name }}{% else %}{{ product.name }}{% endif %}"
+                alt="{{ product.name }}"
                 loading="lazy">
             </div>
         </div>

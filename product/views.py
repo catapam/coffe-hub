@@ -270,6 +270,7 @@ class ProductListView(ListView):
                     'size_active': product.default_variant_active,
                     'stock_by_size': stock_by_size,
                     'buy_url': product.get_buy_url,
+                    'image': product.image(view='list'),
                 })
 
         category_items = [
@@ -511,6 +512,7 @@ class ProductDetailView(DetailView):
             'category_items': category_items,
             'meta_description': meta_description,
             'meta_keywords': meta_keywords,
+            'image': product.image(),
         })
         return context
 
