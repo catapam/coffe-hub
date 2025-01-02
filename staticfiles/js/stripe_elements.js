@@ -93,7 +93,26 @@ function setupFormSubmission(card, clientSecret) {
         const url = '/checkout/cache_checkout_data/';
         $.post(url, postData)
             .done(() => confirmCardPayment(stripe, card, clientSecret, form, submitButton))
-            .fail(() => location.reload()); // Reload page if error occurs
+            .fail((jqXHR) => {
+                // Extract error message from the response
+                if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
+                    const serverError = jqXHR.responseJSON.error;
+
+                    // Check for the specific Stripe error
+                    if (serverError.includes('Metadata values can have up to 500 characters')) {
+                        errorMessage = `The payment processor limits the number of unique products that can be processed on each order. Please try removing a few products and try the checkout again.
+                        We are working on a solution to improve your checkout experience in the future, and appreciate your patience.`;
+                    } else {
+                        errorMessage = serverError; // Use the original error message for other cases
+                    }
+                }
+
+                // Show the error in a toast
+                showToast("error", errorMessage);
+
+                // Reload the page
+                setTimeout(() => location.reload(), 3000);
+            });
     });
 }
 

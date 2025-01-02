@@ -217,7 +217,7 @@ class ProductListView(ListView):
             self.object_list.first(), ProductVariant
         ):
             for variant in self.object_list:
-                product=variant.product
+                product = variant.product
                 stock_by_size = {
                     v.size: {
                         'price': v.price,

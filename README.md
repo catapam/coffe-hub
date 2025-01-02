@@ -897,6 +897,16 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 
 Bugs were found during tests and they were all documented using the the Project feature in Github by creating individual tickets for each bug. All bugs found and their status (to-do or done) can be seen <a href='https://github.com/users/catapam/projects/4/views/5'>here</a>.
 
+### Non-fixed bugs
+
+- **Stripe limits the lenght of metadata to 500 characteres**: 
+  At the moment that will cause an error on the checkout submission  if the cart has too many products. Due to time constrains, this is a known bug that will be left for a future sprint. For now some error handling was added and the issue will return a Toast error informing of the limitation and the contents of the cart metadata.
+
+  <details><summary><b>Toast message on error</b></summary>
+
+  ![Error message example](documentation/bugs/stripe-metadata-taost-error.png)
+
+  </details>
 ---
 # Credits
 
