@@ -368,6 +368,9 @@ Key design principles include:
 
 ## Existing Features and How to Use
 
+Check this video for a full overview of all features:
+[![Watch the demo video](https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+
 ### General Features
 
 - **Dark Mode**  
@@ -498,19 +501,20 @@ Key design principles include:
 - **Facebook business page**
 Leverage one of the biggest social medias to deliver content to targetted users using highly engaging visuals through a platform already familiar to most users.
 
-<details><summary><b>Demo</b></summary>
+  <details><summary><b>Demo</b></summary>
 
-![Facebook Business Page](documentation/facebook.png)
+  ![Facebook Business Page](documentation/demos/facebook.png)
 
-</details>
+  </details>
 
 - **Newsletter email subscription**
 The footer integrates a Mailchimp newsletter signup section, making it easy for visitors to stay informed about the latest news and offers. This feature enhances user engagement by keeping them connected with the brand. The subscription was intentionally set for a 2 step confirmation via email, so the setup can be checked as valid in MailChimp. Due to the account with Mailchimp being a free setup, the links to redirect to the site and list name on the REacptcha page cannot be editted, those only serve the purpose of confirming the functionality of the API setup with Mailchimp.
 
-<details><summary><b>Demo</b></summary>
+  <details><summary><b>Demo</b></summary>
 
+  ![Newsletter subscription form at the footer of all pages](documentation/demos/newsletter.gif)
 
-</details>
+  </details>
 
 ## Future Features
 
@@ -678,6 +682,7 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 * Cart page as well as all the backend pages are blocked from indexing by crawlers, that is intentional as those pages would bring no benefit to any SEO strategies or Search Engine results, and could be potential targets of DDoS/crawling attacks.
 * Checkout page apresents a small acessibility issue when running lighthouse test, that is caused by a third party setup on Stripe side and will not be focused on fixing at this moment.
 * For product and order view pages, a sigle page was selected for testing. As all of them follow the same structure, use the same templates and deliver the contents from same locations the sampling represents an aproximation of what should be expected in all other similar pages.
+* Lighthouse creates a report in HTML for each result, the contents of that file calls the results from an external resource, each result is saved on this repository, and linked above for easy access. In order to view the results these steps need to be followed: Press control + click the hyperlink on each of th results above, that will open the raw file into another tab, from that tab, click on download the file at the top of the file and then you can open it with any browser of your choice.
 
 ## CSS
 | **File** | **<a href="https://jigsaw.w3.org/css-validator/" target="_blank">WC3 CSS validator</a>** |
@@ -876,15 +881,15 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
-### Product List (staf and admin access)
+### Product List (staff and admin access)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
-### Product Create (staf and admin access)
+### Product Create (staff and admin access)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
-### Product Edit/Detail (staf and admin access)
+### Product Edit/Detail (staff and admin access)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
