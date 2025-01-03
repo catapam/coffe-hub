@@ -871,6 +871,11 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ### Product detail (end user)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| General | End user | Visual check | Image, buy button, size selector, and quantity selector all have the same behavior as the product card element | Passed | Passed |
+| Rating form | End user | Select rating by clicking on coffee bean icons | The coffee bean icons are interactive and glow according to use actions of clicking and hovering | Passed | Passed |
+| Rating form | End user | Submit with and without comment | Without comment the rating updates the calculated average and shows the number of rating on the review filtering below, with comments all of that still happens but the comment is automatically added to the review list | Passed | Passed |
+| Review filtering | End user | Use filtering by rating system by clicking over ratings and Show all options | The comments below are filtered accordingly | Passed | Passed |
+| Silenced comments | End user view | As admin/staff silence a comment and refresh the end user product view | The comment should not be shown while the count of ratings is still accounting those for the average calculation | Passed | Passed |
 
 ### Allauth frontend pages
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
@@ -910,6 +915,11 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ### Help
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| FAQ accordion | Any | Click on questions | Answers should show up from accordion menu | Passed | Passed |
+| Contact form | Not logged | Visual check | Form should not be pre populated and user can add all details manually | Passed | Passed |
+| Contact form | Logged in | Visual check | Form should have email address pre populated, and user can add/edit all details manually | Passed | Passed |
+| Form submission | Any | Click submission button with valid and invalid email address | The email address is validated and submission is halted with error messages if the email input is invalid, if all is good form is submitted with sucess feedback message | Passed | Passed |
+| Database | Admin/Staff | As admin or staff check if submitted form is updated on the database | Form should show at the Contact messages of Admin/Intranet panel | Passed | Passed |
 
 ### Cart
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
