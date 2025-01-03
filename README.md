@@ -17,6 +17,107 @@ Welcome to Coffee Hub, your one-stop platform for premium coffee and related mer
 ---
 # Table of Contents
 
+1. [Introduction](#introduction)
+   - [Objective](#objective)
+   - [Audience](#audience)
+   - [Solution](#solution)
+   - [Scope](#scope)
+
+2. [Business and Marketing Plan](#business-and-marketing-plan)
+   - [User Experience](#user-experience)
+   - [Market](#market)
+   - [Revenue Model](#revenue-model)
+   - [Marketing](#marketing)
+   - [KPIs](#kpis)
+   - [Risks](#risks)
+   - [Growth Opportunities](#growth-opportunities)
+
+3. [Agile Methodology and Planning](#agile-methodology-and-planning)
+   - [Epics](#epics)
+     - [Epic 1: Project Setup and Initial Configuration](#epic-1-project-setup-and-initial-configuration)
+     - [Epic 2: User Authentication and Authorization](#epic-2-user-authentication-and-authorization)
+     - [Epic 3: Store](#epic-3-store)
+     - [Epic 4: Payment Gateway](#epic-4-payment-gateway)
+     - [Epic 5: Account Management](#epic-5-account-management)
+     - [Epic 6: SEO and Marketing](#epic-6-seo-and-marketing)
+   - [MoSCoW Methodology](#moscow-methodology)
+     - [Sprint 1](#sprintepic-1)
+     - [Sprint 2](#sprintepic-2)
+     - [Sprint 3](#sprintepic-3)
+     - [Sprint 4](#sprintepic-4)
+     - [Sprint 5](#sprintepic-5)
+     - [Sprint 6](#sprintepic-6)
+   - [Sprint Length](#sprint-length)
+   - [Reviews](#reviews)
+
+4. [Design](#design)
+   - [Color Scheme](#color-scheme)
+   - [Typography](#typography)
+   - [Wireframes](#wireframes)
+   - [Data Structure](#data-structure)
+
+5. [Features](#features)
+   - [Existing Features and How to Use](#existing-features-and-how-to-use)
+     - [General Features](#general-features)
+     - [Products](#products)
+     - [Cart](#cart)
+     - [Account Management](#account-management)
+     - [End-User features](#end-user-features)
+     - [Staff and Admin Features](#staff-and-admin-features)
+     - [Developer/Tester Features](#developer-tester-features)
+     - [SEO and Marketing Features](#seo-and-marketing-features)
+   - [Future Features](#future-features)
+
+6. [Technology Used](#technology-used)
+   - [Languages](#languages)
+   - [Frameworks, Libraries, and Tools](#frameworks-libraries-and-tools)
+
+7. [Deployment](#deployment)
+   - [Heroku](#heroku)
+   - [Forking](#forking)
+   - [Local Clone](#local-clone)
+
+8. [Testing](#testing)
+   - [HTML, Accessibility, and Performance](#html-accessibility-and-performance)
+   - [CSS](#css)
+   - [JavaScript](#java-script)
+   - [Python](#python)
+   - [Manual Testing](#manual-testing)
+     - [Header Menu](#header-menu)
+     - [Search Bar](#search-bar)
+     - [Footer](#footer)
+     - [Newsletter Subscription](#newsletter-subscription)
+     - [Home](#home-1)
+     - [Filtering and Sorting](#filtering-and-sorting)
+     - [Product Card](#product-card)
+     - [About](#about)
+     - [Privacy Policy](#privacy-policy)
+     - [Custom 401](#custom-401)
+     - [Custom 404](#custom-404)
+     - [Shop/product list](#shopproduct-list)
+     - [Product Details](#product-detail-end-user)
+     - [Allauth frontend](#allauth-frontend-pages)
+     - [Allauth backend](#allauth-pages-logged-in)
+     - [Help](#help)
+     - [Cart](#cart-1)
+     - [Cart Select](#cart-select)
+     - [Checkout](#checkout-1)
+     - [User Portal - Side menu](#user-portal---side-menu)
+     - [User Portal - Profile management](#user-portal---profile-management)
+     - [User Portal - Order management](#user-portal---orders-management)
+     - [User Portal - Intranet](#user-portal---intranet-staff-only)
+     - [User Portal - Custom admin panel](#user-portal---custom-admin-panel-admin-only)
+     - [Product Create](#product-create-staff-and-admin-access)
+     - [Product Edit](#product-editdetail-staff-and-admin-access)
+   - [Bugs](#bugs)
+     - [Non-fixed bugs](#non-fixed-bugs)
+
+9. [Credits](#credits)
+   - [Code](#code)
+   - [Content](#content)
+   - [Documentation](#documentation)
+
+10. [Acknowledments](#acknowledgements)
 
 ---
 # Introduction
@@ -34,6 +135,8 @@ Coffee Hub centralizes everything a coffee enthusiast needs—premium products, 
 
 ## Scope
 The scope of Coffee Hub covers product discovery, secure transactions, order management, and user-generated reviews that admins can moderate. By keeping the user interface intuitive and visually appealing, we streamline the shopping journey from browsing to checkout.
+
+[^ Back to table of contents](#table-of-contents)
 
 ---
 # Business and Marketing plan
@@ -67,6 +170,8 @@ Our marketing strategy combines targeted social media campaigns, search engine o
 
 - **Expanded Catalog**: Introduce more exclusive or rare coffee varieties, roasts, and coffee accessories.
 - **Partnerships**: Collaborate with local producers and specialty roasters, featuring unique blends that encourage brand loyalty.
+
+[^ Back to table of contents](#table-of-contents)
 
 ---
 # Agile Methodology and Planning
@@ -260,6 +365,8 @@ Based on the total story points, each sprint was assigned 1 week length.
 
 Tasks and tickets were reviewed every 3 work days. New tickets, such as bug reports, may have been incorporated into the planning, which sometimes resulted in the removal of tasks from sprints or adjustments to their MoSCoW priorities.
 
+[^ Back to table of contents](#table-of-contents)
+
 ---
 # Design
 
@@ -362,6 +469,8 @@ Key design principles include:
 * **Soft CRUD for Staff**: Staff and Admins can view, add, and edit products, sizes and categories from the frontend tools. Deactivating products and sizes is available from the product details view when logged either as admin or staff too. Deleting was intetionally restricted to Admins only and can exclusively be done from the custom admin panel.
 
 * **Staff permissions**: Most of deleting permissions are only available to Admins and from Admin panel only. Staff do have access to the admin panel, but view only, with some rare exceptions where they have edit permissions too. That was also built-in as a feature since the beginning of project planning.
+
+[^ Back to table of contents](#table-of-contents)
 
 ---
 # Features
@@ -555,6 +664,8 @@ Coffee Hub is dedicated to enhancing the platform with features that improve usa
 
 Each of these features aligns with Coffee Hub's vision of delivering a premium, user-centric e-commerce experience while driving future growth and innovation.
 
+[^ Back to table of contents](#table-of-contents)
+
 ---
 # Technology Used
 
@@ -585,6 +696,8 @@ Each of these features aligns with Coffee Hub's vision of delivering a premium, 
 * **freeprivacypolicy.com**: Privacy privacy generator
 * **xml-sitemaps.com**: Sitemap template creation
 * **Balsamiq**: Wireframes creation
+
+[^ Back to table of contents](#table-of-contents)
 
 ---
 # Deployment
@@ -638,6 +751,9 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 > remove: Total 10 (delta 1), reused 10 (delta 1)
 > Unpacking objects: 100% (10/10), done.
 ```
+
+[^ Back to table of contents](#table-of-contents)
+
 ---
 # Testing
 
@@ -1005,10 +1121,22 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ### Product Create (staff and admin access)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| General | Staff/admin | Visual check | Image comes up with placeholder in place, and form has all empty values. User can input name, description, image, and category only | Passed | Passed |
+| Input validation | Staff/admin | Test form input validation with valid and invalid data | Empty name will return error, while too long entries are not allowed. When uplaoding image only image formats are allowed. | Passed | Passed |
+| Save button | Staff/admin | Click | If data input is valid, save product and redirect to the same product edit page where size can be set up. Otherwise validation errors are shown to the user | Passed | Passed |
 
 ### Product Edit/Detail (staff and admin access)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Just created product | Staff/admin | Visual check | Size is empty, as well as price and stock. Rating is zeroed and deactivate size is not visible | Passed | Passed |
+| Image | Staff/admin | Visual check | Image shows the current image for the product or the placeholder if none | Passed | Passed |
+| Badges | Staff/admin | Visual check | The same way as product list view show badges for product and size active state over the image top-left corner, that can be seen here | Passed | Passed |
+| Upload image icon | Staff/admin | Click | Opens an upload window where local images can be chosen, uploads are written to the Cloudniary storage directly upon save, but shown as preview on the browser in the meanwhile | Passed | Passed |
+| Input validation | Staff/admin | Test form input validation with valid and invalid data | Empty name will return error, while too long entries are not allowed. When uplaoding image only image formats are allowed. Empty size can not be selected, if the product is new at least one size needs to be created to continue | Passed | Passed |
+| Selector menu (category and size) | Staff/Admin | Test editing, or creating new entries for each selector | When on edit/creation mode all other input options as well as button get grayed out and blocked, invalid data will return toast messages while saving valid data confirms the creation/edition. Cancelling the edit/creation returns to the old selection without apllying any changes. No page refreshes are done during any of those steps | Passed | Passed |
+| Save button | Staff/admin | Click | If data is valid saves the changes and feedback a message informing of it. Any validation issues will return a toast error informing of the issues | Passed | Passed |
+| Toggle size/product buttons | Staff/admin | Click | Badge is updated with the new state for the clicked button, database is updated and End users can see the change immediately on the frontend | Passed | Passed |
+| Silence rating comments | Staff/admin | Click button | On Staff/Admin view the commend becomes crossed and a red message informs that comment is silenced. On the front end the comment stops showing, while the rating is still accounted for the rating average calculation. Clicking the button on a silenced comment removes the silenced state and reverts it to an usual comment that can be seen on the front end immediately (saving is not needed on this process) | Passed | Passed |
 
 ## Bugs
 
@@ -1024,6 +1152,9 @@ Bugs were found during tests and they were all documented using the the Project 
   ![Error message example](documentation/bugs/stripe-metadata-toast-error.png)
 
   </details>
+
+[^ Back to table of contents](#table-of-contents)
+
 ---
 # Credits
 
@@ -1043,6 +1174,8 @@ Two youtube videos were of grand relevance as guidance for coding:
 
 * <a href="https://github.com/kpetrauskas92/Mont-Adventures-PP5" target="_blank"> Mont Adventures</a> - Inspiration for README sessions and structure
 
+[^ Back to table of contents](#table-of-contents)
+
 ---
 # Acknowledgements
 
@@ -1050,3 +1183,5 @@ Two youtube videos were of grand relevance as guidance for coding:
 * Gareth Mc Girr: My mentor, for all the help and advice throughout the project.
 * Code Institute: For all the training and guidance.
 * WP Engine: My current employer, for providing all the support necessary and allowing great networking.
+
+[^ Back to table of contents](#table-of-contents)
