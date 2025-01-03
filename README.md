@@ -254,7 +254,7 @@ The details for each sprint are provided below:
 
 ## Sprint Length
 
-Based on the total story points, each sprint was assigned 1 week lenght.
+Based on the total story points, each sprint was assigned 1 week length.
 
 ## Reviews
 
@@ -809,6 +809,14 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ### Filtering and sorting
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Default sorting | Any | Check with no filters or sorting applied | All products are listed, and sorted by Rating high to low | Passed | Passed | 
+| Filter by category | Any | Change categories selection and apply filter | Only products of selected categories are shown | Passed | Passed |
+| Filter by min or max price | Any | Change min or/and max price on filter menu options | Products are shown repeated if multiple sizes fit the filtering, with each card showing one of the sizes, the price range is respected | Passed | Passed |
+| Filter by min rating | Any | Change min rating selection from filtering menu options | Only products with average rating above the selected threshold are shown | Passed | Passed |
+| Show out of stock toggler | Any | Check it | If filtering or sorting by price, sizes that have no stock are also shown on the results. The out of stock sizes are sorted as they had price equal to $0 | Passed | Passed |
+| General | Any | Applying any filter or sorting | Other filters, sorting and search queries that do not conflict with the new selection are kept | Passed | Passed |
+| Sorting | Any | Apply any sorting paramenters from the sort menu | Products are reorganized accordingly | Passed | Passed |
+| Clear all filters button | Any | Click | All queries are cleaned up, including search query. And page gets reloaded with no filters, sorting or search queries | Passed | Passed |
 
 ### Product Card
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
@@ -817,18 +825,31 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ### About
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| General | Any | Visual Check | The layout is appropriate on all device sizes | Passed | Passed |
+| Image rendering | Any | Visual check and HTML review | The image has proper alt text, and it's rendered from the right source | Passed | Passed |
+| Title and metatags | Any | Check HTML | Title and metatags are added and correctly set for the page | Passed | Passed |
+| Contact us button | Any | Click | Redirects to help page | Passed | Passed |
 
 ### Privacy policy
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| General | Any | Visual Check | The layout is appropriate on all device sizes | Passed | Passed |
+| Title and metatags | Any | Check HTML | Title and metatags are added and correctly set for the page | Passed | Passed |
+| External links | Any | Click | Links are opened on a separate tab | Passed | Passed |
 
 ### Custom 401
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| General | Any | Visual Check | The layout is appropriate on all device sizes | Passed | Passed |
+| Title and metatags | Any | Check HTML | Title and metatags are added and correctly set for the page | Passed | Passed |
+| Contact us link | Any | Click | Redirects to help page | Passed | Passed |
 
 ### Custom 404
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| General | Any | Visual Check | The layout is appropriate on all device sizes | Passed | Passed |
+| Title and metatags | Any | Check HTML | Title and metatags are added and correctly set for the page | Passed | Passed |
+| Home page link | Any | Click | Redirects to home page | Passed | Passed |
 
 ### Shop/product list
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
@@ -839,21 +860,40 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
-### Login
+### Allauth frontend pages
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Login | Not logged | Click Signup from suggested hyperlink | Redirects to Register/signup page | Passed | Passed |
+| Login | Not logged | Submit invalid data | Page reloads showing what was invalid | Passed | Passed |
+| Login | Not logged | Submit valid data | Redirect to Dashboard Main page and a Welcome popup shows up | Passed | Passed |
+| Login | Not logged | Submit valid data, with selecting remember me option | Same behavior as above, but user remains logged in even if page is closed | Passed | Passed |
+| Login | Not logged | Click "Forgot Password" option | Redirect to password reset page | Passed | Passed |
+| Password reset request | Not logged | Submit valid user email address, test link received by email | Redirects to "Password reset done" + Recovery email is sent with recovery link + Link redirects to "Password Reset with key" page | Passed | Passed |
+| Password reset request | Not logged | Submit invalid/user-not-created email address, test link received by email | Redirects to "Password reset done" + Recovery email is still sent, but informing the email address does not have an account and how to create one, link redirects to Register page | Passed | Passed |
+| Register | Not logged | Click Signin from suggested hyperlink | Redirects to Login/signin page | Passed | Passed |
+| Register | Not logged | Submit invalid data, like email not having @ symbol, password too short or weak, password does not match | Page reloads showing which fields are invalid and instructions of valid input | Passed | Passed |
+| Register | Not logged | Submit valid data | Redirects to Login page showing a popup informing the confrmation email was sent | Passed | Passed |
+| Confirmation email | Not logged | Click on the confirmation link first time | Redirects to Confirmation page | Passed | Passed |
+| Confirmation email | Not logged | Click on the confirmation after confirmation | Redirects to Confirmation page informing the link is expired | Passed | Passed |
+| Confirmation page | Not logged | Click on the confirmation button | Redirects to Login page | Passed | Passed |
+| Admin panel | Not logged | Open /admin URL | If not logged, redirects to custom login page | Passed | Passed |
+| Admin panel | End user | Open /admin URL | If logged as end user, redirects to custom 401 page | Passed | Passed |
 
-### Register
+### Allauth pages (logged in)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
-### Reset password
-| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
-### Verify email
-| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Account / User | Any | Submit the user change using a unique name on the database | Redirects to Main dashboard page and shows a pop-up confirming the change | Passed | Passed |
+| Account / User | Any | Submit the user change using a name already in use | Refreshes page showing the error on the form submission and error pop-up shows up informing the change was not made | Passed | Passed |
+| Account / Email | Any | Add new unique email address | Refreshes page showing a pop-up confirming the domain was added, email is sent to confirm email verification, email is populated to the list showing state unvirified | Passed | Passed |
+| Account / Email | Any | Add new unique email address | Refreshes page showing a pop-up confirming the domain was added, email is sent to confirm email verification, email is populated to the list showing state unvirified | Passed | Passed |
+| Account / Email | Any | Add email address used on this account or any other on the database | Shows error alert on the form informing about the email being already in use | Passed | Passed |
+| Account / Email | Any | Change primary email address, by selecting a new email address on the list and clicking the "Make primary" button | Refreshes page, show pop-up informing the change was completed or error in case it fails, updates the list to show the primary email address on the top and with the correct tag label associated | Passed | Passed |
+| Account / Email | Any | Select email address from list and click re-send verification | Refreshes page and shows pop-up informing the email was sent | Passed | Passed |
+| Account / Email | Any | Select email address from list and click remove | Confirmation pop-up asking for confrimation before proceeding, once confirmed the page refreshes and a pop-up shows up informing the action was completed, email is removed from database and list | Passed | Passed |
+| Account / Password | Any | Submit with invalid data, either wrong 'current password', unmatching 'new password' or invalid 'new password' (too weak) | Page refreshes with form showing which details are incorrect | Passed | Passed |
+| Account / Password | Any | Submit with valid data, correct 'current passowrd', matching 'new password' and valid new password format | Page refreshes showing a pop-up confriming the change | Passed | Passed |
+| Account / Password | Any | Click 'forgot password' | Redirects to reset password pagem where email address is requested to send the reset email | Passed | Passed |
+| Account / Password reset | Any | Same as non-logged in tests for this page | - | Passed | Passed |
 
 ### Help
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
@@ -879,23 +919,7 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
-### User Portal - Username management
-| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
-### User Portal - Password management
-| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
-### User Portal - Emails management
-| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
 ### User Portal - Orders management
-| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
-### User Portal - Logout
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
@@ -921,12 +945,12 @@ Bugs were found during tests and they were all documented using the the Project 
 
 ### Non-fixed bugs
 
-- **Stripe limits the lenght of metadata to 500 characteres**: 
+- **Stripe limits the length of metadata to 500 characteres**: 
   At the moment that will cause an error on the checkout submission  if the cart has too many products. Due to time constrains, this is a known bug that will be left for a future sprint. For now some error handling was added and the issue will return a Toast error informing of the limitation and the contents of the cart metadata.
 
   <details><summary><b>Toast message on error</b></summary>
 
-  ![Error message example](documentation/bugs/stripe-metadata-taost-error.png)
+  ![Error message example](documentation/bugs/stripe-metadata-toast-error.png)
 
   </details>
 ---
