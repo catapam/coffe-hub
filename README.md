@@ -947,14 +947,20 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ### Checkout
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
-### Payment Processing(Stripe)
-| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Cart review | End user | Visual check | All cart functionalities are also present on the checkout page at the cart review session | Passed | Passed |
+| Checkout form | End user | Visual check | If the user has profile data added to their account, the data is pre-filled to the form automatically allowing editing yet, otherwise the form comes up clean and ready to be filled manually | Passed | Passed |
+| Data validation | End user | Test validation of each input with invalid and valid data | If invalid data is input, the form submission fails and returns message informing of the issues, otherwise form is submitted | Passed | Passed |
+| Email entry | End user | Visual check | Email entry is a dropdown menu showing only the emails added to the account already | Passed | Passed |
+| Country entry | End user | Visual check | Country entry is a dorpdown menu showing a list of all countries, selcting any will show a flag of the country just below the selection input | Passed | Passed |
+| Save details to account | End user | Check/uncheck box before submission | Submitting with the checked box should update the profile details on the database, while unchecked skips that | Passed | Passed |
+| Card validation | End user | Input Stripe valid test card and submit form | Order is create, user gets redirected to order view with confirmation message, Payment is completed on Stripe dashboard | Passed | Passed |
+| Card validation | End user | Input Stripe invalid card and submit form | Order is not saved, error message is prompted informing of the error | Passed | Passed |
+| Card validation | End user | Stripe errors | Toast message is prompted informing what was the error. Order not created | Passed | Passed |
 
 ### User Portal - Side menu
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
 
 ### User Portal - Profile management
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
