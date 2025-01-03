@@ -369,7 +369,7 @@ Key design principles include:
 ## Existing Features and How to Use
 
 Check this video for a full overview of all features:
-[![Watch the demo video](https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+[![Demo Walkthrough](https://img.youtube.com/vi/OmTn5QGvCFA/maxresdefault.jpg)](https://www.youtube.com/watch?v=OmTn5QGvCFA)
 
 ### General Features
 
@@ -768,12 +768,49 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ### Header menu
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Logo | Any | Click | Redirect to home page | Passed | Passed |
+| Shop menu | Any | Click | Redirect to products list page | Passed | Passed |
+| About menu | Any | Click | Redirect to about page | Passed | Passed |
+| Cart menu | End user | Click | Redirect to Cart page | Passed | Passed |
+| Account menu | Any | Click | Show all Account menu options, for non-logged users: help, login, register; for logged in users: User Portal, logout and help (if not admin or staff) | Passed | Passed |
+| Background | Any | Scroll down | Blur anything under the header and header remains fixed at top of screen| Passed | Passed |
+
+### Search bar
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Search bar | Any | Search findable and non findabled strings | Redirect to Product list page showing filtered content according to the input string | Passed | Passed |
 
 ### Footer
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Position | Any | Check position on page layout | Always stay fixed at the bottom of screen, while allowing a screen height for the main content | Passed | Passed |
+| Quick links - Shop | Any | Click | Redirect to Products list page | Passed | Passed |
+| Quick links - About | Any | Click | Redirect to About page | Passed | Passed |
+| Quick links - Help | Any | Click | Redirect to Help page | Passed | Passed |
+| Quick links - Account | Any | Click | Redirect to login page if not logged, and if logged as end user redirect to profile page, or to username management if Admin or Staff | Passed | Passed |
+| Social Media icons | Any | Click | Open the relevant link on another tab | Passed | Passed |
+| Provacy Policy link | Any | Click | Redirects to provacy policy page | Passed | Passed |
+
+### Newsletter subscription
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Newsletter subscription form | Any | Invalid data | Return a message informing about the error | Passed | Passed |
+| Newsletter subscription form | Any | Valid data | Return a message informing a confirmation was sent, email is sent and user can confirm subbscription from the link received | Passed | Passed |
+| Newsletter subscription form | Any | Used email | Return a message informing the email is already subscribed | Passed | Passed |
 
 ### Home
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Hero image | Any | Visual check | Gradient is correctly applied below the image, image is shown in correct scale, correct image file is delivered | Passed | Passed |
+| Title and metatags | Any | Check HTML | Title and metatags are added and correctly set for the home page, using default values | Passed | Passed |
+| Products Title | Any | Check if title is shown between filtering options and hero image | Products should be displayed | Passed | Passed |
+| Product cards | Any | Visual check | Product cards are correctly displayed according to the screen width | Passed | Passed |
+
+### Filtering and sorting
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+
+### Product Card
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
@@ -793,9 +830,10 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
-### Shop/product list (end user)
+### Shop/product list
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| General | Any | Visual check | Products are listed the same way as the home page but without the hero image | Passed | Passed |
 
 ### Product detail (end user)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
@@ -814,18 +852,6 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
 ### Verify email
-| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
-### Newsletter subscription
-| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
-### Filtering and sorting
-| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
-### Search bar
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
@@ -878,10 +904,6 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
 ### User Portal - Custom admin panel (admin only)
-| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
-|--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
-### Product List (staff and admin access)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
 
