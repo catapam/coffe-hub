@@ -479,6 +479,9 @@ Check this video for a full overview of all features:
 - **Permissions and Access**  
   Staff and admin permissions are carefully segmented to ensure secure and appropriate access to features. Staff users have restricted access compared to admins.
 
+- **Stripe link from order**
+  When checking the order view from admin/intraney panel, users can click on the payment ID and get redirected directly to the payment page on Stripe, access to Stripe dashboard is needed to continue from there, but the navigation is facilitated with the direct link.
+
 ### Developer/Tester Features
 
 - **Cookie Consent Reset**  
@@ -960,23 +963,44 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ### User Portal - Side menu
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
-
+| Menu options | End user | Visual check | The options are: Profile, User, Email, Password, Orders, Help and logout | Passed | Passed |
+| Menu options | Staff | Visual check | The options are: User, Email, Password, Intranet and logout | Passed | Passed |
+| Menu options | Admin | Visual check | The options are: User, Email, Password, Admin and logout | Passed | Passed |
+| Menu toggler | Any | Click | Clicking the arrow menu toggler closes and open the text options, when closed only the icon is visible | Passed | Passed |
+| Menu options | Any | Click | Redirects to relevant pages | Passed | Passed |
 
 ### User Portal - Profile management
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| General | End user | Visual check | All data is pre populated if already present, or form comes up empty for manual filling if not | Passed | Passed |
+| Form validation | End user | Submit data | All validations work exactly the same way as on the checkout form | Passed | Passed |
+| Save button | End user | Click | Save button will write the data to the user database if correct or return error messages if validation errors are present | Passed | Passed |
 
 ### User Portal - Orders management
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Order list | End user | Visual check | All orders are listed and show correct details as well as a button to view more info of each order individually | Passed | Passed |
+| View button | End user | Click | Redirects to order details view of the selected order | Passed | Passed |
+| Order view | End user | Visual check | The page is static and shows all the details of the order, data is updated in realtime in case of change from admin/staff backend (example status changes) | Passed | Passed |
 
 ### User Portal - Intranet (staff only)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| User Portal menu option | Staff | Click | Opens a new tab with the admin panel | Passed | Passed |
+| Admin panel | Staff | Visual check | Admin panel only shows options for Users, Orders and Contact messages | Passed | Passed |
+| Admin panel - User tab | Staff | Visual check | Only end users can be seen from the list | Passed | Passed |
+| Admin panel - Permissions | Staff | Visual check | Options to delete are restricted (check video of features) | Passed | Passed |
+| User Inline options | Staff | Visual check | All user related data entries can be seen as inline options on the user selection | Passed | Passed |
 
 ### User Portal - Custom admin panel (admin only)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| User Portal menu option | Admin | Click | Opens a new tab with the admin panel | Passed | Passed |
+| Admin panel | Admin | Visual check | Admin panel shows all the avaialble options | Passed | Passed |
+| Admin panel - User tab | Admin | Visual check | All users can be seen from the list | Passed | Passed |
+| Admin panel - Permissions | Admin | Visual check | Full permissions (check video of features) | Passed | Passed |
+| User Inline options | Admin | Visual check | All user related data entries can be seen as inline options on the user selection, including permission to change Staff and superuser state | Passed | Passed |
+| Product Inline options | Admin | Visual check | All product related data entries can be seen as inline options on the Product selection, including sizes, and reviews | Passed | Passed |
 
 ### Product Create (staff and admin access)
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |

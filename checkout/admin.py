@@ -206,7 +206,7 @@ class OrderAdmin(ModelAdmin):
         'user',
         'date',
         'order_total',
-        'payment_intent_id'
+        'stripe_pid'
     )
 
     ordering = ('-date',)
@@ -221,14 +221,14 @@ class OrderAdmin(ModelAdmin):
         Returns:
             str: HTML link to the PaymentIntent in Stripe or a message.
         '''
-        if obj.payment_intent_id:
+        if obj.stripe_pid:
             url = (
                 f'https://dashboard.stripe.com/test/payments/'
-                f'{obj.payment_intent_id}'
+                f'{obj.stripe_pid}'
             )
             return format_html(
                 '<a href="{}" target="_blank">{}</a>',
-                url, obj.payment_intent_id
+                url, obj.stripe_pid
             )
         return 'No Payment Intent'
 
