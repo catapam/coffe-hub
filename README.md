@@ -804,7 +804,7 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | Hero image | Any | Visual check | Gradient is correctly applied below the image, image is shown in correct scale, correct image file is delivered | Passed | Passed |
 | Title and metatags | Any | Check HTML | Title and metatags are added and correctly set for the home page, using default values | Passed | Passed |
 | Products Title | Any | Check if title is shown between filtering options and hero image | Products should be displayed | Passed | Passed |
-| Product cards | Any | Visual check | Product cards are correctly displayed according to the screen width | Passed | Passed |
+| Product cards | Any | Visual check | Product cards are correctly displayed according to the screen width, number of columns and card width is adjusted and even across all cards, card height is even on all cards | Passed | Passed |
 
 ### Filtering and sorting
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
@@ -821,6 +821,18 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ### Product Card
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Image | Any | Check source and justification | Images should come from Cloudinary and load from thumbnail when rendering on product cards, the image should have no background and be centered horizontally | Passed | Passed |
+| Status badges | Staff or Admin | Visual check | Badges should show correct information according to the active state on the database | Passed | Passed |
+| Product title/name | Any | Click | Redirect to product details/edit page | Passed | Passed |
+| Product description | Any | Visual check | Description matches the correct product from database | Passed | Passed |
+| Size selector | Any | Change selection | Price is updated, links on button and title are updated, size badge is updated (staff and admin only), stock count is updated (staff and admin only), max quantity selector is updated (end user only) | Passed | Passed |
+| Quantity selector | End user | Max value | Max value should not allow numbers bigger than the current stock availabilty | Passed | Passed |
+| Quantity selector | End user | Users can force bigger numbers by typing it, the value should be rejected under submission and return a toast informing of the issue | Passed | Passed |
+| Quantity selector | End user | Type number higher than stock availability and try purchasing item | Users can force bigger numbers by typing it, the value should be rejected under submission and return a toast informing of the issue | Passed | Passed |
+| Quantity selector | End user | Type non-numeric value | Typing letters should get restricted | Passed | Passed |
+| Stock selector | Admin/Staff | Visual check | Stock selector should be blocked of change, and show the current stock according to selected size | Passed | Passed |
+| Buy button | End user | Click | Product gets added to cart (session or database depending on login status), toast confirms the addition | Passed | Passed |
+| Edit button | Staff/Admin | Click | Redirects to Product edit page bringing size selection | Passed | Passed |
 
 ### About
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
