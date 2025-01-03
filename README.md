@@ -924,6 +924,25 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 ### Cart
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
 |--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| Buy button from product cards and detail page | Not logged | Click | Add product to the session cart according to size and quantity selection, if product is already existing on the cart it adds up to the existing quantity | Passed | Passed |
+| Buy button from product cards and detail page | Logged in end user | Click | Add product to the database cart according to size and quantity selection, if product is already existing on the cart it adds up to the existing quantity | Passed | Passed |
+| Cart view | End user | Visual check | If cart is empty message stating there are no products is shown and only 'Continue shopping' button is shown, If products were added, each product is shown on an individual line | Passed | Passed |
+| Cart entries | End user | Visual check | Each product shows the product image, name, size, individual price, quantity and a delete button. The quantity is an input selector that can be changed and respects max value as stock | Passed | Passed |
+| Quantity | End user | Change quantity | Delete button is gone and a 'Save' button takes place instead | Passed | Passed |
+| Save button | End user | Click | Saves the quantity change and updates cart total, showing a confirmation toast message | Passed | Passed |
+| Delete button | End user | Click | Remove product from cart and updates cart total, showing a confirmation toast message | Passed | Passed |
+| Max stock reduction after product is added to cart | End user | Add all stock a product to the cart and as admin reduce the number of available products | Cart is updated to the total available stock and a toast message informs of the change | Passed | Passed |
+| Checkout button | End user | Click | If not logged, redirects to login page before proceeding, after login if user has a session and a database cart they get redirect to the cart selection page, or checkout page if not. If user is already logged in, they get redirected to the checkout page directly without need to login again | Passed | Passed |
+| Continue Shopping button | End User | Click | Redirects to product list page with no filters, search queries or sorting applied | Passed | Passed |
+
+### Cart Select
+| **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
+|--------------|----------|----------|---------------------|--------------------------|---------------------------|
+| General | End user | Visual check | Both carts (session and database) are displayed on screen, with buttons to select either or merge both together into the database cart | Passed | Passed |
+| Select Session cart button | End user | Click | Current database cart is purged, and session cart is added to the database. Session cart is eliminated from the session then | Passed | Passed |
+| Select Database cart button | End user | Click | Current session cart is purged, and database cart is kept as is | Passed | Passed |
+| Merge carts button | End user | Click | All entries are added as database cart, merging same products of same size together by summing up the quantities. Session cart is purged from session then. | Passed | Passed |
+| Move away without selecting | End User | Click any other menu options without choosing the cart select options | Database cart is kept and session cart is purged | Passed | Passed | 
 
 ### Checkout
 | **Location** | **User** | **Test** | **Expected result** | **Actual result mobile** | **Actual result desktop** |
