@@ -946,7 +946,7 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 | Product description | Any | Visual check | Description matches the correct product from database | Passed | Passed |
 | Size selector | Any | Change selection | Price is updated, links on button and title are updated, size badge is updated (staff and admin only), stock count is updated (staff and admin only), max quantity selector is updated (end user only) | Passed | Passed |
 | Quantity selector | End user | Max value | Max value should not allow numbers bigger than the current stock availabilty | Passed | Passed |
-| Quantity selector | End user | Users can force bigger numbers by typing it, the value should be rejected under submission and return a toast informing of the issue | Passed | Passed |
+| Quantity selector | End user | Users can force bigger numbers by typing it | The value should be rejected under submission and return a toast informing of the issue | Passed | Passed |
 | Quantity selector | End user | Type number higher than stock availability and try purchasing item | Users can force bigger numbers by typing it, the value should be rejected under submission and return a toast informing of the issue | Passed | Passed |
 | Quantity selector | End user | Type non-numeric value | Typing letters should get restricted | Passed | Passed |
 | Stock selector | Admin/Staff | Visual check | Stock selector should be blocked of change, and show the current stock according to selected size | Passed | Passed |
